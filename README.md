@@ -3,9 +3,6 @@ Buildtime trend
 
 Visualise what's trending in your build process
 
-How to get it
--------------
-
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
 Dependencies
