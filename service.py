@@ -53,6 +53,11 @@ class TravisParser(object):
         if repo_slug is None:
             return "Repo is not set, use repo_slug=user/repo"
 
+        # check if repo is allowed
+        allowed_repo = ["buildtimetrend", "ruleant"]
+        if not any(x in repo_slug for x in allowed_repo):
+            return "The supplied repo is not allowed : %s" % cgi.escape(repo_slug)
+
         if build is not None:
             settings.add_setting('build', build);
 
