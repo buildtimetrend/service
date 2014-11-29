@@ -39,7 +39,7 @@ class TravisParser(object):
 
     @cherrypy.expose
     def index(self):
-        return "Comming soon, <a href='https://github.com/buildtimetrend/service'>Buildtime Trend as a Service</a>."
+        return "Coming soon, <a href='https://github.com/buildtimetrend/service'>Buildtime Trend as a Service</a>."
 
     @cherrypy.expose
     def travis(self, repo_slug=None, build=None):
