@@ -7,6 +7,16 @@ Visualise what's trending in your build process
 
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
+Usage
+-----
+
+The service is available on Heroku : http://buildtimetrend-service.herokuapp.com/
+
+- `/travis` : loads a travis build log file, processes it and sends the data to Keen.io
+  parameters :
+  - `repo_slug` : name of the Github repo, fe. buildtimetrend/python-lib
+  - `build` : Travis CI build ID
+
 Dependencies
 ------------
 
