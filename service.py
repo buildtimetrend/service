@@ -41,7 +41,7 @@ class TravisParser(object):
         return "Hello world!"
 
     @cherrypy.expose
-    def travis(self, repo_slug, build):
+    def travis(self, repo_slug=None, build=None):
         settings = Settings()
         settings.load_config_file("config_service.yml")
 
