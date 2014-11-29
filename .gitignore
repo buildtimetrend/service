@@ -6,6 +6,8 @@ config.yml
 config_service.yml
 *.py[cod]
 
+venv/
+
 # C extensions
 *.so
 
