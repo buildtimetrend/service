@@ -46,7 +46,7 @@ class TravisParser(object):
         settings.load_config_file("config_service.yml")
 
         if repo_slug is not None:
-            settings.add_project_name(repo_slug);
+            settings.set_project_name(repo_slug);
 
         repo_slug = setting.get_project_name()
         if repo_slug is None:
