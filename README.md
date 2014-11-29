@@ -3,6 +3,8 @@ Buildtime trend
 
 Visualise what's trending in your build process
 
+[![Stack Share](http://img.shields.io/badge/tech-stack-0690fa.svg)](http://stackshare.io/ruleant/buildtime-trend)
+
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
 Dependencies
