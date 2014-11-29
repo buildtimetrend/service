@@ -38,7 +38,7 @@ class TravisParser(object):
 
     @cherrypy.expose
     def index(self):
-        return "Hello world!"
+        return "Welcome to Buildtime Trend Service"
 
     @cherrypy.expose
     def travis(self, repo_slug=None, build=None):
