@@ -24,6 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
+import cgi
 import cherrypy
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
@@ -78,7 +79,7 @@ class TravisParser(object):
             log_build_keen(travis_data.build_jobs[build_job])
 
         return "Succesfully retrieved build #%s data of %s from Travis CI and sent to Keen.io" % \
-            (build, repo_slug)
+            (cgi.escape(build), cgi.escape(repo_slug))
        
 
 if __name__ == "__main__":
