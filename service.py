@@ -49,7 +49,7 @@ class TravisParser(object):
         if repo_slug is not None:
             settings.set_project_name(repo_slug);
 
-        repo_slug = setting.get_project_name()
+        repo_slug = settings.get_project_name()
         if repo_slug is None:
             return "Repo is not set, use repo_slug=user/repo"
 
