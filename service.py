@@ -28,6 +28,7 @@ import cgi
 import cherrypy
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
+from buildtimetrend.tools import get_logger
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 
@@ -44,6 +45,7 @@ class TravisParser(object):
     @cherrypy.expose
     def travis(self, repo=None, build=None):
         settings = Settings()
+        logger = get_logger()
         settings.load_config_file("config_service.yml")
 
         if repo is not None:
@@ -51,25 +53,29 @@ class TravisParser(object):
 
         repo = settings.get_project_name()
         if repo is None:
+            logger.warning("Repo is not set")
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
         allowed_repo = ["buildtimetrend", "ruleant"]
         if not any(x in repo for x in allowed_repo):
-            return "The supplied repo is not allowed : %s" % cgi.escape(repo)
+            message = "The supplied repo is not allowed : %s"
+            logger.warning(message, repo)
+            return message % cgi.escape(repo)
 
         if build is not None:
             settings.add_setting('build', build);
 
         build = settings.get_setting('build')
         if build is None:
+            logger.warning("Build number is not set")
             return "Build number is not set, use build=build_id"
 
         travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
-        print "Retrieve build #%s data of %s from Travis CI" % \
-            (build, repo)
+        logger.info("Retrieve build #%s data of %s from Travis CI",
+                    build, repo)
         travis_data.get_build_data()
 
         # process all build jobs
@@ -80,11 +86,12 @@ class TravisParser(object):
 
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
-            print "Send build job #%s data to Keen.io" % build_job
+            logger.info("Send build job #%s data to Keen.io", build_job)
             log_build_keen(travis_data.build_jobs[build_job])
 
-        return "Succesfully retrieved build #%s data of %s from Travis CI and sent to Keen.io" % \
-            (cgi.escape(build), cgi.escape(repo))
+        message = "Succesfully retrieved build #%s data of %s from Travis CI and sent to Keen.io"
+        logger.info(message, build, repo)
+        return message % (cgi.escape(build), cgi.escape(repo))
        
 
 if __name__ == "__main__":
