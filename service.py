@@ -42,21 +42,21 @@ class TravisParser(object):
         return "Coming soon, <a href='https://github.com/buildtimetrend/service'>Buildtime Trend as a Service</a>."
 
     @cherrypy.expose
-    def travis(self, repo_slug=None, build=None):
+    def travis(self, repo=None, build=None):
         settings = Settings()
         settings.load_config_file("config_service.yml")
 
-        if repo_slug is not None:
-            settings.set_project_name(repo_slug);
+        if repo is not None:
+            settings.set_project_name(repo);
 
-        repo_slug = settings.get_project_name()
-        if repo_slug is None:
-            return "Repo is not set, use repo_slug=user/repo"
+        repo = settings.get_project_name()
+        if repo is None:
+            return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
         allowed_repo = ["buildtimetrend", "ruleant"]
-        if not any(x in repo_slug for x in allowed_repo):
-            return "The supplied repo is not allowed : %s" % cgi.escape(repo_slug)
+        if not any(x in repo for x in allowed_repo):
+            return "The supplied repo is not allowed : %s" % cgi.escape(repo)
 
         if build is not None:
             settings.add_setting('build', build);
@@ -65,11 +65,11 @@ class TravisParser(object):
         if build is None:
             return "Build number is not set, use build=build_id"
 
-        travis_data = TravisData(repo_slug, build)
+        travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
         print "Retrieve build #%s data of %s from Travis CI" % \
-            (build, repo_slug)
+            (build, repo)
         travis_data.get_build_data()
 
         # process all build jobs
@@ -84,7 +84,7 @@ class TravisParser(object):
             log_build_keen(travis_data.build_jobs[build_job])
 
         return "Succesfully retrieved build #%s data of %s from Travis CI and sent to Keen.io" % \
-            (cgi.escape(build), cgi.escape(repo_slug))
+            (cgi.escape(build), cgi.escape(repo))
        
 
 if __name__ == "__main__":
