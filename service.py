@@ -29,6 +29,7 @@ import cherrypy
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
+from buildtimetrend.tools import set_loglevel
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 
@@ -45,8 +46,11 @@ class TravisParser(object):
     @cherrypy.expose
     def travis(self, repo=None, build=None):
         settings = Settings()
-        logger = get_logger()
         settings.load_config_file("config_service.yml")
+
+        # set loglevel
+        set_loglevel("INFO")
+        logger = get_logger()
 
         if repo is not None:
             settings.set_project_name(repo);
