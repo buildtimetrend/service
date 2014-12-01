@@ -63,9 +63,9 @@ class TravisParser(object):
             self.settings.add_setting('build', build)
 
         # process travis build
-        return self.process_travis()
+        return self.process_travis_buildlog()
 
-    def process_travis(self):
+    def process_travis_buildlog(self):
         '''
         Check parameters, load build data from Travis CI,
         process it and send to Keen.io for storage.
