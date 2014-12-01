@@ -1,0 +1,12 @@
+language: python
+python:
+- '2.7'
+install:
+- CFLAGS="-O0" pip install -r requirements.txt
+script:
+- nosetests
+deploy:
+  provider: heroku
+  api_key:
+    secure: aJ0roTFvocYRRsJSQj0mY5omBaq8okXl29gLv9euIMVhZtL7avfLxmR790pFYkCGz0Cud1Mniz+yHjstueqSY9au7tNzjNuidZjDbS6Txjz5HzYxU17EA0ppl1xlmI2wF+GD5edhOFhRmeY52FzZiuSGEMHIRP4gTT26pmjzRas=
+  app: buildtimetrend-service
