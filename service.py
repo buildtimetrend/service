@@ -23,6 +23,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import os
+import json
 import cgi
 import cherrypy
 from buildtimetrend.travis import TravisData
@@ -56,6 +57,8 @@ class TravisParser(object):
 
     @cherrypy.expose
     def travis(self, repo=None, build=None):
+        self.load_travis_payload()
+
         if repo is not None:
             self.settings.set_project_name(repo)
 
@@ -111,6 +114,16 @@ class TravisParser(object):
                   " and sent to Keen.io"
         logger.info(message, build, repo)
         return message % (cgi.escape(build), cgi.escape(repo))
+
+    def load_travis_payload(self):
+        '''
+        Load payload from Travis notification
+        '''
+        if 'Content-Length' in cherrypy.request.headers:
+            content_length = cherrypy.request.headers['Content-Length']
+            rawbody = cherrypy.request.body.read(int(content_length))
+            payload = json.load(rawbody)
+            get_logger().info("Travis Payload : %r.", payload)
 
 
 if __name__ == "__main__":
