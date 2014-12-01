@@ -51,21 +51,22 @@ class TravisParser(object):
 
     @cherrypy.expose
     def index(self):
-        return "Coming soon, <a href='https://github.com/buildtimetrend/service'>Buildtime Trend as a Service</a>."
+        return "Coming soon, " \
+               "<a href='https://github.com/buildtimetrend/service'>" \
+               "Buildtime Trend as a Service</a>."
 
     @cherrypy.expose
     def travis(self, repo=None, build=None):
         settings = Settings()
 
         if repo is not None:
-            settings.set_project_name(repo);
+            settings.set_project_name(repo)
 
         if build is not None:
-            settings.add_setting('build', build);
+            settings.add_setting('build', build)
 
         # process travis build
         return self.process_travis()
-
 
     def process_travis(self):
         '''
@@ -110,10 +111,11 @@ class TravisParser(object):
             logger.info("Send build job #%s data to Keen.io", build_job)
             log_build_keen(travis_data.build_jobs[build_job])
 
-        message = "Succesfully retrieved build #%s data of %s from Travis CI and sent to Keen.io"
+        message = "Succesfully retrieved build #%s data of %s from Travis CI" \
+                  " and sent to Keen.io"
         logger.info(message, build, repo)
         return message % (cgi.escape(build), cgi.escape(repo))
-       
+
 
 if __name__ == "__main__":
     # configure cherrypy webserver host and port
