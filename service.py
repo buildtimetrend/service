@@ -42,8 +42,8 @@ class TravisParser(object):
         '''
         Initialise class, by loading a config file and setting loglevel
         '''
-        settings = Settings()
-        settings.load_config_file("config_service.yml")
+        self.settings = Settings()
+        self.settings.load_config_file("config_service.yml")
 
         # set loglevel
         set_loglevel("INFO")
@@ -56,13 +56,11 @@ class TravisParser(object):
 
     @cherrypy.expose
     def travis(self, repo=None, build=None):
-        settings = Settings()
-
         if repo is not None:
-            settings.set_project_name(repo)
+            self.settings.set_project_name(repo)
 
         if build is not None:
-            settings.add_setting('build', build)
+            self.settings.add_setting('build', build)
 
         # process travis build
         return self.process_travis()
@@ -72,10 +70,9 @@ class TravisParser(object):
         Check parameters, load build data from Travis CI,
         process it and send to Keen.io for storage.
         '''
-        settings = Settings()
         logger = get_logger()
 
-        repo = settings.get_project_name()
+        repo = self.settings.get_project_name()
         if repo is None:
             logger.warning("Repo is not set")
             return "Repo is not set, use repo=user/repo"
@@ -87,7 +84,7 @@ class TravisParser(object):
             logger.warning(message, repo)
             return message % cgi.escape(repo)
 
-        build = settings.get_setting('build')
+        build = self.settings.get_setting('build')
         if build is None:
             logger.warning("Build number is not set")
             return "Build number is not set, use build=build_id"
