@@ -39,6 +39,16 @@ class TravisParser(object):
     Retrieve timing data from Travis CI, parse it and store it in Keen.io
     '''
 
+    def __init__(self):
+        '''
+        Initialise class, by loading a config file and setting loglevel
+        '''
+        settings = Settings()
+        settings.load_config_file("config_service.yml")
+
+        # set loglevel
+        set_loglevel("INFO")
+
     @cherrypy.expose
     def index(self):
         return "Coming soon, <a href='https://github.com/buildtimetrend/service'>Buildtime Trend as a Service</a>."
@@ -46,10 +56,6 @@ class TravisParser(object):
     @cherrypy.expose
     def travis(self, repo=None, build=None):
         settings = Settings()
-        settings.load_config_file("config_service.yml")
-
-        # set loglevel
-        set_loglevel("INFO")
 
         if repo is not None:
             settings.set_project_name(repo);
