@@ -129,11 +129,14 @@ class TravisParser(object):
         '''
         Load payload from Travis notification
         '''
+        logger = get_logger()
+        logger.info("Check Travis headers : %r", cherrypy.request.headers)
+
         if 'Content-Length' in cherrypy.request.headers:
             content_length = cherrypy.request.headers['Content-Length']
             rawbody = cherrypy.request.body.read(int(content_length))
             payload = json.load(rawbody)
-            get_logger().info("Travis Payload : %r.", payload)
+            logger.info("Travis Payload : %r.", payload)
 
 
 if __name__ == "__main__":
