@@ -61,8 +61,8 @@ class TravisParser(object):
     @cherrypy.expose
     def travis(self, repo=None, build=None):
         '''
-        Visiting this page triggers loading and processing a build log and data of
-        a travis CI build process.
+        Visiting this page triggers loading and processing the build log
+        and data of a travis CI build process.
         Parameters:
         repo : git repo name (fe. user/repo)
         build : build number
