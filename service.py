@@ -51,12 +51,22 @@ class TravisParser(object):
 
     @cherrypy.expose
     def index(self):
+        '''
+        Index page
+        '''
         return "Coming soon, " \
                "<a href='https://github.com/buildtimetrend/service'>" \
                "Buildtime Trend as a Service</a>."
 
     @cherrypy.expose
     def travis(self, repo=None, build=None):
+        '''
+        Visiting this page triggers loading and processing a build log and data of
+        a travis CI build process.
+        Parameters:
+        repo : git repo name (fe. user/repo)
+        build : build number
+        '''
         self.load_travis_payload()
 
         if repo is not None:
