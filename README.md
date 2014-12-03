@@ -20,6 +20,16 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
   - parameters :
     - `repo` : name of the Github repo, fe. `buildtimetrend/python-lib`
     - `build` : Travis CI build ID
+    - `payload` : Travis CI notification payload, more info in the [Travis CI documentation](http://docs.travis-ci.com/user/notifications/#Webhook-notification)
+
+To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file :
+
+    notifications:
+      webhooks:
+        # trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io
+        - http://buildtimetrend-service.herokuapp.com/travis
+
+When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters from the payload that is passed by Travis CI.
 
 Dependencies
 ------------
