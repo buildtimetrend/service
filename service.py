@@ -67,6 +67,8 @@ class TravisParser(object):
         repo : git repo name (fe. user/repo)
         build : build number
         '''
+        logger = get_logger()
+
         # reset settings
         self.settings.set_project_name(None)
         self.settings.add_setting('build', None)
@@ -76,9 +78,11 @@ class TravisParser(object):
 
         # process url (GET) parameters
         if repo is not None:
+            logger.info("Build repo : %s", repo)
             self.settings.set_project_name(repo)
 
         if build is not None:
+            logger.info("Build number : %d", int(build))
             self.settings.add_setting('build', build)
 
         # process travis build
