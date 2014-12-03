@@ -48,6 +48,7 @@ class TravisParser(object):
 
         # set loglevel
         set_loglevel("INFO")
+        self.logger = get_logger()
 
     @cherrypy.expose
     def index(self):
@@ -67,8 +68,6 @@ class TravisParser(object):
         repo : git repo name (fe. user/repo)
         build : build number
         '''
-        logger = get_logger()
-
         # reset settings
         self.settings.set_project_name(None)
         self.settings.add_setting('build', None)
@@ -78,11 +77,11 @@ class TravisParser(object):
 
         # process url (GET) parameters
         if repo is not None:
-            logger.info("Build repo : %s", repo)
+            self.logger.info("Build repo : %s", repo)
             self.settings.set_project_name(repo)
 
         if build is not None:
-            logger.info("Build number : %s", str(build))
+            self.logger.info("Build number : %s", str(build))
             self.settings.add_setting('build', build)
 
         # process travis build
@@ -93,29 +92,27 @@ class TravisParser(object):
         Check parameters, load build data from Travis CI,
         process it and send to Keen.io for storage.
         '''
-        logger = get_logger()
-
         repo = self.settings.get_project_name()
         if repo is None:
-            logger.warning("Repo is not set")
+            self.logger.warning("Repo is not set")
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
         allowed_repo = ["buildtimetrend", "ruleant"]
         if not any(x in repo for x in allowed_repo):
             message = "The supplied repo is not allowed : %s"
-            logger.warning(message, repo)
+            self.logger.warning(message, repo)
             return message % cgi.escape(repo)
 
         build = self.settings.get_setting('build')
         if build is None:
-            logger.warning("Build number is not set")
+            self.logger.warning("Build number is not set")
             return "Build number is not set, use build=build_id"
 
         travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
-        logger.info("Retrieve build #%s data of %s from Travis CI",
+        self.logger.info("Retrieve build #%s data of %s from Travis CI",
                     build, repo)
         travis_data.get_build_data()
 
@@ -127,26 +124,25 @@ class TravisParser(object):
 
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
-            logger.info("Send build job #%s data to Keen.io", build_job)
+            self.logger.info("Send build job #%s data to Keen.io", build_job)
             log_build_keen(travis_data.build_jobs[build_job])
 
         message = "Succesfully retrieved build #%s data of %s from Travis CI" \
                   " and sent to Keen.io"
-        logger.info(message, build, repo)
+        self.logger.info(message, build, repo)
         return message % (cgi.escape(build), cgi.escape(repo))
 
     def load_travis_payload(self, payload):
         '''
         Load payload from Travis notification
         '''
-        logger = get_logger()
-        logger.info("Check Travis headers : %r", cherrypy.request.headers)
+        self.logger.info("Check Travis headers : %r", cherrypy.request.headers)
 
         if payload is None:
             return
 
         json_payload = json.loads(payload)
-        logger.info("Travis Payload : %r.", json_payload)
+        self.logger.info("Travis Payload : %r.", json_payload)
 
         # get repo name from payload
         if ("repository" in json_payload
@@ -157,12 +153,12 @@ class TravisParser(object):
                 (json_payload["repository"]["owner_name"],
                  json_payload["repository"]["name"])
 
-            logger.info("Build repo : %s", repo)
+            self.logger.info("Build repo : %s", repo)
             self.settings.set_project_name(repo)
 
         # get build number from payload
         if "number" in json_payload:
-            logger.info("Build number : %s", str(json_payload["number"]))
+            self.logger.info("Build number : %s", str(json_payload["number"]))
             self.settings.add_setting('build', json_payload['number'])
 
 
