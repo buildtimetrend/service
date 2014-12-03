@@ -82,7 +82,7 @@ class TravisParser(object):
             self.settings.set_project_name(repo)
 
         if build is not None:
-            logger.info("Build number : %d", int(build))
+            logger.info("Build number : %s", str(build))
             self.settings.add_setting('build', build)
 
         # process travis build
@@ -162,7 +162,7 @@ class TravisParser(object):
 
         # get build number from payload
         if "number" in json_payload:
-            logger.info("Build number : %d", json_payload["number"])
+            logger.info("Build number : %s", str(json_payload["number"]))
             self.settings.add_setting('build', json_payload['number'])
 
 
