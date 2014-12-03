@@ -59,7 +59,7 @@ class TravisParser(object):
                "Buildtime Trend as a Service</a>."
 
     @cherrypy.expose
-    def travis(self, repo=None, build=None):
+    def travis(self, repo=None, build=None, payload=None):
         '''
         Visiting this page triggers loading and processing the build log
         and data of a travis CI build process.
@@ -67,8 +67,14 @@ class TravisParser(object):
         repo : git repo name (fe. user/repo)
         build : build number
         '''
-        self.load_travis_payload()
+        # reset settings
+        self.settings.set_project_name(None)
+        self.settings.add_setting('build', None)
 
+        # load parameters from the Travis notification payload
+        self.load_travis_payload(payload)
+
+        # process url (GET) parameters
         if repo is not None:
             self.settings.set_project_name(repo)
 
@@ -125,18 +131,35 @@ class TravisParser(object):
         logger.info(message, build, repo)
         return message % (cgi.escape(build), cgi.escape(repo))
 
-    def load_travis_payload(self):
+    def load_travis_payload(self, payload):
         '''
         Load payload from Travis notification
         '''
         logger = get_logger()
         logger.info("Check Travis headers : %r", cherrypy.request.headers)
 
-        if 'Content-Length' in cherrypy.request.headers:
-            content_length = cherrypy.request.headers['Content-Length']
-            rawbody = cherrypy.request.body.read(int(content_length))
-            payload = json.load(rawbody)
-            logger.info("Travis Payload : %r.", payload)
+        if payload is None:
+            return
+
+        json_payload = json.loads(payload)
+        logger.info("Travis Payload : %r.", json_payload)
+
+        # get repo name from payload
+        if ("repository" in json_payload
+                and "owner_name" in json_payload["repository"]
+                and "name" in json_payload["repository"]):
+
+            repo = "%s/%s" % \
+                (json_payload["repository"]["owner_name"],
+                 json_payload["repository"]["name"])
+
+            logger.info("Build repo : %s", repo)
+            self.settings.set_project_name(repo)
+
+        # get build number from payload
+        if "number" in json_payload:
+            logger.info("Build number : %d", json_payload["number"])
+            self.settings.add_setting('build', json_payload['number'])
 
 
 if __name__ == "__main__":
