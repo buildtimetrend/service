@@ -29,7 +29,7 @@ To trigger the service at the end of a Travis CI build, add this to your `.travi
         # trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io
         - http://buildtimetrend-service.herokuapp.com/travis
 
-When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters from the payload that is passed by Travis CI.
+When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the payload that is passed by Travis CI, to trigger loading and parsing the Travis CI log of the corresponding build.
 
 Dependencies
 ------------
