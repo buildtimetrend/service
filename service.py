@@ -46,6 +46,8 @@ class TravisParser(object):
         self.settings = Settings()
         self.settings.load_config_file("config_service.yml")
 
+        cherrypy.config.update({'error_page.404': self.error_page_404})
+
         # set loglevel
         set_loglevel("INFO")
         self.logger = get_logger()
@@ -86,6 +88,15 @@ class TravisParser(object):
 
         # process travis build
         return self.process_travis_buildlog()
+
+    def error_page_404(self, status, message, traceback, version):
+        '''
+        Page 404
+        '''
+        self.logger.error("Eror loading page (%s) : %s", status, message)
+        return "This page doesn't exist, please check usage on the " \
+               "<a href='https://github.com/buildtimetrend/service'>" \
+               "Buildtime Trend as a Service</a> website."
 
     def process_travis_buildlog(self):
         '''
