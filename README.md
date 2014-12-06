@@ -36,15 +36,15 @@ Config file
 
 Add a configfile named `config_service.yml` based on `config_sample.yml` to configure the way the service behaves.
 
-- `allowed_repo` : defines which repos are allowed by the service. It checks for substring matches, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
-Multiple entries are allowed, fe. 
+- `allowed_repo` : defines which repos are allowed by the service. If the `allowed_repo` setting is not defined, all repos are allowed. If substring matches the repo name, it is allowed, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
+Multiple entries are allowed, fe. :
 
-    buildtimetrend:
-      - allowed_repo:
-        - "my_name" # allowing all repo names that contain my_name
-        - "another_name/a_repo" # allows this specific repo
-
-If the `allowed_repo` settings is not defined, all repos are allowed
+```
+buildtimetrend:
+  allowed_repo:
+    - "my_name" # allowing all repo names that contain my_name
+    - "another_name/a_repo" # allows this specific repo
+```
 
 Dependencies
 ------------
