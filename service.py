@@ -34,6 +34,10 @@ from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 
 
+SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
+                       "Buildtime Trend as a Service</a>"
+
+
 class TravisParser(object):
     '''
     Retrieve timing data from Travis CI, parse it and store it in Keen.io
@@ -57,9 +61,7 @@ class TravisParser(object):
         '''
         Index page
         '''
-        return "Coming soon, " \
-               "<a href='https://github.com/buildtimetrend/service'>" \
-               "Buildtime Trend as a Service</a>."
+        return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     @cherrypy.expose
     def travis(self, repo=None, build=None, payload=None):
@@ -94,9 +96,8 @@ class TravisParser(object):
         Page 404
         '''
         self.logger.error("Eror loading page (%s) : %s", status, message)
-        return "This page doesn't exist, please check usage on the " \
-               "<a href='https://github.com/buildtimetrend/service'>" \
-               "Buildtime Trend as a Service</a> website."
+        return "This page doesn't exist, please check usage on " \
+               "the %s website." % SERVICE_WEBSITE_LINK
 
     def process_travis_buildlog(self):
         '''
