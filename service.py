@@ -23,7 +23,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import os
-import json
 import cgi
 import cherrypy
 from buildtimetrend.travis import process_notification_payload
