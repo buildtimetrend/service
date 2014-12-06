@@ -76,6 +76,8 @@ class TravisParser(object):
         self.settings.set_project_name(None)
         self.settings.add_setting('build', None)
 
+        self.logger.info("Check Travis headers : %r", cherrypy.request.headers)
+
         # load parameters from the Travis notification payload
         self.load_travis_payload(payload)
 
@@ -148,8 +150,6 @@ class TravisParser(object):
         '''
         Load payload from Travis notification
         '''
-        self.logger.info("Check Travis headers : %r", cherrypy.request.headers)
-
         if payload is None:
             return
 
