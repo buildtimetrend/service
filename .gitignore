@@ -3,7 +3,6 @@ buildtimes.xml
 trend.png
 config.js
 config.yml
-config_service.yml
 *.py[cod]
 
 venv/

@@ -143,8 +143,9 @@ class TravisParser(object):
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
-        allowed_repo = ["buildtimetrend", "ruleant"]
-        if not any(x in repo for x in allowed_repo):
+        allowed_repo = self.settings.get_setting("allowed_repo")
+        if allowed_repo is not None and \
+                not any(x in repo for x in allowed_repo):
             message = "The supplied repo is not allowed : %s"
             self.logger.warning(message, repo)
             return message % cgi.escape(repo)
