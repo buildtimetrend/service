@@ -117,7 +117,7 @@ class TravisParser(object):
 
         # retrieve build data using Travis CI API
         self.logger.info("Retrieve build #%s data of %s from Travis CI",
-                    build, repo)
+                         build, repo)
         travis_data.get_build_data()
 
         # process all build jobs
