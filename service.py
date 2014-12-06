@@ -26,6 +26,7 @@ import os
 import json
 import cgi
 import cherrypy
+from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
@@ -79,7 +80,7 @@ class TravisParser(object):
         self.logger.info("Check Travis headers : %r", cherrypy.request.headers)
 
         # load parameters from the Travis notification payload
-        self.load_travis_payload(payload)
+        process_notification_payload(payload)
 
         # process url (GET) parameters
         if repo is not None:
@@ -145,33 +146,6 @@ class TravisParser(object):
                   " and sent to Keen.io"
         self.logger.info(message, build, repo)
         return message % (cgi.escape(build), cgi.escape(repo))
-
-    def load_travis_payload(self, payload):
-        '''
-        Load payload from Travis notification
-        '''
-        if payload is None:
-            return
-
-        json_payload = json.loads(payload)
-        self.logger.info("Travis Payload : %r.", json_payload)
-
-        # get repo name from payload
-        if ("repository" in json_payload
-                and "owner_name" in json_payload["repository"]
-                and "name" in json_payload["repository"]):
-
-            repo = "%s/%s" % \
-                (json_payload["repository"]["owner_name"],
-                 json_payload["repository"]["name"])
-
-            self.logger.info("Build repo : %s", repo)
-            self.settings.set_project_name(repo)
-
-        # get build number from payload
-        if "number" in json_payload:
-            self.logger.info("Build number : %s", str(json_payload["number"]))
-            self.settings.add_setting('build', json_payload['number'])
 
 
 if __name__ == "__main__":
