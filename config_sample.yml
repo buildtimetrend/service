@@ -1,0 +1,11 @@
+# Buildtime Trend general settings
+buildtimetrend:
+    allowed_repo:
+      - "match_this_substring"
+      - "my_name/repo_name"
+
+# Keen.io connection settings
+keen:
+    project_id: "Keen.io project_id"
+    write_key: "Keen.io write_key"
+    read_key: "Keen.io read_key"

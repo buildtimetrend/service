@@ -31,6 +31,21 @@ To trigger the service at the end of a Travis CI build, add this to your `.travi
 
 When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the payload that is passed by Travis CI, to trigger loading and parsing the Travis CI log of the corresponding build.
 
+Config file
+-----------
+
+Add a configfile named `config_service.yml` based on `config_sample.yml` to configure the way the service behaves.
+
+- `allowed_repo` : defines which repos are allowed by the service. It checks for substring matches, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
+Multiple entries are allowed, fe. 
+
+    buildtimetrend:
+      - allowed_repo:
+        - "my_name" # allowing all repo names that contain my_name
+        - "another_name/a_repo" # allows this specific repo
+
+If the `allowed_repo` settings is not defined, all repos are allowed
+
 Dependencies
 ------------
 
