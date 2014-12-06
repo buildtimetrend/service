@@ -107,6 +107,37 @@ class TravisParser(object):
         process it and send to Keen.io for storage.
         '''
         repo = self.settings.get_project_name()
+        build = self.settings.get_setting('build')
+
+        result = self.check_process_parameters(repo, build)
+        if result is not None:
+            return result
+
+        travis_data = TravisData(repo, build)
+
+        # retrieve build data using Travis CI API
+        self.logger.info("Retrieve build #%s data of %s from Travis CI",
+                    build, repo)
+        travis_data.get_build_data()
+
+        # process all build jobs
+        travis_data.process_build_jobs()
+
+        # send build job data to Keen.io
+        for build_job in travis_data.build_jobs:
+            self.logger.info("Send build job #%s data to Keen.io", build_job)
+            log_build_keen(travis_data.build_jobs[build_job])
+
+        message = "Succesfully retrieved build #%s data of %s from Travis CI" \
+                  " and sent to Keen.io"
+        self.logger.info(message, build, repo)
+        return message % (cgi.escape(build), cgi.escape(repo))
+
+    def check_process_parameters(self, repo, build):
+        '''
+        Check parameters (repo and build)
+        Returns error message, None when all parameters are fine.
+        '''
         if repo is None:
             self.logger.warning("Repo is not set")
             return "Repo is not set, use repo=user/repo"
@@ -123,28 +154,10 @@ class TravisParser(object):
             self.logger.warning("Build number is not set")
             return "Build number is not set, use build=build_id"
 
-        travis_data = TravisData(repo, build)
-
-        # retrieve build data using Travis CI API
-        self.logger.info("Retrieve build #%s data of %s from Travis CI",
-                    build, repo)
-        travis_data.get_build_data()
-
-        # process all build jobs
-        travis_data.process_build_jobs()
-
         if not keen_is_writable():
             return "Keen IO write key not set, no data was sent"
 
-        # send build job data to Keen.io
-        for build_job in travis_data.build_jobs:
-            self.logger.info("Send build job #%s data to Keen.io", build_job)
-            log_build_keen(travis_data.build_jobs[build_job])
-
-        message = "Succesfully retrieved build #%s data of %s from Travis CI" \
-                  " and sent to Keen.io"
-        self.logger.info(message, build, repo)
-        return message % (cgi.escape(build), cgi.escape(repo))
+        return None
 
 
 if __name__ == "__main__":
