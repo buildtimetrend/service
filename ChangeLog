@@ -1,0 +1,1 @@
+- issue #51 : Use heroku to process Travis logs asynchronously
