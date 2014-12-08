@@ -131,7 +131,7 @@ class TravisParser(object):
             self.logger.info("Send build job #%s data to Keen.io", build_job)
             log_build_keen(travis_data.build_jobs[build_job])
 
-        message = "Succesfully retrieved build #%s data of %s from Travis CI" \
+        message = "Successfully retrieved build #%s data of %s from Travis CI" \
                   " and sent to Keen.io"
         self.logger.info(message, build, repo)
         return message % (cgi.escape(build), cgi.escape(repo))
