@@ -47,7 +47,7 @@ buildtimetrend:
 ```
 
 - `travis_account_token` : define to enable checking Travis CI notification Authorization header. More info on Travis CI Webhook Authorization and where to find the Account token : http://docs.travis-ci.com/user/notifications/#Authorization-for-Webhooks
-Remark : the account token should be the one of the user who created the repo on Travis CI
+Remark : the account token should be the one of the user who created the repo on Travis CI.
 
 It can also be defined with the `TRAVIS_ACCOUNT_TOKEN` environment variable.
 
