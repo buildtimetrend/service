@@ -99,8 +99,9 @@ class TravisParser(object):
         '''
         Page 404
         '''
-        self.logger.error("Cherrypy %s : Error loading page (%s) : %s",
-                          version, status, message)
+        self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
+                          "Traceback : %s",
+                          version, status, message, traceback)
         return "This page doesn't exist, please check usage on " \
                "the %s website." % SERVICE_WEBSITE_LINK
 
