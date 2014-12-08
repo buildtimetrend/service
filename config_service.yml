@@ -3,9 +3,3 @@ buildtimetrend:
     allowed_repo:
       - "buildtimetrend"
       - "ruleant"
-
-# Keen.io connection settings
-keen:
-    project_id: "542fc8e9709a39424f8284bc"
-    write_key: "791774ed32bd2980d79e25105fbf6625f937791ec3bf7fdf0d6ebbe24b72ccb9505a9cc55b4c8e064de46d0ce5a8038824f413458ede9b77954b9e544d039b67e837955ec7ea91bc90af1901587b573d214b5ac77a533eaaabc0f9967ed068c3d78fe4e28c539013247d5997637af6d8"
-#    read_key: "Keen.io read_key"
