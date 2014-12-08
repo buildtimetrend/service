@@ -3,6 +3,7 @@ buildtimetrend:
     allowed_repo:
       - "match_this_substring"
       - "my_name/repo_name"
+    travis_account_token: "Travis CI account token of user who set up the repo"
 
 # Keen.io connection settings
 keen:
