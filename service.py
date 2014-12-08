@@ -50,6 +50,7 @@ class TravisParser(object):
         '''
         self.settings = Settings()
         self.settings.load_config_file("config_service.yml")
+        self.settings.load_env_vars()
 
         cherrypy.config.update({'error_page.404': self.error_page_404})
 
