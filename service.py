@@ -26,6 +26,7 @@ import os
 import cgi
 import cherrypy
 from buildtimetrend.travis import process_notification_payload
+from buildtimetrend.travis import check_authorization
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
@@ -79,7 +80,8 @@ class TravisParser(object):
         self.logger.info("Check Travis headers : %r", cherrypy.request.headers)
 
         # load parameters from the Travis notification payload
-        process_notification_payload(payload)
+        if self.check_travis_notification():
+            process_notification_payload(payload)
 
         # process url (GET) parameters
         if repo is not None:
@@ -160,6 +162,24 @@ class TravisParser(object):
             return "Keen IO write key not set, no data was sent"
 
         return None
+
+    def check_travis_notification(self):
+        '''
+        Load Authorization and Travis-Repo-Slug headers and check if
+        the Authorization header is correct
+        '''
+        if "Authorization" not in cherrypy.request.headers:
+            self.logger.debug("Authorization header is not set")
+            return False
+
+        if "Travis-Repo-Slug" not in cherrypy.request.headers:
+            self.logger.debug("Travis-Repo-Slug header is not set")
+            return False
+
+        return check_authorization(
+            cherrypy.request.headers["Travis-Repo-Slug"],
+            cherrypy.request.headers["Authorization"]
+        )
 
 
 if __name__ == "__main__":
