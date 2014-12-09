@@ -1,2 +1,2 @@
 v0.1 (not yet released)
-- issue #51 : Use heroku to process Travis logs asynchronously
+- issue #4, #51 : Use heroku to process Travis logs asynchronously
