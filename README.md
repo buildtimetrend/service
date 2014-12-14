@@ -1,5 +1,5 @@
-Buildtime trend
-===============
+Buildtime Trend as a Service
+============================
 
 Visualise what's trending in your build process
 
@@ -55,6 +55,7 @@ Dependencies
 ------------
 
 - `buildtimetrend` : [Buildtime Trend library](https://github.com/buildtimetrend/python-lib)
+- `cherrypy` : [CherrPy](http://www.cherrypy.org/) A Minimalist Python Web Framework, making the API available as a web service
 
 Bugs and feature requests
 -------------------------
