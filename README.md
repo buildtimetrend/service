@@ -43,7 +43,7 @@ Multiple entries are allowed, fe. :
 buildtimetrend:
   allowed_repo:
     - "my_name" # allowing all repo names that contain my_name
-    - "another_name/a_repo" # allows this specific repo
+    - "another_name/some_repo" # allows this specific repo
 ```
 
 - `travis_account_token` : define to enable checking Travis CI notification Authorization header. More info on Travis CI Webhook Authorization and where to find the Account token : http://docs.travis-ci.com/user/notifications/#Authorization-for-Webhooks
