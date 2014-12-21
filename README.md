@@ -51,6 +51,9 @@ Remark : the account token should be the one of the user who created the repo on
 
 It can also be defined with the `TRAVIS_ACCOUNT_TOKEN` environment variable.
 
+- `loglevel` : defines loglevel, possible values : `DEBUG`, `INFO`, `WARNING` (default), `ERROR`
+It can also be defined with the `BTT_LOGLEVEL` environment variable.
+
 Dependencies
 ------------
 
