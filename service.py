@@ -30,7 +30,6 @@ from buildtimetrend.travis import check_authorization
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
-from buildtimetrend.tools import set_loglevel
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 
