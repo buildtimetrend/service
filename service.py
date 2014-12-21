@@ -54,8 +54,7 @@ class TravisParser(object):
 
         cherrypy.config.update({'error_page.404': self.error_page_404})
 
-        # set loglevel
-        set_loglevel("INFO")
+        # get logger
         self.logger = get_logger()
 
     @cherrypy.expose
