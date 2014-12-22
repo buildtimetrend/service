@@ -153,7 +153,6 @@ class TravisParser(object):
             self.logger.warning(message, repo)
             return message % cgi.escape(repo)
 
-        build = self.settings.get_setting('build')
         if build is None:
             self.logger.warning("Build number is not set")
             return "Build number is not set, use build=build_id"
