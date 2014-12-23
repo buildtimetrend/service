@@ -146,12 +146,9 @@ class TravisParser(object):
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
-        allowed_repo = self.settings.get_setting("allowed_repo")
-        if allowed_repo is not None and \
-                not any(x in repo for x in allowed_repo):
-            message = "The supplied repo is not allowed : %s"
-            self.logger.warning(message, repo)
-            return message % cgi.escape(repo)
+        msg_repo_is_allowed = self.repo_is_allowed(repo)
+        if msg_repo_is_allowed is not None:
+            return msg_repo_is_allowed
 
         if build is None:
             self.logger.warning("Build number is not set")
@@ -159,6 +156,26 @@ class TravisParser(object):
 
         if not keen_is_writable():
             return "Keen IO write key not set, no data was sent"
+
+        return None
+
+    def repo_is_allowed(self, repo):
+        '''
+        Check if repo is allowed
+        List of allowed repos is set by setting 'allowed_repo',
+        if not defined, the repo is not checked,
+        'allowed_repo' can have multiple values, if any of them matches
+        a substring of the repo, the repo is allowed.
+
+        Parameters:
+        -repo : repo name
+        '''
+        allowed_repo = self.settings.get_setting("allowed_repo")
+        if allowed_repo is not None and \
+                not any(x in repo for x in allowed_repo):
+            message = "The supplied repo is not allowed : %s"
+            self.logger.warning(message, repo)
+            return message % cgi.escape(repo)
 
         return None
 
