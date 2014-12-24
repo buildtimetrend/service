@@ -146,9 +146,9 @@ class TravisParser(object):
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
-        msg_repo_is_allowed = self.repo_is_allowed(repo)
-        if msg_repo_is_allowed is not None:
-            return msg_repo_is_allowed
+        msg_is_repo_allowed = self.is_repo_allowed(repo)
+        if msg_is_repo_allowed is not None:
+            return msg_is_repo_allowed
 
         if build is None:
             self.logger.warning("Build number is not set")
@@ -159,7 +159,7 @@ class TravisParser(object):
 
         return None
 
-    def repo_is_allowed(self, repo):
+    def is_repo_allowed(self, repo):
         '''
         Check if repo is allowed
         List of allowed repos is set by setting 'allowed_repo',
