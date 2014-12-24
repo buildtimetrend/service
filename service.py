@@ -48,8 +48,7 @@ class TravisParser(object):
         Initialise class, by loading a config file and setting loglevel
         '''
         self.settings = Settings()
-        self.settings.load_config_file("config_service.yml")
-        self.settings.load_env_vars()
+        self.settings.load_settings(config_file="config_service.yml")
 
         cherrypy.config.update({'error_page.404': self.error_page_404})
 
