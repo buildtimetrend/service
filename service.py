@@ -63,6 +63,16 @@ class TravisParser(object):
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     @cherrypy.expose
+    def badge(self):
+        '''
+        Generates a shield badge
+        '''
+        Redirect to shields.io API to generate badge
+        raise cherrypy.HTTPRedirect(
+            "https://img.shields.io/badge/buildtime-trend-blue.svg"
+        )
+
+    @cherrypy.expose
     def travis(self, repo=None, build=None, payload=None):
         '''
         Visiting this page triggers loading and processing the build log
