@@ -67,7 +67,7 @@ class TravisParser(object):
         '''
         Generates a shield badge
         '''
-        Redirect to shields.io API to generate badge
+        # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
             "https://img.shields.io/badge/buildtime-trend-blue.svg"
         )
