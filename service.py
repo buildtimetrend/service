@@ -32,6 +32,8 @@ from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
+from buildtimetrend.keenio import get_avg_buildtime
+from buildtimetrend.keenio import get_latest_buildtime
 
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
@@ -63,13 +65,31 @@ class TravisParser(object):
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     @cherrypy.expose
-    def badge(self):
+    def badge(self, repo_owner=None, repo_name=None, badge_type="avg",
+              interval=None):
         '''
         Generates a shield badge
         '''
+        repo = "%s/%s" % (repo_owner, repo_name)
+
+        if badge_type == "latest":
+            # get last duration
+            duration = get_latest_buildtime(repo)
+        else:
+            # Calculate average
+            duration = get_avg_buildtime(repo, interval)
+
+        if duration is None:
+            text = "trend"
+        else:
+            text = "{:.1f}s".format(duration)
+
+        self.logger.info("Badge type %s (interval : %s) for %s, duration : %s",
+                         badge_type, interval, repo, text)
+
         # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
-            "https://img.shields.io/badge/buildtime-trend-blue.svg"
+            "https://img.shields.io/badge/buildtime-%s-blue.svg" % text
         )
 
     @cherrypy.expose
