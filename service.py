@@ -71,7 +71,9 @@ class TravisParser(object):
         Generates a shield badge
         '''
         repo = "%s/%s" % (repo_owner, repo_name)
-        text = "trend"
+        badge_subject = "buildtime"
+        badge_status = "trend"
+        badge_colour = "blue"
 
         if self.is_repo_allowed(repo) is None:
             if badge_type == "latest":
@@ -79,17 +81,19 @@ class TravisParser(object):
                 duration = get_latest_buildtime(repo)
             else:
                 # Calculate average
+                badge_subject = "avg._buildtime_(%s)" % str(interval)
                 duration = get_avg_buildtime(repo, interval)
 
             if duration is not None:
-                text = "{:.1f}s".format(duration)
+                badge_status = "{:.1f}s".format(duration)
 
             self.logger.info("Badge type %s (interval : %s) for %s, duration : %s",
-                             badge_type, interval, repo, text)
+                             badge_type, interval, repo, badge_status)
 
         # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
-            "https://img.shields.io/badge/buildtime-%s-blue.svg" % text
+            "https://img.shields.io/badge/%s-%s-%s.svg" %
+            (badge_subject, badge_status, badge_colour)
         )
 
     @cherrypy.expose
