@@ -31,6 +31,7 @@ from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
 from buildtimetrend.tools import get_repo_slug
+from buildtimetrend.tools import check_interval
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
@@ -81,9 +82,12 @@ class TravisParser(object):
                 # get last duration
                 duration = get_latest_buildtime(repo)
             else:
-                # Calculate average
-                badge_subject = "avg._buildtime_(%s)" % str(interval)
+                # calculate average
                 duration = get_avg_buildtime(repo, interval)
+
+                # set badge subject
+                badge_subject = "avg._buildtime_(%s)" % \
+                    check_interval(interval)["name"]
 
             if duration is not None:
                 badge_status = "{:.1f}s".format(duration)
