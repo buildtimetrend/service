@@ -73,6 +73,13 @@ class TravisParser(object):
         Generates a shield badge
         '''
         repo = get_repo_slug(repo_owner, repo_name)
+        interval = check_interval(interval)["name"]
+
+        if type(badge_type) is str:
+            badge_type = badge_type.lower()
+        else:
+            badge_type = str(badge_type)
+
         badge_subject = "buildtime"
         badge_status = "trend"
         badge_colour = "blue"
@@ -86,8 +93,7 @@ class TravisParser(object):
                 duration = get_avg_buildtime(repo, interval)
 
                 # set badge subject
-                badge_subject = "avg._buildtime_(%s)" % \
-                    check_interval(interval)["name"]
+                badge_subject = "avg._buildtime_(%s)" % interval
 
             if duration is not None:
                 badge_status = "{:.1f}s".format(duration)
