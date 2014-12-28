@@ -87,8 +87,9 @@ class TravisParser(object):
             if duration is not None:
                 badge_status = "{:.1f}s".format(duration)
 
-            self.logger.info("Badge type %s (interval : %s) for %s, duration : %s",
-                             badge_type, interval, repo, badge_status)
+            self.logger.info(
+                "Badge type %s (interval : %s) for %s, duration : %s",
+                badge_type, interval, repo, badge_status)
 
         # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
