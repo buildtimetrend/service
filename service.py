@@ -30,6 +30,7 @@ from buildtimetrend.travis import check_authorization
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
+from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
@@ -70,7 +71,7 @@ class TravisParser(object):
         '''
         Generates a shield badge
         '''
-        repo = "%s/%s" % (repo_owner, repo_name)
+        repo = get_repo_slug(repo_owner, repo_name)
         badge_subject = "buildtime"
         badge_status = "trend"
         badge_colour = "blue"
