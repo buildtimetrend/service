@@ -216,7 +216,7 @@ class TravisParser(object):
         -repo : repo name
         '''
         allowed_repo = self.settings.get_setting("allowed_repo")
-        if allowed_repo is not None and \
+        if allowed_repo is not None and repo is not None and \
                 not any(x in repo for x in allowed_repo):
             message = "The supplied repo is not allowed : %s"
             self.logger.warning(message, repo)
