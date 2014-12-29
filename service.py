@@ -84,7 +84,7 @@ class TravisParser(object):
         badge_status = "trend"
         badge_colour = "blue"
 
-        if self.is_repo_allowed(repo) is None:
+        if repo is not None and self.is_repo_allowed(repo) is None:
             if badge_type == "latest":
                 # get last duration
                 duration = get_latest_buildtime(repo)
@@ -215,8 +215,13 @@ class TravisParser(object):
         Parameters:
         -repo : repo name
         '''
+        if repo is None:
+            message = "Repo is not defined"
+            self.logger.warning(message)
+            return message
+
         allowed_repo = self.settings.get_setting("allowed_repo")
-        if allowed_repo is not None and repo is not None and \
+        if allowed_repo is not None and \
                 not any(x in repo for x in allowed_repo):
             message = "The supplied repo is not allowed : %s"
             self.logger.warning(message, repo)
