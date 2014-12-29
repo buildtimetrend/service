@@ -98,10 +98,13 @@ class TravisParser(object):
             # valid duration is 0 or greater int or float
             if type(duration) in (float, int) and duration >= 0:
                 badge_status = "{:.1f}s".format(duration)
+            else:
+                badge_status = "unknown"
+                badge_colour = "grey"
 
-                self.logger.info(
-                    "Badge type %s (interval : %s) for %s, duration : %s",
-                    badge_type, interval, repo, badge_status)
+            self.logger.info(
+                "Badge type %s (interval : %s) for %s, duration : %s",
+                badge_type, interval, repo, badge_status)
 
         # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
