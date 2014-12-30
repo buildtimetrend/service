@@ -100,7 +100,7 @@ class TravisParser(object):
                 badge_status = "{:.1f}s".format(duration)
             else:
                 badge_status = "unknown"
-                badge_colour = "grey"
+                badge_colour = "lightgrey"
 
             self.logger.info(
                 "Badge type %s (interval : %s) for %s, duration : %s",
