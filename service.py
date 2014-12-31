@@ -35,6 +35,7 @@ from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
+from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 
 
@@ -83,21 +84,24 @@ class TravisParser(object):
         badge_subject = "buildtime"
         badge_status = "trend"
         badge_colour = "blue"
+        format_string = "{:.1f}s"
 
         if repo is not None and self.is_repo_allowed(repo) is None:
             if badge_type == "latest":
                 # get last duration
-                duration = get_latest_buildtime(repo)
+                value = get_latest_buildtime(repo)
+            elif badge_type == "jobs":
+                badge_subject = "%s_(%s)" % (badge_type, interval)
+                value = get_total_build_jobs(repo, interval)
+                format_string = "{:d}"
             else:
                 # calculate average
-                duration = get_avg_buildtime(repo, interval)
-
-                # set badge subject
-                badge_subject = "avg._buildtime_(%s)" % interval
+                badge_subject = "%s_(%s)" % (badge_subject, interval)
+                value = get_avg_buildtime(repo, interval)
 
             # valid duration is 0 or greater int or float
-            if type(duration) in (float, int) and duration >= 0:
-                badge_status = "{:.1f}s".format(duration)
+            if type(value) in (float, int) and value >= 0:
+                badge_status = format_string.format(value)
             else:
                 badge_status = "unknown"
                 badge_colour = "lightgrey"
