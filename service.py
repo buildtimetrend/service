@@ -35,6 +35,7 @@ from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
+from buildtimetrend.keenio import get_total_builds
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 
@@ -94,6 +95,10 @@ class TravisParser(object):
                 badge_subject = "%s_(%s)" % (badge_type, interval)
                 value = get_total_build_jobs(repo, interval)
                 format_string = "{:d}"
+            elif badge_type == "builds":
+                badge_subject = "%s_(%s)" % (badge_type, interval)
+                value = get_total_builds(repo, interval)
+                format_string = "{:d}"
             else:
                 # calculate average
                 badge_subject = "%s_(%s)" % (badge_subject, interval)
@@ -107,7 +112,7 @@ class TravisParser(object):
                 badge_colour = "lightgrey"
 
             self.logger.info(
-                "Badge type %s (interval : %s) for %s, duration : %s",
+                "Badge type %s (interval : %s) for %s, value : %s",
                 badge_type, interval, repo, badge_status)
 
         # Redirect to shields.io API to generate badge
