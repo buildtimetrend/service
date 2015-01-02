@@ -36,6 +36,8 @@ from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
+from buildtimetrend.keenio import get_pct_passed_build_jobs
+from buildtimetrend.keenio import get_result_color
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 
@@ -99,6 +101,11 @@ class TravisParser(object):
                 badge_subject = "%s_(%s)" % (badge_type, interval)
                 value = get_total_builds(repo, interval)
                 format_string = "{:d}"
+            elif badge_type == "passed":
+                badge_subject = "%s_(%s)" % (badge_type, interval)
+                value = get_pct_passed_build_jobs(repo, interval)
+                badge_colour = get_result_color(value, 100, 75)
+                format_string = "{:d}%"
             else:
                 # calculate average
                 badge_subject = "%s_(%s)" % (badge_subject, interval)
