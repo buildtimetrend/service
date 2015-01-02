@@ -26,6 +26,7 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
       - `avg` : average buildtime of buildjobs in period set by `interval` (default)
       - `jobs` : number of build jobs in period set by `interval`
       - `builds` : number of builds in period set by `interval`
+      - `passed` : percentage of successful build jobs during `interval`
     - `interval` : time interval, options : `week` (default), `month`, `year` 
   - examples :
     - latest build duration : `/badge/buildtimetrend/service/latest` ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest)
@@ -38,6 +39,10 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
     - number of builds last week : `/badge/buildtimetrend/service/builds/week` ![Builds (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/week)
     - number of builds last month : `/badge/buildtimetrend/service/builds/month` ![Builds (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/month)
     - number of builds last year : `/buildtimetrend/service/builds/year` ![Builds (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/year)
+    - percentage of passed build jobs last week : `/badge/buildtimetrend/service/passed/week` ![% passed build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/week)
+    - percentage of passed build jobs last month : `/badge/buildtimetrend/service/passed/month` ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month)
+    - percentage of passed build jobs last year : `/badge/buildtimetrend/service/passed/year` ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year)
+
 
 - `/travis` : loads a Travis CI build log file, processes it and sends the data to Keen.io
   - parameters :
