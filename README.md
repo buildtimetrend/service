@@ -49,8 +49,9 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
 
 ### process Travis CI build log
 
+Loads a Travis CI build log file, processes it and sends the data to Keen.io.
+
 - path : `/travis`
-- description : loads a Travis CI build log file, processes it and sends the data to Keen.io
 - parameters :
   - `repo` : name of the Github repo, fe. `buildtimetrend/python-lib`
   - `build` : Travis CI build ID
