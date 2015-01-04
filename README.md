@@ -33,19 +33,19 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
   - `interval` : time interval, options : `week` (default), `month`, `year` 
 
 #### Badge examples
-- latest build duration : `/badge/buildtimetrend/service/latest` ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest)
-- average buildtime of last week : `/badge/buildtimetrend/service/avg/week` ![Average buildtime (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/week)
-- average buildtime of last month : `/badge/buildtimetrend/service/avg/month` ![Average buildtime (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/month)
-- average buildtime of last year : `/buildtimetrend/service/avg/year` ![Average buildtime (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/year)
-- number of build jobs last week : `/badge/buildtimetrend/service/jobs/week` ![Build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/week)
-- number of build jobs last month : `/badge/buildtimetrend/service/jobs/month` ![Build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/month)
-- number of build jobs last year : `/buildtimetrend/service/jobs/year` ![Build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/year)
-- number of builds last week : `/badge/buildtimetrend/service/builds/week` ![Builds (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/week)
-- number of builds last month : `/badge/buildtimetrend/service/builds/month` ![Builds (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/month)
-- number of builds last year : `/buildtimetrend/service/builds/year` ![Builds (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/year)
-- percentage of passed build jobs last week : `/badge/buildtimetrend/service/passed/week` ![% passed build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/week)
-- percentage of passed build jobs last month : `/badge/buildtimetrend/service/passed/month` ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month)
-- percentage of passed build jobs last year : `/badge/buildtimetrend/service/passed/year` ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year)
+- ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest) : `/badge/buildtimetrend/service/latest`
+- ![Average buildtime (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/week) : `/badge/buildtimetrend/service/avg/week`
+- ![Average buildtime (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/month) : `/badge/buildtimetrend/service/avg/month`
+- ![Average buildtime (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/year) : `/buildtimetrend/service/avg/year`
+- ![Build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/week) : `/badge/buildtimetrend/service/jobs/week`
+- ![Build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/month) : `/badge/buildtimetrend/service/jobs/month`
+- ![Build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/year) : `/buildtimetrend/service/jobs/year`
+- ![Builds (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/week) : `/badge/buildtimetrend/service/builds/week`
+- ![Builds (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/month) : `/badge/buildtimetrend/service/builds/month`
+- ![Builds (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/year) : `/buildtimetrend/service/builds/year`
+- ![% passed build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/week) : `/badge/buildtimetrend/service/passed/week`
+- ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month) : `/badge/buildtimetrend/service/passed/month`
+- ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year) : `/badge/buildtimetrend/service/passed/year`
 
 ### process Travis CI build log
 
