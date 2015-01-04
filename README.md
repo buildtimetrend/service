@@ -47,7 +47,7 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
 - ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month) : `/badge/buildtimetrend/service/passed/month`
 - ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year) : `/badge/buildtimetrend/service/passed/year`
 
-### process Travis CI build log
+### Process Travis CI build log
 
 Loads a Travis CI build log file, processes it and sends the data to Keen.io.
 
