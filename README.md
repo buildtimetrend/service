@@ -32,7 +32,7 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
     - `passed` : percentage of successful build jobs during `interval`
   - `interval` : time interval, options : `week` (default), `month`, `year` 
 
-#### Examples
+#### Badge examples
 - latest build duration : `/badge/buildtimetrend/service/latest` ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest)
 - average buildtime of last week : `/badge/buildtimetrend/service/avg/week` ![Average buildtime (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/week)
 - average buildtime of last month : `/badge/buildtimetrend/service/avg/month` ![Average buildtime (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/month)
