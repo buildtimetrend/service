@@ -15,40 +15,46 @@ Usage
 
 The service is available on Heroku : http://buildtimetrend-service.herokuapp.com/
 
-- `/` : index page
-- `/badge` : generates a shield badge
-  - usage : `/badge/repo_owner/repo_name/badge_type/interval`
-  - parameters :
-    - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
-    - `repo_name` : name of the Github repo, fe. `service`
-    - `badge_type` : type of badge, options :
-      - `latest` : buildtime of last build job
-      - `avg` : average buildtime of buildjobs in period set by `interval` (default)
-      - `jobs` : number of build jobs in period set by `interval`
-      - `builds` : number of builds in period set by `interval`
-      - `passed` : percentage of successful build jobs during `interval`
-    - `interval` : time interval, options : `week` (default), `month`, `year` 
-  - examples :
-    - latest build duration : `/badge/buildtimetrend/service/latest` ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest)
-    - average buildtime of last week : `/badge/buildtimetrend/service/avg/week` ![Average buildtime (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/week)
-    - average buildtime of last month : `/badge/buildtimetrend/service/avg/month` ![Average buildtime (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/month)
-    - average buildtime of last year : `/buildtimetrend/service/avg/year` ![Average buildtime (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/year)
-    - number of build jobs last week : `/badge/buildtimetrend/service/jobs/week` ![Build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/week)
-    - number of build jobs last month : `/badge/buildtimetrend/service/jobs/month` ![Build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/month)
-    - number of build jobs last year : `/buildtimetrend/service/jobs/year` ![Build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/year)
-    - number of builds last week : `/badge/buildtimetrend/service/builds/week` ![Builds (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/week)
-    - number of builds last month : `/badge/buildtimetrend/service/builds/month` ![Builds (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/month)
-    - number of builds last year : `/buildtimetrend/service/builds/year` ![Builds (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/year)
-    - percentage of passed build jobs last week : `/badge/buildtimetrend/service/passed/week` ![% passed build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/week)
-    - percentage of passed build jobs last month : `/badge/buildtimetrend/service/passed/month` ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month)
-    - percentage of passed build jobs last year : `/badge/buildtimetrend/service/passed/year` ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year)
+### Index page
+- path : `/`
 
+### Generate a shield badge
+- path : `/badge`
+- usage : `/badge/repo_owner/repo_name/badge_type/interval`
+- parameters :
+  - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
+  - `repo_name` : name of the Github repo, fe. `service`
+  - `badge_type` : type of badge, options :
+    - `latest` : buildtime of last build job
+    - `avg` : average buildtime of buildjobs in period set by `interval` (default)
+    - `jobs` : number of build jobs in period set by `interval`
+    - `builds` : number of builds in period set by `interval`
+    - `passed` : percentage of successful build jobs during `interval`
+  - `interval` : time interval, options : `week` (default), `month`, `year` 
 
-- `/travis` : loads a Travis CI build log file, processes it and sends the data to Keen.io
-  - parameters :
-    - `repo` : name of the Github repo, fe. `buildtimetrend/python-lib`
-    - `build` : Travis CI build ID
-    - `payload` : Travis CI notification payload, more info in the [Travis CI documentation](http://docs.travis-ci.com/user/notifications/#Webhook-notification)
+#### Examples
+- latest build duration : `/badge/buildtimetrend/service/latest` ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest)
+- average buildtime of last week : `/badge/buildtimetrend/service/avg/week` ![Average buildtime (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/week)
+- average buildtime of last month : `/badge/buildtimetrend/service/avg/month` ![Average buildtime (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/month)
+- average buildtime of last year : `/buildtimetrend/service/avg/year` ![Average buildtime (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/year)
+- number of build jobs last week : `/badge/buildtimetrend/service/jobs/week` ![Build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/week)
+- number of build jobs last month : `/badge/buildtimetrend/service/jobs/month` ![Build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/month)
+- number of build jobs last year : `/buildtimetrend/service/jobs/year` ![Build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/year)
+- number of builds last week : `/badge/buildtimetrend/service/builds/week` ![Builds (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/week)
+- number of builds last month : `/badge/buildtimetrend/service/builds/month` ![Builds (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/month)
+- number of builds last year : `/buildtimetrend/service/builds/year` ![Builds (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/year)
+- percentage of passed build jobs last week : `/badge/buildtimetrend/service/passed/week` ![% passed build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/week)
+- percentage of passed build jobs last month : `/badge/buildtimetrend/service/passed/month` ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month)
+- percentage of passed build jobs last year : `/badge/buildtimetrend/service/passed/year` ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year)
+
+### process Travis CI build log
+
+- path : `/travis`
+- description : loads a Travis CI build log file, processes it and sends the data to Keen.io
+- parameters :
+  - `repo` : name of the Github repo, fe. `buildtimetrend/python-lib`
+  - `build` : Travis CI build ID
+  - `payload` : Travis CI notification payload, more info in the [Travis CI documentation](http://docs.travis-ci.com/user/notifications/#Webhook-notification)
 
 To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file :
 
