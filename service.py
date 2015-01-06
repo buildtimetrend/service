@@ -3,7 +3,7 @@
 '''
 Retrieve Travis CI build data and log to Keen.io
 
-Copyright (C) 2014 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This file is part of buildtimetrend/service
 <https://github.com/buildtimetrend/service/>
