@@ -30,7 +30,10 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
     - `jobs` : number of build jobs in period set by `interval`
     - `builds` : number of builds in period set by `interval`
     - `passed` : percentage of successful build jobs during `interval`
-  - `interval` : time interval, options : `week` (default), `month`, `year` 
+  - `interval` : time interval, options :
+    - `week` (default) : events of last week (last 7 days)
+    - `month` : events of last month (last 30 days)
+    - `year` : events of last year (last 52 weeks)
 
 #### Badge examples
 - ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest) : `/badge/buildtimetrend/service/latest`
