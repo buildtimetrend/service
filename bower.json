@@ -1,0 +1,29 @@
+{
+  "name": "buildtimetrend-service",
+  "version": "0.1-dev",
+  "homepage": "https://github.com/buildtimetrend/service",
+  "authors": [
+    "Dieter Adriaenssens <ruleant@users.sourceforge.net>"
+  ],
+  "description": "Buildtime Trend as a Service",
+  "main": "service.py",
+  "keywords": [
+    "buildtimetrend",
+    "service",
+    "saas",
+    "python",
+    "heroku",
+    "cherrypy"
+  ],
+  "license": "AGPLv3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "dashboard": "https://github.com/buildtimetrend/dashboard.git"
+  }
+}
