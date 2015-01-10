@@ -45,6 +45,23 @@ from buildtimetrend.keenio import get_latest_buildtime
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
 
+class Dashboard(object):
+    _cp_config = {'tools.staticdir.on' : True,
+                  'tools.staticdir.dir' : os.path.join(os.path.abspath("."), u"static/dashboard/"),
+                  'tools.staticdir.index' : 'index.html',
+    }
+
+    @cherrypy.expose
+    def index(self, repo_owner=None, repo_name=None):
+        return open(os.path.join(os.path.abspath("."), u"static/dashboard/index.html"))
+
+    @cherrypy.expose
+    def config_js(self, repo_owner=None, repo_name=None):
+        '''
+        Config file
+        '''
+        return "var config = {repoName: 'ruleant/test'}"
+
 
 class TravisParser(object):
     '''
@@ -275,4 +292,5 @@ if __name__ == "__main__":
         'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', '5000')),
     })
+    cherrypy.tree.mount(Dashboard(), '/dashboard')
     cherrypy.quickstart(TravisParser())
