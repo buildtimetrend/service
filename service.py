@@ -46,11 +46,6 @@ SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
 
 class Dashboard(object):
-    _cp_config = {'tools.staticdir.on' : True,
-                  'tools.staticdir.dir' : os.path.join(os.path.abspath("."), u"static/dashboard/"),
-                  'tools.staticdir.index' : 'index.html',
-    }
-
     @cherrypy.expose
     def index(self, repo_owner=None, repo_name=None):
         return open(os.path.join(os.path.abspath("."), u"static/dashboard/index.html"))
@@ -61,6 +56,15 @@ class Dashboard(object):
         Config file
         '''
         return "var config = {repoName: 'ruleant/test'}"
+
+
+class Assets(object):
+    '''
+    Serves static asset files : css, images, JavaScript
+    '''
+    _cp_config = {'tools.staticdir.on' : True,
+                  'tools.staticdir.dir' : os.path.join(os.path.abspath("."), u"static/dashboard/assets/")
+    }
 
 
 class TravisParser(object):
@@ -293,4 +297,5 @@ if __name__ == "__main__":
         'server.socket_port': int(os.environ.get('PORT', '5000')),
     })
     cherrypy.tree.mount(Dashboard(), '/dashboard')
+    cherrypy.tree.mount(Assets(), '/dashboard/assets')
     cherrypy.quickstart(TravisParser())
