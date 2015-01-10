@@ -1,2 +1,3 @@
 git+https://github.com/buildtimetrend/python-lib.git@master#egg=buildtimetrend==0.2-dev-build14
 cherrypy
+setuptools-bower
