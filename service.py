@@ -46,8 +46,14 @@ SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
 
 class Dashboard(object):
+    '''
+    Hosts Buildtime Trend Dashboard
+    '''
     @cherrypy.expose
     def index(self, repo_owner=None, repo_name=None):
+        '''
+        Index page
+        '''
         return open(os.path.join(os.path.abspath("."), u"static/dashboard/index.html"))
 
     @cherrypy.expose
