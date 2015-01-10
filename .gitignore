@@ -8,9 +8,6 @@ config.yml
 
 venv/
 
-# bower install folder
-components/
-
 # C extensions
 *.so
 
