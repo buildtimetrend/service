@@ -31,6 +31,7 @@ from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
 from buildtimetrend.tools import get_repo_slug
+from buildtimetrend.tools import check_file
 from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
@@ -49,15 +50,24 @@ class Dashboard(object):
     '''
     Hosts Buildtime Trend Dashboard
     '''
+    def __init__(self):
+        self.file_index = os.path.join(
+            os.path.abspath("."), u"static/dashboard/index.html"
+        )
+        self.file_index_service = os.path.join(
+            os.path.abspath("."), u"static/dashboard/index_service.html"
+        )
 
     @cherrypy.expose
     def index(self):
         '''
         Index page
         '''
-        return open(
-            os.path.join(os.path.abspath("."), u"static/dashboard/index.html")
-        )
+        # check if dashboard index for Buildtime Trend as a Service is present
+        if not check_file(self.file_index_service):
+            self.create_index()
+
+        return open(self.file_index_service)
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, page=""):
@@ -98,6 +108,25 @@ class Dashboard(object):
         '''
         return "var config = {repoName: '%s/%s'}" % \
             (cgi.escape(repo_owner), cgi.escape(repo_name))
+
+    def create_index(self):
+        '''
+        Create index file for Buildtime Trend as a Service :
+        adjust paths to 'assets'
+        '''
+        if not check_file(self.file_index):
+            return
+
+        with open(self.file_index, 'rb') as infile, \
+                open(self.file_index_service, 'w') as outfile:
+            for line in infile:
+                line = line.replace("assets", "/dashboard/assets")
+                outfile.write(line)
+
+        get_logger().info(
+            "Created dashboard index service file : %s",
+            self.file_index_service
+        )
 
 
 class Assets(object):
