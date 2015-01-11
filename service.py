@@ -45,6 +45,8 @@ from buildtimetrend.keenio import get_latest_buildtime
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
+ASSETS_URL = '/assets'
+DASHBOARD_URL = '/dashboard'
 
 class Dashboard(object):
     '''
@@ -89,10 +91,10 @@ class Dashboard(object):
         else:
             # redirect to index page, if no other page matches
             if repo_owner is None or repo_name is None:
-                url = "/dashboard/"
+                url = DASHBOARD_URL
             else:
-                url = "/dashboard/%s/%s/index.html" % \
-                (cgi.escape(repo_owner), cgi.escape(repo_name))
+                url = "%s/%s/%s/index.html" % \
+                (DASHBOARD_URL, cgi.escape(repo_owner), cgi.escape(repo_name))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
@@ -120,7 +122,7 @@ class Dashboard(object):
         with open(self.file_index, 'rb') as infile, \
                 open(self.file_index_service, 'w') as outfile:
             for line in infile:
-                line = line.replace("assets", "/dashboard/assets")
+                line = line.replace("assets", ASSETS_URL)
                 outfile.write(line)
 
         get_logger().info(
@@ -369,6 +371,6 @@ if __name__ == "__main__":
         'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', '5000')),
     })
-    cherrypy.tree.mount(Dashboard(), '/dashboard')
-    cherrypy.tree.mount(Assets(), '/dashboard/assets')
+    cherrypy.tree.mount(Dashboard(), DASHBOARD_URL)
+    cherrypy.tree.mount(Assets(), ASSETS_URL)
     cherrypy.quickstart(TravisParser())
