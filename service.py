@@ -49,8 +49,9 @@ class Dashboard(object):
     '''
     Hosts Buildtime Trend Dashboard
     '''
+
     @cherrypy.expose
-    def index(self, repo_owner=None, repo_name=None):
+    def index(self):
         '''
         Index page
         '''
@@ -59,9 +60,41 @@ class Dashboard(object):
         )
 
     @cherrypy.expose
-    def config_js(self, repo_owner=None, repo_name=None):
+    def default(self, repo_owner=None, repo_name=None, page=""):
         '''
-        Config file
+        Default page, returns index page or config file,
+        redirects index page in all other cases.
+
+        Parameters :
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        - page : requested page (index.html or config.js)
+        '''
+        if page == "index.html" or repo_owner is None and repo_name is None:
+            # display index page
+            return self.index()
+        elif page == "config.js":
+            # display config file
+            return self.config_js(repo_owner, repo_name)
+        else:
+            # redirect to index page, if no other page matches
+            if repo_owner is None or repo_name is None:
+                url = "/dashboard/"
+            else:
+                url = "/dashboard/%s/%s/index.html" % \
+                (cgi.escape(repo_owner), cgi.escape(repo_name))
+
+            # rewrite url
+            raise cherrypy.HTTPRedirect(url)
+
+    @cherrypy.expose
+    def config_js(self, repo_owner="buildtimetrend", repo_name="service"):
+        '''
+        Config file for dashboard
+
+        Parameters :
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
         '''
         return "var config = {repoName: '%s/%s'}" % \
             (cgi.escape(repo_owner), cgi.escape(repo_name))
