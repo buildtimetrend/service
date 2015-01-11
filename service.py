@@ -63,7 +63,8 @@ class Dashboard(object):
         '''
         Config file
         '''
-        return "var config = {repoName: 'ruleant/test'}"
+        return "var config = {repoName: '%s/%s'}" % \
+            (cgi.escape(repo_owner), cgi.escape(repo_name))
 
 
 class Assets(object):
