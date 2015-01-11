@@ -54,7 +54,9 @@ class Dashboard(object):
         '''
         Index page
         '''
-        return open(os.path.join(os.path.abspath("."), u"static/dashboard/index.html"))
+        return open(
+            os.path.join(os.path.abspath("."), u"static/dashboard/index.html")
+        )
 
     @cherrypy.expose
     def config_js(self, repo_owner=None, repo_name=None):
@@ -68,8 +70,10 @@ class Assets(object):
     '''
     Serves static asset files : css, images, JavaScript
     '''
-    _cp_config = {'tools.staticdir.on' : True,
-                  'tools.staticdir.dir' : os.path.join(os.path.abspath("."), u"static/dashboard/assets/")
+    _cp_config = {
+        'tools.staticdir.on' : True,
+        'tools.staticdir.dir' :
+            os.path.join(os.path.abspath("."), u"static/dashboard/assets/")
     }
 
 
