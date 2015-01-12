@@ -172,13 +172,10 @@ class TravisParser(object):
         '''
         Generates a shield badge
         '''
+        # parameter check
         repo = get_repo_slug(repo_owner, repo_name)
+        badge_type = str(badge_type).lower()
         interval = check_time_interval(interval)["name"]
-
-        if type(badge_type) is str:
-            badge_type = badge_type.lower()
-        else:
-            badge_type = str(badge_type)
 
         badge_subject = "buildtime"
         badge_status = "trend"
