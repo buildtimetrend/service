@@ -60,7 +60,7 @@ Loads a Travis CI build log file, processes it and sends the data to Keen.io.
   - `build` : Travis CI build ID
   - `payload` : Travis CI notification payload, more info in the [Travis CI documentation](http://docs.travis-ci.com/user/notifications/#Webhook-notification)
 
-To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file :
+To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file (*):
 
     notifications:
       webhooks:
@@ -68,6 +68,9 @@ To trigger the service at the end of a Travis CI build, add this to your `.travi
         - http://buildtimetrend-service.herokuapp.com/travis
 
 When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the `payload` that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.
+
+(*) Remark : Buildtime Trend as a Service is currently still under development, so the service running on Heroku currently doesn't accept build notifications yet.
+
 
 Config file
 -----------
