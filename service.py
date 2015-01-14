@@ -47,17 +47,17 @@ SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
 ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
+DASHBOARD_DIR = os.path.join(os.path.abspath("."), "static", "dashboard")
+ASSETS_DIR = os.path.join(DASHBOARD_DIR, u"assets")
 
 class Dashboard(object):
     '''
     Hosts Buildtime Trend Dashboard
     '''
     def __init__(self):
-        self.file_index = os.path.join(
-            os.path.abspath("."), u"static/dashboard/index.html"
-        )
+        self.file_index = os.path.join(DASHBOARD_DIR, u"index.html")
         self.file_index_service = os.path.join(
-            os.path.abspath("."), u"static/dashboard/index_service.html"
+            DASHBOARD_DIR, u"index_service.html"
         )
 
     @cherrypy.expose
@@ -137,8 +137,7 @@ class Assets(object):
     '''
     _cp_config = {
         'tools.staticdir.on' : True,
-        'tools.staticdir.dir' :
-            os.path.join(os.path.abspath("."), u"static/dashboard/assets/")
+        'tools.staticdir.dir' : ASSETS_DIR
     }
 
 
