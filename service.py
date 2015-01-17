@@ -32,6 +32,7 @@ from buildtimetrend.settings import Settings
 from buildtimetrend.tools import get_logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
+from buildtimetrend.tools import file_is_newer
 from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import log_build_keen
 from buildtimetrend.keenio import keen_is_writable
@@ -65,8 +66,10 @@ class Dashboard(object):
         '''
         Index page
         '''
-        # check if dashboard index for Buildtime Trend as a Service is present
-        if not check_file(self.file_index_service):
+        # Create dashboard index for Buildtime Trend as a Service :
+        # if it doesn't exist, or if it is older than the file from
+        # which it is generated
+        if not file_is_newer(self.file_index_service, self.file_index):
             self.create_index()
 
         return open(self.file_index_service)
