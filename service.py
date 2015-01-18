@@ -52,6 +52,7 @@ DASHBOARD_URL = '/dashboard'
 DASHBOARD_DIR = os.path.join(os.path.abspath("."), "static", "dashboard")
 ASSETS_DIR = os.path.join(DASHBOARD_DIR, u"assets")
 
+
 class Dashboard(object):
     '''
     Hosts Buildtime Trend Dashboard
@@ -160,8 +161,8 @@ class Assets(object):
     Serves static asset files : css, images, JavaScript
     '''
     _cp_config = {
-        'tools.staticdir.on' : True,
-        'tools.staticdir.dir' : ASSETS_DIR
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': ASSETS_DIR
     }
 
 
