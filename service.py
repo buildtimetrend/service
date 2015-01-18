@@ -42,6 +42,7 @@ from buildtimetrend.keenio import get_pct_passed_build_jobs
 from buildtimetrend.keenio import get_result_color
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
+from buildtimetrend.keenio import generate_dashboard_config_file
 
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
@@ -56,6 +57,8 @@ class Dashboard(object):
     Hosts Buildtime Trend Dashboard
     '''
     def __init__(self):
+        self.settings = Settings()
+
         self.file_index = os.path.join(DASHBOARD_DIR, u"index.html")
         self.file_index_service = os.path.join(
             DASHBOARD_DIR, u"index_service.html"
@@ -111,8 +114,26 @@ class Dashboard(object):
         - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
         - repo_name : name of the Github repo, fe. `service`
         '''
-        return "var config = {repoName: '%s/%s'}" % \
-            (cgi.escape(repo_owner), cgi.escape(repo_name))
+        # set sample config file path
+        self.settings.add_setting(
+            'dashboard_sample_configfile',
+            os.path.join(DASHBOARD_DIR, u"config_sample.js")
+        )
+
+        repo = get_repo_slug(repo_owner, repo_name)
+
+        # set config file path
+        config_dir = os.path.join('/tmp', repo)
+        config_file = os.path.join(config_dir, u"config_sample.js")
+        self.settings.add_setting('dashboard_configfile', config_file)
+
+        # generate config file
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir)
+        generate_dashboard_config_file(repo)
+
+        # return config file
+        return open(config_file)
 
     def create_index(self):
         '''
