@@ -131,10 +131,12 @@ class Dashboard(object):
         # generate config file
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
-        generate_dashboard_config_file(repo)
 
-        # return config file
-        return open(config_file)
+        if generate_dashboard_config_file(repo):
+            # return config file
+            return open(config_file)
+        else:
+            raise cherrypy.HTTPError(404, "Configfile could not be generated")
 
     def create_index(self):
         '''
