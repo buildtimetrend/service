@@ -100,8 +100,9 @@ class Dashboard(object):
             if repo_owner is None or repo_name is None:
                 url = DASHBOARD_URL
             else:
-                url = "%s/%s/%s/index.html" % \
-                (DASHBOARD_URL, cgi.escape(repo_owner), cgi.escape(repo_name))
+                repo_slug = get_repo_slug(repo_owner, repo_name)
+                url = "%s/%s/index.html" % \
+                    (DASHBOARD_URL, cgi.escape(repo_slug))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
