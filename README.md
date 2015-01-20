@@ -63,10 +63,12 @@ Loads a Travis CI build log file, processes it and sends the data to Keen.io.
 
 To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file (!):
 
+```yaml
     notifications:
       webhooks:
         # trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io
         - http://buildtimetrend-service.herokuapp.com/travis
+```
 
 When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the `payload` that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.
 
@@ -81,7 +83,7 @@ Add a configfile named `config_service.yml` based on `config_sample.yml` to conf
 - `allowed_repo` : defines which repos are allowed by the service. If the `allowed_repo` setting is not defined, all repos are allowed. If substring matches the repo name, it is allowed, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
 Multiple entries are allowed, fe. :
 
-```
+```yaml
 buildtimetrend:
   allowed_repo:
     - "my_name" # allowing all repo names that contain my_name
