@@ -1,2 +1,2 @@
-git+https://github.com/buildtimetrend/python-lib.git@master#egg=buildtimetrend==0.2.dev18
+git+https://github.com/buildtimetrend/python-lib.git@master#egg=buildtimetrend==0.2.dev19
 cherrypy

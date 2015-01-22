@@ -60,6 +60,10 @@ class Dashboard(object):
     def __init__(self):
         self.settings = Settings()
 
+        self.file_projects = os.path.join(DASHBOARD_DIR, u"projects.html")
+        self.file_projects_service = os.path.join(
+            DASHBOARD_DIR, u"projects_service.html"
+        )
         self.file_index = os.path.join(DASHBOARD_DIR, u"index.html")
         self.file_index_service = os.path.join(
             DASHBOARD_DIR, u"index_service.html"
@@ -68,7 +72,19 @@ class Dashboard(object):
     @cherrypy.expose
     def index(self):
         '''
-        Index page
+        Index page with overview of hosted projects
+        '''
+        # Create project overview for Buildtime Trend as a Service :
+        # if it doesn't exist, or if it is older than the file from
+        # which it is generated
+        if self.modify_index(self.file_projects, self.file_projects_service):
+            return open(self.file_projects_service)
+        else:
+            raise cherrypy.HTTPError(404, "File not found")
+
+    def dashboard(self):
+        '''
+        Dashboard page
         '''
         # Create dashboard index for Buildtime Trend as a Service :
         # if it doesn't exist, or if it is older than the file from
@@ -76,7 +92,7 @@ class Dashboard(object):
         if self.modify_index(self.file_index, self.file_index_service):
             return open(self.file_index_service)
         else:
-            raise cherrypy.HTTPError(404, "File is not available")
+            raise cherrypy.HTTPError(404, "File not found")
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, page=""):
@@ -91,7 +107,7 @@ class Dashboard(object):
         '''
         if page == "index.html" or repo_owner is None and repo_name is None:
             # display index page
-            return self.index()
+            return self.dashboard()
         elif page == "config.js":
             # display config file
             return self.config_js(repo_owner, repo_name)
@@ -108,7 +124,7 @@ class Dashboard(object):
             raise cherrypy.HTTPRedirect(url)
 
     @cherrypy.expose
-    def config_js(self, repo_owner="buildtimetrend", repo_name="service"):
+    def config_js(self, repo_owner=None, repo_name=None):
         '''
         Config file for dashboard
 
@@ -123,10 +139,12 @@ class Dashboard(object):
         )
 
         repo = get_repo_slug(repo_owner, repo_name)
+        if repo is None:
+            repo = ""
 
         # set config file path
         config_dir = os.path.join('/tmp', repo)
-        config_file = os.path.join(config_dir, u"config_sample.js")
+        config_file = os.path.join(config_dir, u"config.js")
         self.settings.add_setting('dashboard_configfile', config_file)
 
         # generate config file
@@ -149,13 +167,11 @@ class Dashboard(object):
         - file_modified : Path of the modified file hosted on the service
         '''
         if not file_is_newer(file_modified, file_original):
-            return False
-
-        with open(file_original, 'rb') as infile, \
-                open(file_modified, 'w') as outfile:
-            for line in infile:
-                line = line.replace("assets", ASSETS_URL)
-                outfile.write(line)
+            with open(file_original, 'rb') as infile, \
+                    open(file_modified, 'w') as outfile:
+                for line in infile:
+                    line = line.replace("assets", ASSETS_URL)
+                    outfile.write(line)
 
         if check_file(file_modified):
             get_logger().info(
