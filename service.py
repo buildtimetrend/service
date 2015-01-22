@@ -73,10 +73,10 @@ class Dashboard(object):
         # Create dashboard index for Buildtime Trend as a Service :
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
-        if not file_is_newer(self.file_index_service, self.file_index):
-            self.create_index()
-
-        return open(self.file_index_service)
+        if self.modify_index(self.file_index, self.file_index_service):
+            return open(self.file_index_service)
+        else:
+            raise cherrypy.HTTPError(404, "File is not available")
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, page=""):
@@ -139,24 +139,32 @@ class Dashboard(object):
         else:
             raise cherrypy.HTTPError(404, "Configfile could not be generated")
 
-    def create_index(self):
+    def modify_index(self, file_original, file_modified):
         '''
         Create index file for Buildtime Trend as a Service :
         adjust paths to 'assets'
-        '''
-        if not check_file(self.file_index):
-            return
 
-        with open(self.file_index, 'rb') as infile, \
-                open(self.file_index_service, 'w') as outfile:
+        Parameters:
+        - file_original : Path of the original file
+        - file_modified : Path of the modified file hosted on the service
+        '''
+        if not file_is_newer(file_modified, file_original):
+            return False
+
+        with open(file_original, 'rb') as infile, \
+                open(file_modified, 'w') as outfile:
             for line in infile:
                 line = line.replace("assets", ASSETS_URL)
                 outfile.write(line)
 
-        get_logger().info(
-            "Created dashboard index service file : %s",
-            self.file_index_service
-        )
+        if check_file(file_modified):
+            get_logger().info(
+                "Created index service file : %s",
+                file_modified
+            )
+            return True
+        else:
+            return False
 
 
 class Assets(object):
