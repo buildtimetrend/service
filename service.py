@@ -289,6 +289,14 @@ class Root(object):
         '''
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
+    @cherrypy.expose
+    def favicon_ico(self):
+        '''
+        Returns favicon.ico.
+        '''
+        cherrypy.response.headers['Content-Type'] = "image/png"
+        return open(os.path.join(ASSETS_DIR, 'images', 'favicon.ico'))
+
     def error_page_404(self, status, message, traceback, version):
         '''
         Page 404
