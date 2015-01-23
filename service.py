@@ -49,6 +49,7 @@ SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
 ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
+BADGE_URL = '/badge'
 DASHBOARD_DIR = os.path.join(os.path.abspath("."), "static", "dashboard")
 ASSETS_DIR = os.path.join(DASHBOARD_DIR, u"assets")
 
@@ -193,9 +194,9 @@ class Assets(object):
     }
 
 
-class TravisParser(object):
+class Badges(object):
     '''
-    Retrieve timing data from Travis CI, parse it and store it in Keen.io
+    Generates shield badges
     '''
 
     def __init__(self):
@@ -203,22 +204,12 @@ class TravisParser(object):
         Initialise class, by loading a config file and setting loglevel
         '''
         self.settings = Settings()
-        self.settings.load_settings(config_file="config_service.yml")
-
-        cherrypy.config.update({'error_page.404': self.error_page_404})
 
         # get logger
         self.logger = get_logger()
 
     @cherrypy.expose
-    def index(self):
-        '''
-        Index page
-        '''
-        return "Coming soon : %s" % SERVICE_WEBSITE_LINK
-
-    @cherrypy.expose
-    def badge(self, repo_owner=None, repo_name=None, badge_type="avg",
+    def default(self, repo_owner=None, repo_name=None, badge_type="avg",
               interval=None):
         '''
         Generates a shield badge
@@ -233,7 +224,7 @@ class TravisParser(object):
         badge_colour = "blue"
         format_string = "{:.1f}s"
 
-        if repo is not None and self.is_repo_allowed(repo) is None:
+        if repo is not None and is_repo_allowed(repo) is None:
             if badge_type == "latest":
                 # get last duration
                 value = get_latest_buildtime(repo)
@@ -271,6 +262,31 @@ class TravisParser(object):
             "https://img.shields.io/badge/%s-%s-%s.svg" %
             (badge_subject, badge_status, badge_colour)
         )
+
+
+class TravisParser(object):
+    '''
+    Retrieve timing data from Travis CI, parse it and store it in Keen.io
+    '''
+
+    def __init__(self):
+        '''
+        Initialise class, by loading a config file and setting loglevel
+        '''
+        self.settings = Settings()
+        self.settings.load_settings(config_file="config_service.yml")
+
+        cherrypy.config.update({'error_page.404': self.error_page_404})
+
+        # get logger
+        self.logger = get_logger()
+
+    @cherrypy.expose
+    def index(self):
+        '''
+        Index page
+        '''
+        return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     @cherrypy.expose
     def travis(self, repo=None, build=None, payload=None):
@@ -355,7 +371,7 @@ class TravisParser(object):
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
-        msg_is_repo_allowed = self.is_repo_allowed(repo)
+        msg_is_repo_allowed = is_repo_allowed(repo)
         if msg_is_repo_allowed is not None:
             return msg_is_repo_allowed
 
@@ -368,30 +384,6 @@ class TravisParser(object):
 
         return None
 
-    def is_repo_allowed(self, repo):
-        '''
-        Check if repo is allowed
-        List of allowed repos is set by setting 'allowed_repo',
-        if not defined, the repo is not checked,
-        'allowed_repo' can have multiple values, if any of them matches
-        a substring of the repo, the repo is allowed.
-
-        Parameters:
-        -repo : repo name
-        '''
-        if repo is None:
-            message = "Repo is not defined"
-            self.logger.warning(message)
-            return message
-
-        allowed_repo = self.settings.get_setting("allowed_repo")
-        if allowed_repo is not None and \
-                not any(x in repo for x in allowed_repo):
-            message = "The supplied repo is not allowed : %s"
-            self.logger.warning(message, repo)
-            return message % cgi.escape(repo)
-
-        return None
 
     def check_travis_notification(self):
         '''
@@ -411,6 +403,32 @@ class TravisParser(object):
             cherrypy.request.headers["Authorization"]
         )
 
+def is_repo_allowed(repo):
+    '''
+    Check if repo is allowed
+    List of allowed repos is set by setting 'allowed_repo',
+    if not defined, the repo is not checked,
+    'allowed_repo' can have multiple values, if any of them matches
+    a substring of the repo, the repo is allowed.
+
+    Parameters:
+    -repo : repo name
+    '''
+    logger = get_logger()
+
+    if repo is None:
+        message = "Repo is not defined"
+        logger.warning(message)
+        return message
+
+    allowed_repo = Settings().get_setting("allowed_repo")
+    if allowed_repo is not None and \
+            not any(x in repo for x in allowed_repo):
+        message = "The supplied repo is not allowed : %s"
+        logger.warning(message, repo)
+        return message % cgi.escape(repo)
+
+    return None
 
 if __name__ == "__main__":
     # configure cherrypy webserver host and port
@@ -421,4 +439,5 @@ if __name__ == "__main__":
     })
     cherrypy.tree.mount(Dashboard(), DASHBOARD_URL)
     cherrypy.tree.mount(Assets(), ASSETS_URL)
+    cherrypy.tree.mount(Badges(), BADGE_URL)
     cherrypy.quickstart(TravisParser())
