@@ -51,7 +51,8 @@ TRAVIS_URL = '/travis'
 ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
 BADGE_URL = '/badge'
-DASHBOARD_DIR = os.path.join(os.path.abspath("."), "static", "dashboard")
+STATIC_DIR = os.path.join(os.path.abspath("."), "static")
+DASHBOARD_DIR = os.path.join(STATIC_DIR, "dashboard")
 ASSETS_DIR = os.path.join(DASHBOARD_DIR, u"assets")
 
 
@@ -292,10 +293,17 @@ class Root(object):
     @cherrypy.expose
     def favicon_ico(self):
         '''
-        Returns favicon.ico.
+        Returns favicon.ico
         '''
         cherrypy.response.headers['Content-Type'] = "image/png"
         return open(os.path.join(ASSETS_DIR, 'images', 'favicon.ico'))
+
+    @cherrypy.expose
+    def robots_txt(self):
+        '''
+        Returns robots.txt
+        '''
+        return open(os.path.join(STATIC_DIR, 'robots.txt'))
 
     def error_page_404(self, status, message, traceback, version):
         '''

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /badge/
+Disallow: /travis/
