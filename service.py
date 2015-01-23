@@ -47,6 +47,7 @@ from buildtimetrend.keenio import generate_dashboard_config_file
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
                        "Buildtime Trend as a Service</a>"
+TRAVIS_URL = '/travis'
 ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
 BADGE_URL = '/badge'
@@ -264,7 +265,7 @@ class Badges(object):
         )
 
 
-class TravisParser(object):
+class Root(object):
     '''
     Retrieve timing data from Travis CI, parse it and store it in Keen.io
     '''
@@ -288,8 +289,33 @@ class TravisParser(object):
         '''
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
+    def error_page_404(self, status, message, traceback, version):
+        '''
+        Page 404
+        '''
+        self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
+                          "Traceback : %s",
+                          version, status, message, traceback)
+        return "This page doesn't exist, please check usage on " \
+               "the %s website." % SERVICE_WEBSITE_LINK
+
+
+class TravisParser(object):
+    '''
+    Retrieve timing data from Travis CI, parse it and store it in Keen.io
+    '''
+
+    def __init__(self):
+        '''
+        Initialise class, by loading a config file and setting loglevel
+        '''
+        self.settings = Settings()
+
+        # get logger
+        self.logger = get_logger()
+
     @cherrypy.expose
-    def travis(self, repo=None, build=None, payload=None):
+    def default(self, repo=None, build=None, payload=None):
         '''
         Visiting this page triggers loading and processing the build log
         and data of a travis CI build process.
@@ -318,16 +344,6 @@ class TravisParser(object):
 
         # process travis build
         return self.process_travis_buildlog()
-
-    def error_page_404(self, status, message, traceback, version):
-        '''
-        Page 404
-        '''
-        self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
-                          "Traceback : %s",
-                          version, status, message, traceback)
-        return "This page doesn't exist, please check usage on " \
-               "the %s website." % SERVICE_WEBSITE_LINK
 
     def process_travis_buildlog(self):
         '''
@@ -440,4 +456,5 @@ if __name__ == "__main__":
     cherrypy.tree.mount(Dashboard(), DASHBOARD_URL)
     cherrypy.tree.mount(Assets(), ASSETS_URL)
     cherrypy.tree.mount(Badges(), BADGE_URL)
-    cherrypy.quickstart(TravisParser())
+    cherrypy.tree.mount(TravisParser(), TRAVIS_URL)
+    cherrypy.quickstart(Root())
