@@ -470,11 +470,5 @@ if __name__ == "__main__":
     cherrypy.tree.mount(TravisParser(), TRAVIS_URL)
 
     # start server
-    if hasattr(cherrypy.engine, 'block'):
-        # 3.1 syntax
-        cherrypy.engine.start()
-        cherrypy.engine.block()
-    else:
-        # 3.0 syntax
-        cherrypy.server.quickstart()
-        cherrypy.engine.start()
+    cherrypy.engine.start()
+    cherrypy.engine.block()
