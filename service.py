@@ -140,6 +140,8 @@ class Dashboard(object):
         '''
         repo = get_repo_slug(repo_owner, repo_name)
 
+        self.logger.info("Generated dashboard config for project %s" % repo)
+
         # return config file
         return get_dashboard_config(repo)
 
