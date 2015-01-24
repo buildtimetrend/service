@@ -42,7 +42,7 @@ from buildtimetrend.keenio import get_pct_passed_build_jobs
 from buildtimetrend.keenio import get_result_color
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
-from buildtimetrend.keenio import generate_dashboard_config_file
+from buildtimetrend.keenio import get_dashboard_config
 
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
@@ -138,30 +138,10 @@ class Dashboard(object):
         - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
         - repo_name : name of the Github repo, fe. `service`
         '''
-        # set sample config file path
-        self.settings.add_setting(
-            'dashboard_sample_configfile',
-            os.path.join(DASHBOARD_DIR, u"config_sample.js")
-        )
-
         repo = get_repo_slug(repo_owner, repo_name)
-        if repo is None:
-            repo = ""
 
-        # set config file path
-        config_dir = os.path.join('/tmp', repo)
-        config_file = os.path.join(config_dir, u"config.js")
-        self.settings.add_setting('dashboard_configfile', config_file)
-
-        # generate config file
-        if not os.path.exists(config_dir):
-            os.makedirs(config_dir)
-
-        if generate_dashboard_config_file(repo):
-            # return config file
-            return open(config_file)
-        else:
-            raise cherrypy.HTTPError(404, "Configfile could not be generated")
+        # return config file
+        return get_dashboard_config(repo)
 
     def modify_index(self, file_original, file_modified):
         '''
