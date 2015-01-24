@@ -463,7 +463,18 @@ if __name__ == "__main__":
         }
     }
 
+    # assign handlers to entry paths
+    cherrypy.tree.mount(Root(), '/', ROOT_CONFIG)
     cherrypy.tree.mount(Dashboard(), DASHBOARD_URL)
     cherrypy.tree.mount(Badges(), BADGE_URL)
     cherrypy.tree.mount(TravisParser(), TRAVIS_URL)
-    cherrypy.quickstart(Root(), '/', ROOT_CONFIG)
+
+    # start server
+    if hasattr(cherrypy.engine, 'block'):
+        # 3.1 syntax
+        cherrypy.engine.start()
+        cherrypy.engine.block()
+    else:
+        # 3.0 syntax
+        cherrypy.server.quickstart()
+        cherrypy.engine.start()
