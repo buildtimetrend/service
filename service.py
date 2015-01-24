@@ -64,6 +64,7 @@ class Dashboard(object):
     '''
     def __init__(self):
         self.settings = Settings()
+        self.logger = get_logger()
 
         self.file_projects = os.path.join(DASHBOARD_DIR, u"projects.html")
         self.file_projects_service = os.path.join(
@@ -179,7 +180,7 @@ class Dashboard(object):
                     outfile.write(line)
 
         if check_file(file_modified):
-            get_logger().info(
+            self.logger.info(
                 "Created index service file : %s",
                 file_modified
             )
