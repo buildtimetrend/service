@@ -51,9 +51,11 @@ TRAVIS_URL = '/travis'
 ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
 BADGE_URL = '/badge'
-STATIC_DIR = os.path.join(os.path.abspath("."), "static")
-DASHBOARD_DIR = os.path.join(STATIC_DIR, "dashboard")
-ASSETS_DIR = os.path.join(DASHBOARD_DIR, u"assets")
+STATIC_DIR = os.path.join(os.path.abspath('.'), 'static')
+DASHBOARD_DIR = os.path.join(STATIC_DIR, 'dashboard')
+ASSETS_DIR = os.path.join(DASHBOARD_DIR, 'assets')
+FAVICON_PATH = os.path.join(ASSETS_DIR, 'images', 'favicon.ico')
+ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
 
 
 class Dashboard(object):
@@ -186,16 +188,6 @@ class Dashboard(object):
             return False
 
 
-class Assets(object):
-    '''
-    Serves static asset files : css, images, JavaScript
-    '''
-    _cp_config = {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': ASSETS_DIR
-    }
-
-
 class Badges(object):
     '''
     Generates shield badges
@@ -289,21 +281,6 @@ class Root(object):
         Index page
         '''
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
-
-    @cherrypy.expose
-    def favicon_ico(self):
-        '''
-        Returns favicon.ico
-        '''
-        cherrypy.response.headers['Content-Type'] = "image/png"
-        return open(os.path.join(ASSETS_DIR, 'images', 'favicon.ico'))
-
-    @cherrypy.expose
-    def robots_txt(self):
-        '''
-        Returns robots.txt
-        '''
-        return open(os.path.join(STATIC_DIR, 'robots.txt'))
 
     def error_page_404(self, status, message, traceback, version):
         '''
@@ -469,8 +446,23 @@ if __name__ == "__main__":
         'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', '5000')),
     })
+
+    ROOT_CONFIG = {
+        '/favicon.ico': {
+            'tools.staticfile.on': True,
+            'tools.staticfile.filename': FAVICON_PATH
+        },
+        '/robots.txt': {
+            'tools.staticfile.on': True,
+            'tools.staticfile.filename': ROBOTS_PATH
+        },
+        ASSETS_URL: {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': ASSETS_DIR
+        }
+    }
+
     cherrypy.tree.mount(Dashboard(), DASHBOARD_URL)
-    cherrypy.tree.mount(Assets(), ASSETS_URL)
     cherrypy.tree.mount(Badges(), BADGE_URL)
     cherrypy.tree.mount(TravisParser(), TRAVIS_URL)
-    cherrypy.quickstart(Root())
+    cherrypy.quickstart(Root(), '/', ROOT_CONFIG)
