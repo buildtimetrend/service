@@ -210,7 +210,7 @@ class Badges(object):
         badge_colour = "blue"
         format_string = "{:.1f}s"
 
-        if repo is not None and is_repo_allowed(repo) is None:
+        if repo is not None and is_repo_allowed(repo):
             if badge_type == "latest":
                 # get last duration
                 value = get_latest_buildtime(repo)
@@ -372,9 +372,8 @@ class TravisParser(object):
             return "Repo is not set, use repo=user/repo"
 
         # check if repo is allowed
-        msg_is_repo_allowed = is_repo_allowed(repo)
-        if msg_is_repo_allowed is not None:
-            return msg_is_repo_allowed
+        if not is_repo_allowed(repo):
+            return "The supplied repo is not allowed : %s" % cgi.escape(repo)
 
         if build is None:
             self.logger.warning("Build number is not set")
@@ -404,6 +403,7 @@ class TravisParser(object):
             cherrypy.request.headers["Authorization"]
         )
 
+
 def is_repo_allowed(repo):
     '''
     Check if repo is allowed
@@ -418,18 +418,18 @@ def is_repo_allowed(repo):
     logger = get_logger()
 
     if repo is None:
-        message = "Repo is not defined"
-        logger.warning(message)
-        return message
+        logger.warning("Repo is not defined")
+        return False
 
     allowed_repo = Settings().get_setting("allowed_repo")
     if allowed_repo is not None and \
             not any(x in repo for x in allowed_repo):
         message = "The supplied repo is not allowed : %s"
         logger.warning(message, repo)
-        return message % cgi.escape(repo)
+        return False
 
-    return None
+    return True
+
 
 if __name__ == "__main__":
     # configure cherrypy webserver host and port
