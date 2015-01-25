@@ -43,6 +43,7 @@ from buildtimetrend.keenio import get_result_color
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 from buildtimetrend.keenio import get_dashboard_config
+from buildtimetrend.keenio import get_config_project_list
 
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
@@ -142,8 +143,16 @@ class Dashboard(object):
 
         self.logger.info("Generated dashboard config for project %s", repo)
 
+        # define extra settings
+        extra = {
+            'serviceUrl': "" # use this service instance for badge generation
+        }
+
+        # add project list
+        extra.update(get_config_project_list())
+
         # return config file
-        return get_dashboard_config(repo)
+        return get_dashboard_config(repo, extra)
 
     def modify_index(self, file_original, file_modified):
         '''
