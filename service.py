@@ -43,7 +43,7 @@ from buildtimetrend.keenio import get_result_color
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 from buildtimetrend.keenio import get_dashboard_config
-from buildtimetrend.keenio import get_config_project_list
+from buildtimetrend.keenio import get_all_projects
 
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
@@ -429,6 +429,22 @@ def is_repo_allowed(repo):
         return False
 
     return True
+
+
+def get_config_project_list():
+    '''
+    Returns a list of repoNames of other projects hosted on the same website
+    '''
+    # create list of only allowed project repos
+    allowed_projects = filter(lambda x: is_repo_allowed(x), get_all_projects())
+
+    print "allowed projects : %s" % allowed_projects
+
+    if len(allowed_projects) > 0:
+        # convert values from unicode to UTF8
+        return {'projectList': [x.encode('UTF8') for x in allowed_projects]}
+    else:
+        return {}
 
 
 if __name__ == "__main__":
