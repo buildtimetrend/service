@@ -446,8 +446,6 @@ def get_config_project_list():
     # create list of only allowed project repos
     allowed_projects = filter(lambda x: is_repo_allowed(x), get_all_projects())
 
-    print "allowed projects : %s" % allowed_projects
-
     if len(allowed_projects) > 0:
         # convert values from unicode to UTF8
         return {'projectList': [x.encode('UTF8') for x in allowed_projects]}
