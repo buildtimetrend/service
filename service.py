@@ -139,14 +139,22 @@ class Dashboard(object):
         - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
         - repo_name : name of the Github repo, fe. `service`
         '''
-        repo = get_repo_slug(repo_owner, repo_name)
-
-        self.logger.info("Generated dashboard config for project %s", repo)
-
         # define extra settings
         extra = {
             'serviceUrl': "" # use this service instance for badge generation
         }
+
+        repo = get_repo_slug(repo_owner, repo_name)
+
+        # Check if repo is allowed
+        if not is_repo_allowed(repo):
+            message = "Project %s is not allowed"
+            self.logger.info(message, repo)
+            extra['message'] = message % cgi.escape(repo)
+            repo = None
+        else:
+            self.logger.info("Generated dashboard config for project %s", repo)
+
 
         # add project list
         extra.update(get_config_project_list())
