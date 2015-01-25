@@ -444,11 +444,13 @@ def get_config_project_list():
     Returns a list of repoNames of other projects hosted on the same website
     '''
     # create list of only allowed project repos
-    allowed_projects = filter(lambda x: is_repo_allowed(x), get_all_projects())
+    # and convert values from unicode to UTF8
+    allowed_projects = [
+        x.encode('UTF8') for x in get_all_projects() if is_repo_allowed(x)
+    ]
 
     if len(allowed_projects) > 0:
-        # convert values from unicode to UTF8
-        return {'projectList': [x.encode('UTF8') for x in allowed_projects]}
+        return {'projectList': allowed_projects}
     else:
         return {}
 
