@@ -147,7 +147,7 @@ class Dashboard(object):
         repo = get_repo_slug(repo_owner, repo_name)
 
         # Check if repo is allowed
-        if not is_repo_allowed(repo):
+        if repo is not None and not is_repo_allowed(repo):
             message = "Project %s is not allowed"
             self.logger.info(message, repo)
             extra['message'] = message % cgi.escape(repo)
