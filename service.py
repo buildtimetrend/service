@@ -172,7 +172,7 @@ class Dashboard(object):
         - file_modified : Path of the modified file hosted on the service
         '''
         if not file_is_newer(file_modified, file_original):
-            with open(file_original, 'rb') as infile, \
+            with open(file_original, 'r') as infile, \
                     open(file_modified, 'w') as outfile:
                 for line in infile:
                     line = line.replace("assets", ASSETS_URL)
