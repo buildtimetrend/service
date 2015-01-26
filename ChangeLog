@@ -3,3 +3,4 @@ v0.1 (not yet released)
 - set loglevel with environment variable BTT_LOGLEVEL and config file setting
 - issue #17 : add build status badges
 - issue #74 : return custom favicon.ico and robots.txt
+- issue #71 : host dashboards of projects on service
