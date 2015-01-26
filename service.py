@@ -148,7 +148,7 @@ class Dashboard(object):
 
         # Check if repo is allowed
         if repo is not None and not is_repo_allowed(repo):
-            message = "Project %s is not allowed"
+            message = "Project '%s' is not allowed."
             self.logger.info(message, repo)
             extra['message'] = message % cgi.escape(repo)
             repo = None
@@ -381,7 +381,7 @@ class TravisParser(object):
 
         # check if repo is allowed
         if not is_repo_allowed(repo):
-            return "The supplied repo is not allowed : %s" % cgi.escape(repo)
+            return "Project '%s' is not allowed." % cgi.escape(repo)
 
         if build is None:
             self.logger.warning("Build number is not set")
@@ -432,7 +432,7 @@ def is_repo_allowed(repo):
     allowed_repo = Settings().get_setting("allowed_repo")
     if allowed_repo is not None and \
             not any(x in repo for x in allowed_repo):
-        message = "The supplied repo is not allowed : %s"
+        message = "Project '%s' is not allowed."
         logger.warning(message, repo)
         return False
 
