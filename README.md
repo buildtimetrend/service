@@ -19,6 +19,15 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
 ### Index page
 - path : `/`
 
+### Display a dashboard with Buildtime Trend charts
+- path : `/dashboard`
+- usage : `/dashboard/repo_owner/repo_name`
+- parameters :
+  - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
+  - `repo_name` : name of the Github repo, fe. `service`
+
+> **Remark :** Visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
+
 ### Generate a shield badge
 - path : `/badge`
 - usage : `/badge/repo_owner/repo_name/badge_type/interval`
