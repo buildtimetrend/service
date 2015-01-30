@@ -17,6 +17,13 @@ Usage
 
 The service is available on Heroku : http://buildtimetrend-service.herokuapp.com/
 
+With these components :
+
+- [Index page](#index-page)
+- [Dashboard](#dashboard)
+- [Shield badges](#shield-badges)
+- [Process Travis CI build log](#process-travis-ci-build-log)
+
 ### Index page
 - path : `/`
 
