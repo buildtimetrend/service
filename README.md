@@ -9,6 +9,7 @@ Visualise what's trending in your build process
 [![Codacy Badge](https://www.codacy.com/project/badge/4ff71ed6b542493ab6f407f4c37aeb01)](https://www.codacy.com/public/ruleant/service)
 [![Stack Share](http://img.shields.io/badge/tech-stack-0690fa.svg)](http://stackshare.io/ruleant/buildtime-trend)
 
+
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
 Usage
@@ -19,7 +20,10 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
 ### Index page
 - path : `/`
 
-### Display a dashboard with Buildtime Trend charts
+### Dashboard
+
+Display a dashboard with Buildtime Trend charts
+
 - path : `/dashboard`
 - usage : `/dashboard/repo_owner/repo_name`
 - parameters :
@@ -28,7 +32,10 @@ The service is available on Heroku : http://buildtimetrend-service.herokuapp.com
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
 
-### Generate a shield badge
+### Shield badges
+
+Generate a shield badges
+
 - path : `/badge`
 - usage : `/badge/repo_owner/repo_name/badge_type/interval`
 - parameters :
