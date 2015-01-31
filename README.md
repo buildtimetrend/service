@@ -15,7 +15,7 @@ This project contains the files that offer Buildtime Trend as a service. The [Bu
 Usage
 -----
 
-The service is available on Heroku : http://buildtimetrend-service.herokuapp.com/
+The service is available on Heroku : http://buildtimetrend-dev.herokuapp.com/
 
 With these components :
 
@@ -60,19 +60,19 @@ Generate a shield badges
     - `year` : events of last year (last 52 weeks)
 
 #### Badge examples
-- ![Latest build duration](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/latest) : `/badge/buildtimetrend/service/latest`
-- ![Average buildtime (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/week) : `/badge/buildtimetrend/service/avg/week`
-- ![Average buildtime (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/month) : `/badge/buildtimetrend/service/avg/month`
-- ![Average buildtime (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/avg/year) : `/buildtimetrend/service/avg/year`
-- ![Build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/week) : `/badge/buildtimetrend/service/jobs/week`
-- ![Build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/month) : `/badge/buildtimetrend/service/jobs/month`
-- ![Build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/jobs/year) : `/buildtimetrend/service/jobs/year`
-- ![Builds (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/week) : `/badge/buildtimetrend/service/builds/week`
-- ![Builds (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/month) : `/badge/buildtimetrend/service/builds/month`
-- ![Builds (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/builds/year) : `/buildtimetrend/service/builds/year`
-- ![% passed build jobs (week)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/week) : `/badge/buildtimetrend/service/passed/week`
-- ![% passed build jobs (month)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/month) : `/badge/buildtimetrend/service/passed/month`
-- ![% passed build jobs (year)](https://buildtimetrend-service.herokuapp.com/badge/buildtimetrend/service/passed/year) : `/badge/buildtimetrend/service/passed/year`
+- ![Latest build duration](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/latest) : `/badge/buildtimetrend/service/latest`
+- ![Average buildtime (week)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/avg/week) : `/badge/buildtimetrend/service/avg/week`
+- ![Average buildtime (month)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/avg/month) : `/badge/buildtimetrend/service/avg/month`
+- ![Average buildtime (year)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/avg/year) : `/buildtimetrend/service/avg/year`
+- ![Build jobs (week)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/jobs/week) : `/badge/buildtimetrend/service/jobs/week`
+- ![Build jobs (month)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/jobs/month) : `/badge/buildtimetrend/service/jobs/month`
+- ![Build jobs (year)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/jobs/year) : `/buildtimetrend/service/jobs/year`
+- ![Builds (week)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/week) : `/badge/buildtimetrend/service/builds/week`
+- ![Builds (month)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/month) : `/badge/buildtimetrend/service/builds/month`
+- ![Builds (year)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/year) : `/buildtimetrend/service/builds/year`
+- ![% passed build jobs (week)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/week) : `/badge/buildtimetrend/service/passed/week`
+- ![% passed build jobs (month)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/month) : `/badge/buildtimetrend/service/passed/month`
+- ![% passed build jobs (year)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/year) : `/badge/buildtimetrend/service/passed/year`
 
 ### Process Travis CI build log
 
@@ -90,7 +90,7 @@ To trigger the service at the end of a Travis CI build, add this to your `.travi
     notifications:
       webhooks:
         # trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io
-        - http://buildtimetrend-service.herokuapp.com/travis
+        - http://buildtimetrend-dev.herokuapp.com/travis
 ```
 
 When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the `payload` that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.
