@@ -15,7 +15,12 @@ This project contains the files that offer Buildtime Trend as a service. The [Bu
 Usage
 -----
 
-The service is available on Heroku : http://buildtimetrend-dev.herokuapp.com/
+The service is available on Heroku :
+- production : http://buildtimetrend.herokuapp.com/
+    Available soon.
+    ~~Currently in beta, available for free for Open Source projects, thanks to [Keen.io](https://keen.io) for hosting the data.~~
+- development : http://buildtimetrend-dev.herokuapp.com/
+    Used for development, expect frequent changes
 
 With these components :
 
