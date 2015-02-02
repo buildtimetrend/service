@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 # vim: set expandtab sw=4 ts=4:
 """
-Retrieve Travis CI build data and log to Keen.io
+Buildtime Trend as a Service Cherrypy handlers.
+
+Service components :
+- /dashboard : display Buildtime Trend dashboard of hosted projects
+- /badge     : generate badges with metrics of project build data
+- /travis    : retrieve and parse build data from Travis CI
 
 Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
@@ -60,10 +65,11 @@ ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
 
 
 class Dashboard(object):
-    """
-    Hosts Buildtime Trend Dashboard
-    """
+
+    """Buildtime Trend Dashboard handler."""
+
     def __init__(self):
+        """Constructor."""
         self.settings = Settings()
         self.logger = get_logger()
 
@@ -78,9 +84,7 @@ class Dashboard(object):
 
     @cherrypy.expose
     def index(self):
-        """
-        Index page with overview of hosted projects
-        """
+        """Index page with overview of hosted projects."""
         # Create project overview for Buildtime Trend as a Service :
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
@@ -90,9 +94,7 @@ class Dashboard(object):
             raise cherrypy.HTTPError(404, "File not found")
 
     def dashboard(self):
-        """
-        Dashboard page
-        """
+        """Dashboard page."""
         # Create dashboard index for Buildtime Trend as a Service :
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
@@ -104,7 +106,9 @@ class Dashboard(object):
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, page=""):
         """
-        Default page, returns index page or config file,
+        Default page.
+
+        Returns index page or config file,
         redirects index page in all other cases.
 
         Parameters :
@@ -133,7 +137,7 @@ class Dashboard(object):
     @cherrypy.expose
     def config_js(self, repo_owner=None, repo_name=None):
         """
-        Config file for dashboard
+        Config file for dashboard.
 
         Parameters :
         - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
@@ -164,8 +168,10 @@ class Dashboard(object):
 
     def modify_index(self, file_original, file_modified):
         """
-        Create index file for Buildtime Trend as a Service :
-        adjust paths to 'assets'
+        Create index file for Buildtime Trend as a Service.
+
+        It adjust paths to 'assets' :
+        the relative path is change to an absolute path.
 
         Parameters:
         - file_original : Path of the original file
@@ -189,14 +195,11 @@ class Dashboard(object):
 
 
 class Badges(object):
-    """
-    Generates shield badges
-    """
+
+    """Generates shield badges."""
 
     def __init__(self):
-        """
-        Initialise class, by loading a config file and setting loglevel
-        """
+        """Initialise class."""
         self.settings = Settings()
 
         # get logger
@@ -205,9 +208,7 @@ class Badges(object):
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
               interval=None):
-        """
-        Generates a shield badge
-        """
+        """Generates a shield badge."""
         # parameter check
         repo = get_repo_slug(repo_owner, repo_name)
         badge_type = str(badge_type).lower()
@@ -259,13 +260,14 @@ class Badges(object):
 
 
 class Root(object):
-    """
-    Retrieve timing data from Travis CI, parse it and store it in Keen.io
-    """
+
+    """Root handler."""
 
     def __init__(self):
         """
-        Initialise class, by loading a config file and setting loglevel
+        Initialise class.
+
+        Load config file and set loglevel, define error page handler
         """
         self.settings = Settings()
         self.settings.load_settings(config_file="config_service.yml")
@@ -277,15 +279,11 @@ class Root(object):
 
     @cherrypy.expose
     def index(self):
-        """
-        Index page
-        """
+        """Index page."""
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     def error_page_404(self, status, message, traceback, version):
-        """
-        Page 404
-        """
+        """Error Page (404)."""
         self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
                           "Traceback : %s",
                           version, status, message, traceback)
@@ -294,14 +292,15 @@ class Root(object):
 
 
 class TravisParser(object):
+
     """
-    Retrieve timing data from Travis CI, parse it and store it in Keen.io
+    Build date parser.
+
+    Retrieve timing data from Travis CI, parse it and store it in Keen.io.
     """
 
     def __init__(self):
-        """
-        Initialise class, by loading a config file and setting loglevel
-        """
+        """Initialise class."""
         self.settings = Settings()
 
         # get logger
@@ -310,8 +309,11 @@ class TravisParser(object):
     @cherrypy.expose
     def default(self, repo=None, build=None, payload=None):
         """
+        Default handler.
+
         Visiting this page triggers loading and processing the build log
         and data of a travis CI build process.
+
         Parameters:
         repo : git repo name (fe. user/repo)
         build : build number
@@ -340,6 +342,8 @@ class TravisParser(object):
 
     def process_travis_buildlog(self):
         """
+        Process Travis CI buildlog.
+
         Check parameters, load build data from Travis CI,
         process it and send to Keen.io for storage.
         """
@@ -372,6 +376,8 @@ class TravisParser(object):
 
     def check_process_parameters(self, repo, build):
         """
+        Process setup parameters.
+
         Check parameters (repo and build)
         Returns error message, None when all parameters are fine.
         """
@@ -395,6 +401,8 @@ class TravisParser(object):
 
     def check_travis_notification(self):
         """
+        Check Travis CI notification request.
+
         Load Authorization and Travis-Repo-Slug headers and check if
         the Authorization header is correct
         """
@@ -414,7 +422,8 @@ class TravisParser(object):
 
 def is_repo_allowed(repo):
     """
-    Check if repo is allowed
+    Check if repo is allowed.
+
     List of allowed repos is set by setting 'allowed_repo',
     if not defined, the repo is not checked,
     'allowed_repo' can have multiple values, if any of them matches
@@ -441,10 +450,11 @@ def is_repo_allowed(repo):
 
 def get_config_project_list():
     """
-    Returns a list of repoNames of other projects hosted on the same website
+    Return a list of repoNames of projects hosted on this website.
+
+    Create list of only allowed project repos
+    and convert values from unicode to UTF8
     """
-    # create list of only allowed project repos
-    # and convert values from unicode to UTF8
     allowed_projects = [
         x.encode('UTF8') for x in get_all_projects() if is_repo_allowed(x)
     ]
