@@ -17,9 +17,11 @@ Usage
 
 The service is available on Heroku :
 - production : http://buildtimetrend.herokuapp.com/
+
     Available soon.
     ~~Currently in beta, available for free for Open Source projects, thanks to [Keen.io](https://keen.io) for hosting the data.~~
 - development : http://buildtimetrend-dev.herokuapp.com/
+
     Used for development, expect frequent changes
 
 With these components :
@@ -148,6 +150,8 @@ Contact
 -------
 
 Website : http://buildtimetrend.github.io/python-client
+
+Mailinglist : [Buildtime Trend Community](https://groups.google.com/d/forum/buildtimetrend-dev)
 
 Follow us on [Twitter](https://twitter.com/buildtime_trend), [Github](https://github.com/ruleant/buildtime-trend) and [OpenHub](https://www.openhub.net/p/buildtime-trend).
 
