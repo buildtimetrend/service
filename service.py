@@ -50,7 +50,7 @@ from buildtimetrend.keenio import get_latest_buildtime
 from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
 
-CLIENT_NAME = "buildtime-service"
+CLIENT_NAME = "buildtimetrend/service"
 CLIENT_VERSION = "0.2.dev"
 
 SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
