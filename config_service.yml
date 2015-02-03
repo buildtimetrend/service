@@ -1,0 +1,3 @@
+# Buildtime Trend general settings
+buildtimetrend:
+    loglevel: "INFO"
