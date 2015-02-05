@@ -86,9 +86,14 @@ Generate a shield badges
 Loads a Travis CI build log file, processes it and sends the data to Keen.io.
 
 - path : `/travis`
+- usage : `/travis/repo_owner/repo_name/build`
 - parameters :
-  - `repo` : name of the Github repo, fe. `buildtimetrend/python-lib`
+  - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
+  - `repo_name` : name of the Github repo, fe. `service`
   - `build` : Travis CI build ID
+
+OR
+
   - `payload` : Travis CI notification payload, more info in the [Travis CI documentation](http://docs.travis-ci.com/user/notifications/#Webhook-notification)
 
 To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file (!):

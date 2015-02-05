@@ -147,7 +147,7 @@ class Dashboard(object):
         """
         # define extra settings
         extra = {
-            'serviceUrl': "" # use this service instance for badge generation
+            'serviceUrl': ""  # use this service instance for badge generation
         }
 
         repo = get_repo_slug(repo_owner, repo_name)
@@ -160,7 +160,6 @@ class Dashboard(object):
             repo = None
         else:
             self.logger.info("Generated dashboard config for project %s", repo)
-
 
         # add project list
         extra.update(get_config_project_list())
@@ -198,10 +197,10 @@ class Dashboard(object):
 
 class Badges(object):
 
-    """Generates shield badges."""
+    """ Generate shield badges. """
 
     def __init__(self):
-        """Initialise class."""
+        """ Initialise class. """
         self.settings = Settings()
 
         # get logger
@@ -209,8 +208,25 @@ class Badges(object):
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
-              interval=None):
-        """Generates a shield badge."""
+                interval=None):
+        """
+        Generate a shield badge.
+
+        Parameters :
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        - badge_type : type of badge, options :
+          - latest : buildtime of last build job
+          - avg : average buildtime of buildjobs in period set by `interval`
+                  (default)
+          - jobs : number of build jobs in period set by `interval`
+          - builds : number of builds in period set by `interval`
+          - passed : percentage of successful build jobs during `interval`
+        - interval : time interval, options :
+          - week (default) : events of last week (last 7 days)
+          - month : events of last month (last 30 days)
+          - year : events of last year (last 52 weeks)
+        """
         # parameter check
         repo = get_repo_slug(repo_owner, repo_name)
         badge_type = str(badge_type).lower()
@@ -263,7 +279,7 @@ class Badges(object):
 
 class Root(object):
 
-    """Root handler."""
+    """ Root handler. """
 
     def __init__(self):
         """
@@ -282,11 +298,11 @@ class Root(object):
 
     @cherrypy.expose
     def index(self):
-        """Index page."""
+        """ Index page. """
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     def error_page_404(self, status, message, traceback, version):
-        """Error Page (404)."""
+        """ Error Page (404). """
         self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
                           "Traceback : %s",
                           version, status, message, traceback)
@@ -303,14 +319,15 @@ class TravisParser(object):
     """
 
     def __init__(self):
-        """Initialise class."""
+        """ Initialise class. """
         self.settings = Settings()
 
         # get logger
         self.logger = get_logger()
 
     @cherrypy.expose
-    def default(self, repo=None, build=None, payload=None):
+    def default(self, repo_owner=None, repo_name=None, build=None,
+                payload=None):
         """
         Default handler.
 
@@ -318,8 +335,9 @@ class TravisParser(object):
         and data of a travis CI build process.
 
         Parameters:
-        repo : git repo name (fe. user/repo)
-        build : build number
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        - build : build number
         """
         # reset settings
         self.settings.set_project_name(None)
@@ -330,6 +348,8 @@ class TravisParser(object):
         # load parameters from the Travis notification payload
         if self.check_travis_notification():
             process_notification_payload(payload)
+
+        repo = get_repo_slug(repo_owner, repo_name)
 
         # process url (GET) parameters
         if repo is not None:
@@ -386,7 +406,7 @@ class TravisParser(object):
         """
         if repo is None:
             self.logger.warning("Repo is not set")
-            return "Repo is not set, use repo=user/repo"
+            return "Repo is not set, use /travis/repo_owner/repo_name/build"
 
         # check if repo is allowed
         if not is_repo_allowed(repo):
@@ -400,7 +420,6 @@ class TravisParser(object):
             return "Keen IO write key not set, no data was sent"
 
         return None
-
 
     def check_travis_notification(self):
         """
@@ -486,8 +505,8 @@ if __name__ == "__main__":
             'tools.staticfile.filename': ROBOTS_PATH
         },
         ASSETS_URL: {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': ASSETS_DIR
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': ASSETS_DIR
         }
     }
 
