@@ -310,7 +310,8 @@ class TravisParser(object):
         self.logger = get_logger()
 
     @cherrypy.expose
-    def default(self, repo=None, build=None, payload=None):
+    def default(self, repo_owner=None, repo_name=None, build=None,
+            payload=None):
         """
         Default handler.
 
@@ -318,8 +319,9 @@ class TravisParser(object):
         and data of a travis CI build process.
 
         Parameters:
-        repo : git repo name (fe. user/repo)
-        build : build number
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        - build : build number
         """
         # reset settings
         self.settings.set_project_name(None)
@@ -330,6 +332,8 @@ class TravisParser(object):
         # load parameters from the Travis notification payload
         if self.check_travis_notification():
             process_notification_payload(payload)
+
+        repo = get_repo_slug(repo_owner, repo_name)
 
         # process url (GET) parameters
         if repo is not None:
@@ -386,7 +390,7 @@ class TravisParser(object):
         """
         if repo is None:
             self.logger.warning("Repo is not set")
-            return "Repo is not set, use repo=user/repo"
+            return "Repo is not set, use /travis/repo_owner/repo_name/build"
 
         # check if repo is allowed
         if not is_repo_allowed(repo):
