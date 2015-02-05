@@ -197,10 +197,10 @@ class Dashboard(object):
 
 class Badges(object):
 
-    """Generates shield badges."""
+    """ Generate shield badges. """
 
     def __init__(self):
-        """Initialise class."""
+        """ Initialise class. """
         self.settings = Settings()
 
         # get logger
@@ -209,7 +209,24 @@ class Badges(object):
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
                 interval=None):
-        """Generates a shield badge."""
+        """
+        Generate a shield badge.
+
+        Parameters :
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        - badge_type : type of badge, options :
+          - latest : buildtime of last build job
+          - avg : average buildtime of buildjobs in period set by `interval`
+                  (default)
+          - jobs : number of build jobs in period set by `interval`
+          - builds : number of builds in period set by `interval`
+          - passed : percentage of successful build jobs during `interval`
+        - interval : time interval, options :
+          - week (default) : events of last week (last 7 days)
+          - month : events of last month (last 30 days)
+          - year : events of last year (last 52 weeks)
+        """
         # parameter check
         repo = get_repo_slug(repo_owner, repo_name)
         badge_type = str(badge_type).lower()
@@ -262,7 +279,7 @@ class Badges(object):
 
 class Root(object):
 
-    """Root handler."""
+    """ Root handler. """
 
     def __init__(self):
         """
@@ -281,11 +298,11 @@ class Root(object):
 
     @cherrypy.expose
     def index(self):
-        """Index page."""
+        """ Index page. """
         return "Coming soon : %s" % SERVICE_WEBSITE_LINK
 
     def error_page_404(self, status, message, traceback, version):
-        """Error Page (404)."""
+        """ Error Page (404). """
         self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
                           "Traceback : %s",
                           version, status, message, traceback)
@@ -302,7 +319,7 @@ class TravisParser(object):
     """
 
     def __init__(self):
-        """Initialise class."""
+        """ Initialise class. """
         self.settings = Settings()
 
         # get logger
