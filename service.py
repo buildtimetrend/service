@@ -200,7 +200,7 @@ class Badges(object):
     """ Generate shield badges. """
 
     def __init__(self):
-        """Initialise class."""
+        """ Initialise class. """
         self.settings = Settings()
 
         # get logger
@@ -209,7 +209,24 @@ class Badges(object):
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
                 interval=None):
-        """ Generate a shield badge. """
+        """
+        Generate a shield badge.
+
+        Parameters :
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        - badge_type : type of badge, options :
+          - latest : buildtime of last build job
+          - avg : average buildtime of buildjobs in period set by `interval`
+                  (default)
+          - jobs : number of build jobs in period set by `interval`
+          - builds : number of builds in period set by `interval`
+          - passed : percentage of successful build jobs during `interval`
+        - interval : time interval, options :
+          - week (default) : events of last week (last 7 days)
+          - month : events of last month (last 30 days)
+          - year : events of last year (last 52 weeks)
+        """
         # parameter check
         repo = get_repo_slug(repo_owner, repo_name)
         badge_type = str(badge_type).lower()
