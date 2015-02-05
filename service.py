@@ -147,7 +147,7 @@ class Dashboard(object):
         """
         # define extra settings
         extra = {
-            'serviceUrl': "" # use this service instance for badge generation
+            'serviceUrl': ""  # use this service instance for badge generation
         }
 
         repo = get_repo_slug(repo_owner, repo_name)
@@ -160,7 +160,6 @@ class Dashboard(object):
             repo = None
         else:
             self.logger.info("Generated dashboard config for project %s", repo)
-
 
         # add project list
         extra.update(get_config_project_list())
@@ -209,7 +208,7 @@ class Badges(object):
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
-              interval=None):
+                interval=None):
         """Generates a shield badge."""
         # parameter check
         repo = get_repo_slug(repo_owner, repo_name)
@@ -311,7 +310,7 @@ class TravisParser(object):
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, build=None,
-            payload=None):
+                payload=None):
         """
         Default handler.
 
@@ -405,7 +404,6 @@ class TravisParser(object):
 
         return None
 
-
     def check_travis_notification(self):
         """
         Check Travis CI notification request.
@@ -490,8 +488,8 @@ if __name__ == "__main__":
             'tools.staticfile.filename': ROBOTS_PATH
         },
         ASSETS_URL: {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': ASSETS_DIR
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': ASSETS_DIR
         }
     }
 
