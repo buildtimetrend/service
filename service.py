@@ -39,7 +39,7 @@ from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
 from buildtimetrend.keenio import check_time_interval
-from buildtimetrend.keenio import log_build_keen
+from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
@@ -390,7 +390,7 @@ class TravisParser(object):
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
             self.logger.info("Send build job #%s data to Keen.io", build_job)
-            log_build_keen(travis_data.build_jobs[build_job])
+            send_build_data_service (travis_data.build_jobs[build_job])
 
         message = "Successfully retrieved build #%s data of %s" \
                   " from Travis CI and sent to Keen.io"
