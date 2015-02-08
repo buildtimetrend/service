@@ -496,6 +496,7 @@ if __name__ == "__main__":
     # configure cherrypy webserver host and port
     # inspired by https://github.com/craigkerstiens/cherrypy-helloworld
     cherrypy.config.update({
+        'environment': 'production',
         'server.socket_host': '0.0.0.0',
         'server.socket_port': int(os.environ.get('PORT', '5000')),
     })
