@@ -4,3 +4,4 @@ v0.1 (not yet released)
 - issue #17 : add build status badges
 - issue #74 : return custom favicon.ico and robots.txt
 - issue #71 : host dashboards of projects on service
+- schema change : save build job data in build_jobs.job (was builds.build)

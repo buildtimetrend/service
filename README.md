@@ -18,11 +18,16 @@ Usage
 The service is available on Heroku :
 - production : http://buildtimetrend.herokuapp.com/
 
-    Available soon.
-    ~~Currently in beta, available for free for Open Source projects, thanks to [Keen.io](https://keen.io) for hosting the data.~~
+    Currently in beta.
+
+    Available for free for Open Source projects (public on GitHub), thanks to [Keen.io](https://keen.io) for hosting the timing data.
+
+    Private projects will be supported soon.
+
 - development : http://buildtimetrend-dev.herokuapp.com/
 
-    Used for development, expect frequent changes
+    Used for development, expect frequent changes, accepts only a limited number of projects.
+    [Contact us](#Contact) if you'd like to test the development version. It's recommended to use the production version.
 
 With these components :
 
@@ -96,18 +101,16 @@ OR
 
   - `payload` : Travis CI notification payload, more info in the [Travis CI documentation](http://docs.travis-ci.com/user/notifications/#Webhook-notification)
 
-To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file (!):
+To trigger the service at the end of a Travis CI build, add this to your `.travis.yml` file:
 
 ```yaml
     notifications:
       webhooks:
         # trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io
-        - http://buildtimetrend-dev.herokuapp.com/travis
+        - http://buildtimetrend.herokuapp.com/travis
 ```
 
 When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the `payload` that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.
-
-> (!) **Remark :** Buildtime Trend as a Service is currently still under development, so the service running on Heroku currently doesn't accept build notifications yet.
 
 
 Config file
@@ -154,7 +157,7 @@ For an overview of who contributed to create Buildtime trend, see [Credits](http
 Contact
 -------
 
-Website : http://buildtimetrend.github.io/python-client
+Website : http://buildtimetrend.github.io/service
 
 Mailinglist : [Buildtime Trend Community](https://groups.google.com/d/forum/buildtimetrend-dev)
 
