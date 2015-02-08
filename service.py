@@ -390,7 +390,7 @@ class TravisParser(object):
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
             self.logger.info("Send build job #%s data to Keen.io", build_job)
-            send_build_data_service (travis_data.build_jobs[build_job])
+            send_build_data_service(travis_data.build_jobs[build_job])
 
         message = "Successfully retrieved build #%s data of %s" \
                   " from Travis CI and sent to Keen.io"
