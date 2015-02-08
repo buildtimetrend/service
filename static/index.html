@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset='utf-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+  <title>Buildtime Trend as a Service</title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="/assets/css/keen-dashboards.css" />
+  <link type="text/css" rel="stylesheet" href="/assets/css/trends.css" />
+</head>
+
+<body class="application">
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar">&nbsp;</span>
+        </button>
+        <a id="title" class="navbar-brand" href="./">Buildtime Trend as a Service</a>
+      </div>
+
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <li><a href="https://buildtimetrend.github.io/service/">About Buildtime Trend</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <h2>Get started</h2>
+    <h3>Step 1 : setup Travis CI</h3>
+    <p>Add this to the <code>.travis.yml</code> file of your project:</p>
+
+    <div class="highlight highlight-yaml"><pre>    <span class="pl-s1"><span class="pl-ent">notifications:</span></span>
+      <span class="pl-s1"><span class="pl-ent">webhooks:</span></span>
+        <span class="pl-c"># trigger Buildtime Trend Service to parse Travis CI log</span>
+        <span class="pl-s1">- <span class="pl-s1">http://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
+
+    <p>This will trigger the service at the end of a Travis CI build, to retrieve and parse the Travis CI build log file and get the timing data.</p>
+    <p>All required parameters (repo name and build number) are retrieved from the notification <code>payload</code> that is passed by Travis CI.</p>
+
+    <h3>Step 2 : go to the dashboard</h3>
+    <p>Visit the <a href="/dashboard" >dashboard</a> to see the trends and metrics of the builds of your project.</p>
+    <p>Currently this service is available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.
+    <p>Private projects will be supported soon.</p>
+
+    <h3>Step 3 : add a badge</h3>
+    <p>Shield badges are available to add to the <code>README.md</code> file or website of your project.</p>
+
+    <h4>Example : </h4>
+
+    <p><a href="https://buildtimetrend.herokuapp.com/dashboard/buildtimetrend/service/"><img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest" alt="Buildtime Trend badge" /></a>
+    <pre>
+    Markup :
+    [![Buildtime trend](https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest)](https://buildtimetrend.herokuapp.com/dashboard/buildtimetrend/service/)
+
+    HTML :
+    &lt;a href="https://buildtimetrend.herokuapp.com/dashboard/buildtimetrend/service/"&gt;&lt;img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest" alt="Buildtime Trend badge" /&gt;&lt;/a&gt;</pre>
+    Replace <b>buildtimetrend/service</b> by your project name on GitHub.<br />
+    See <a href="buildtimetrend.github.io/service#shield-badges" >documentation</a> for more available badges.
+    </p>
+  </div>
+</body>
+</html>

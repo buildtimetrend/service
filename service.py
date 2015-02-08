@@ -291,6 +291,8 @@ class Root(object):
         self.settings.load_settings(config_file="config_service.yml")
         self.settings.set_client(CLIENT_NAME, CLIENT_VERSION)
 
+        self.file_index = os.path.join(STATIC_DIR, "index.html")
+
         cherrypy.config.update({'error_page.404': self.error_page_404})
 
         # get logger
@@ -299,7 +301,10 @@ class Root(object):
     @cherrypy.expose
     def index(self):
         """ Index page. """
-        return "Coming soon : %s" % SERVICE_WEBSITE_LINK
+        if check_file(self.file_index):
+            return open(self.file_index)
+        else:
+            raise cherrypy.HTTPError(404, "File not found")
 
     def error_page_404(self, status, message, traceback, version):
         """ Error Page (404). """
