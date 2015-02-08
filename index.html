@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Buildtime Trend as a Service : Visualise what&#39;s trending in your build process">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Buildtime Trend as a Service</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/buildtimetrend/service">View on GitHub</a>
+
+          <h1 id="project_title">Buildtime Trend as a Service</h1>
+          <h2 id="project_tagline">Visualise what&#39;s trending in your build process</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/buildtimetrend/service/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/buildtimetrend/service/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>This project offers the Buildtime Trend project as a service. The <a href="https://github.com/buildtimetrend/python-lib">Buildtime Trend library</a> powers this service.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>The service is available on Heroku : <a href="http://buildtimetrend.herokuapp.com/">http://buildtimetrend.herokuapp.com/</a></p>
+
+<p>It is currently in beta.</p>
+
+<p>Available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.</p>
+
+<p>Private projects will be supported soon.</p>
+
+<h2>
+<a id="components" class="anchor" href="#components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Components</h2>
+
+<ul>
+<li><a href="#index-page">Index page</a></li>
+<li><a href="#dashboard">Dashboard</a></li>
+<li><a href="#shield-badges">Shield badges</a></li>
+<li><a href="#process-travis-ci-build-log">Process Travis CI build log</a></li>
+</ul>
+
+<h3>
+<a id="index-page" class="anchor" href="#index-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Index page</h3>
+
+<ul>
+<li>path : <code>/</code>
+</li>
+</ul>
+
+<h3>
+<a id="dashboard" class="anchor" href="#dashboard" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dashboard</h3>
+
+<p>Display a dashboard with Buildtime Trend charts</p>
+
+<ul>
+<li>path : <code>/dashboard</code>
+</li>
+<li>usage : <code>/dashboard/repo_owner/repo_name</code>
+</li>
+<li>parameters :
+
+<ul>
+<li>
+<code>repo_owner</code> : name of the Github repo owner, fe. <code>buildtimetrend</code>
+</li>
+<li>
+<code>repo_name</code> : name of the Github repo, fe. <code>service</code>
+</li>
+</ul>
+</li>
+</ul>
+
+<blockquote>
+<p><strong>Remark :</strong> When visiting <code>/dashboard</code> (without parameters), an overview of all hosted projects is displayed.</p>
+</blockquote>
+
+<h3>
+<a id="shield-badges" class="anchor" href="#shield-badges" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shield badges</h3>
+
+<p>Generate a shield badges</p>
+
+<ul>
+<li>path : <code>/badge</code>
+</li>
+<li>usage : <code>/badge/repo_owner/repo_name/badge_type/interval</code>
+</li>
+<li>parameters :
+
+<ul>
+<li>
+<code>repo_owner</code> : name of the Github repo owner, fe. <code>buildtimetrend</code>
+</li>
+<li>
+<code>repo_name</code> : name of the Github repo, fe. <code>service</code>
+</li>
+<li>
+<code>badge_type</code> : type of badge, options :
+
+<ul>
+<li>
+<code>latest</code> : buildtime of last build job</li>
+<li>
+<code>avg</code> : average buildtime of buildjobs in period set by <code>interval</code> (default)</li>
+<li>
+<code>jobs</code> : number of build jobs in period set by <code>interval</code>
+</li>
+<li>
+<code>builds</code> : number of builds in period set by <code>interval</code>
+</li>
+<li>
+<code>passed</code> : percentage of successful build jobs during <code>interval</code>
+</li>
+</ul>
+</li>
+<li>
+<code>interval</code> : time interval, options :
+
+<ul>
+<li>
+<code>week</code> (default) : events of last week (last 7 days)</li>
+<li>
+<code>month</code> : events of last month (last 30 days)</li>
+<li>
+<code>year</code> : events of last year (last 52 weeks)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h4>
+<a id="badge-examples" class="anchor" href="#badge-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Badge examples</h4>
+
+<ul>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest" alt="Latest build duration"> : <code>/badge/buildtimetrend/service/latest</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/avg/week" alt="Average buildtime (week)"> : <code>/badge/buildtimetrend/service/avg/week</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/avg/month" alt="Average buildtime (month)"> : <code>/badge/buildtimetrend/service/avg/month</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/avg/year" alt="Average buildtime (year)"> : <code>/buildtimetrend/service/avg/year</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/jobs/week" alt="Build jobs (week)"> : <code>/badge/buildtimetrend/service/jobs/week</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/jobs/month" alt="Build jobs (month)"> : <code>/badge/buildtimetrend/service/jobs/month</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/jobs/year" alt="Build jobs (year)"> : <code>/buildtimetrend/service/jobs/year</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/builds/week" alt="Builds (week)"> : <code>/badge/buildtimetrend/service/builds/week</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/builds/month" alt="Builds (month)"> : <code>/badge/buildtimetrend/service/builds/month</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/builds/year" alt="Builds (year)"> : <code>/buildtimetrend/service/builds/year</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/passed/week" alt="% passed build jobs (week)"> : <code>/badge/buildtimetrend/service/passed/week</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/passed/month" alt="% passed build jobs (month)"> : <code>/badge/buildtimetrend/service/passed/month</code>
+</li>
+<li>
+<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/passed/year" alt="% passed build jobs (year)"> : <code>/badge/buildtimetrend/service/passed/year</code>
+</li>
+</ul>
+
+<h3>
+<a id="process-travis-ci-build-log" class="anchor" href="#process-travis-ci-build-log" aria-hidden="true"><span class="octicon octicon-link"></span></a>Process Travis CI build log</h3>
+
+<p>Loads a Travis CI build log file, processes it and sends the data to Keen.io.</p>
+
+<ul>
+<li>path : <code>/travis</code>
+</li>
+<li>usage : <code>/travis/repo_owner/repo_name/build</code>
+</li>
+<li>parameters :
+
+<ul>
+<li>
+<code>repo_owner</code> : name of the Github repo owner, fe. <code>buildtimetrend</code>
+</li>
+<li>
+<code>repo_name</code> : name of the Github repo, fe. <code>service</code>
+</li>
+<li>
+<code>build</code> : Travis CI build ID</li>
+</ul>
+</li>
+</ul>
+
+<p>OR</p>
+
+<ul>
+<li>
+<code>payload</code> : Travis CI notification payload, more info in the <a href="http://docs.travis-ci.com/user/notifications/#Webhook-notification">Travis CI documentation</a>
+</li>
+</ul>
+
+<p>To trigger the service at the end of a Travis CI build, add this to your <code>.travis.yml</code> file:</p>
+
+<div class="highlight highlight-yaml"><pre>    <span class="pl-s1"><span class="pl-ent">notifications:</span></span>
+      <span class="pl-s1"><span class="pl-ent">webhooks:</span></span>
+        <span class="pl-c"># trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io</span>
+        <span class="pl-s1">- <span class="pl-s1">http://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
+
+<p>When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the <code>payload</code> that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.</p>
+
+<h2>
+<a id="config-file" class="anchor" href="#config-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Config file</h2>
+
+<p>Add a configfile named <code>config_service.yml</code> based on <code>config_sample.yml</code> to configure the way the service behaves.</p>
+
+<ul>
+<li>
+<code>allowed_repo</code> : defines which repos are allowed by the service. If the <code>allowed_repo</code> setting is not defined, all repos are allowed. If substring matches the repo name, it is allowed, so fe. <code>my_name</code> will allow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is allowed as well.
+Multiple entries are allowed, fe. :</li>
+</ul>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s1"><span class="pl-ent">buildtimetrend:</span></span>
+  <span class="pl-s1"><span class="pl-ent">allowed_repo:</span></span>
+    <span class="pl-s1">- <span class="pl-s1"><span class="pl-pds">"</span>my_name<span class="pl-pds">"</span></span><span class="pl-s1"> </span></span><span class="pl-c"># allowing all repo names that contain my_name</span>
+    <span class="pl-s1">- <span class="pl-s1"><span class="pl-pds">"</span>another_name/some_repo<span class="pl-pds">"</span></span><span class="pl-s1"> </span></span><span class="pl-c"># allows this specific repo</span></pre></div>
+
+<ul>
+<li>
+<code>travis_account_token</code> : define to enable checking Travis CI notification Authorization header. More info on Travis CI Webhook Authorization and where to find the Account token : <a href="http://docs.travis-ci.com/user/notifications/#Authorization-for-Webhooks">http://docs.travis-ci.com/user/notifications/#Authorization-for-Webhooks</a>
+</li>
+</ul>
+
+<blockquote>
+<p><strong>Remark :</strong> the account token should be the one of the user who created the repo on Travis CI.</p>
+</blockquote>
+
+<p>It can also be defined with the <code>TRAVIS_ACCOUNT_TOKEN</code> environment variable.</p>
+
+<ul>
+<li>
+<code>loglevel</code> : defines loglevel, possible values : <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code> (default), <code>ERROR</code>
+It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.</li>
+</ul>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>
+<code>buildtimetrend</code> : <a href="https://github.com/buildtimetrend/python-lib">Buildtime Trend library</a>
+</li>
+<li>
+<code>cherrypy</code> : <a href="http://www.cherrypy.org/">CherrPy</a> A Minimalist Python Web Framework, making the API available as a web service</li>
+</ul>
+
+<h2>
+<a id="bugs-and-feature-requests" class="anchor" href="#bugs-and-feature-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bugs and feature requests</h2>
+
+<p>Please report bugs and add feature requests in the Github <a href="https://github.com/buildtimetrend/python-lib/issues">issue tracker</a>.</p>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>For an overview of who contributed to create Buildtime trend, see <a href="https://github.com/buildtimetrend/python-lib/wiki/Credits">Credits</a>.</p>
+
+<h2>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h2>
+
+<p>Website : <a href="http://buildtimetrend.github.io/">http://buildtimetrend.github.io/</a></p>
+
+<p>Mailinglist : <a href="https://groups.google.com/d/forum/buildtimetrend-dev">Buildtime Trend Community</a></p>
+
+<p>Follow us on <a href="https://twitter.com/buildtime_trend">Twitter</a>, <a href="https://github.com/ruleant/buildtime-trend">Github</a> and <a href="https://www.openhub.net/p/buildtime-trend">OpenHub</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Buildtime Trend as a Service maintained by <a href="https://github.com/buildtimetrend">buildtimetrend</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-49318924-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
