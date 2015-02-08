@@ -19,7 +19,9 @@ The service is available on Heroku :
 - production : http://buildtimetrend.herokuapp.com/
 
     Currently in beta.
+
     Available for free for Open Source projects (public on GitHub), thanks to [Keen.io](https://keen.io) for hosting the timing data.
+
     Private projects will be supported soon.
 
 - development : http://buildtimetrend-dev.herokuapp.com/
