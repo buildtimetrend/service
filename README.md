@@ -29,7 +29,17 @@ The service is available on Heroku :
     Used for development, expect frequent changes, accepts only a limited number of projects.
     [Contact us](#Contact) if you'd like to test the development version. It's recommended to use the production version.
 
-With these components :
+Or you can clone the project and deploy it to Heroku.
+
+Or run it on your own server :
+
+```bash
+python service.py
+```
+
+This will launch a CherryPy instance hosting the service on port 5000.
+
+## Components
 
 - [Index page](#index-page)
 - [Dashboard](#dashboard)
