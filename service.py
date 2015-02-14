@@ -53,7 +53,7 @@ from buildtimetrend.keenio import get_all_projects
 CLIENT_NAME = "buildtimetrend/service"
 CLIENT_VERSION = "0.2.dev"
 
-SERVICE_WEBSITE_LINK = "<a href='https://github.com/buildtimetrend/service'>" \
+SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
                        "Buildtime Trend as a Service</a>"
 TRAVIS_URL = '/travis'
 ASSETS_URL = '/assets'
