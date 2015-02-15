@@ -75,13 +75,13 @@ class Dashboard(object):
         self.settings = Settings()
         self.logger = get_logger()
 
-        self.file_projects = os.path.join(DASHBOARD_DIR, u"projects.html")
+        self.file_projects = os.path.join(DASHBOARD_DIR, "projects.html")
         self.file_projects_service = os.path.join(
-            DASHBOARD_DIR, u"projects_service.html"
+            DASHBOARD_DIR, "projects_service.html"
         )
-        self.file_index = os.path.join(DASHBOARD_DIR, u"index.html")
+        self.file_index = os.path.join(DASHBOARD_DIR, "index.html")
         self.file_index_service = os.path.join(
-            DASHBOARD_DIR, u"index_service.html"
+            DASHBOARD_DIR, "index_service.html"
         )
 
     @cherrypy.expose
