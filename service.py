@@ -62,7 +62,8 @@ BADGE_URL = '/badge'
 STATIC_DIR = os.path.join(os.path.abspath('.'), 'static')
 DASHBOARD_DIR = os.path.join(STATIC_DIR, 'dashboard')
 ASSETS_DIR = os.path.join(DASHBOARD_DIR, 'assets')
-FAVICON_PATH = os.path.join(ASSETS_DIR, 'images', 'favicon.ico')
+IMAGES_DIR = os.path.join(ASSETS_DIR, 'images')
+FAVICON_PATH = os.path.join(IMAGES_DIR, 'favicon.ico')
 ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
 
 
