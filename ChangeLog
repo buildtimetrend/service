@@ -5,3 +5,4 @@ v0.1 (not yet released)
 - issue #74 : return custom favicon.ico and robots.txt
 - issue #71 : host dashboards of projects on service
 - schema change : save build job data in build_jobs.job (was builds.build)
+- issue #77 : add apple-touch-icon.png
