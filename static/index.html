@@ -41,7 +41,7 @@
     <div class="highlight highlight-yaml"><pre>    <span class="pl-s1"><span class="pl-ent">notifications:</span></span>
       <span class="pl-s1"><span class="pl-ent">webhooks:</span></span>
         <span class="pl-c"># trigger Buildtime Trend Service to parse Travis CI log</span>
-        <span class="pl-s1">- <span class="pl-s1">http://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
+        <span class="pl-s1">- <span class="pl-s1">https://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
 
     <p>This will trigger the service at the end of a Travis CI build, to retrieve and parse the Travis CI build log file and get the timing data.</p>
     <p>All required parameters (repo name and build number) are retrieved from the notification <code>payload</code> that is passed by Travis CI.</p>
