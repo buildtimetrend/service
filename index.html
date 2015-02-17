@@ -38,7 +38,7 @@
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>The service is available (in beta) on Heroku, feel free to try it out : <a href="http://buildtimetrend.herokuapp.com/">http://buildtimetrend.herokuapp.com/</a></p>
+<p>The service is available (in beta) on Heroku, feel free to try it out : <a href="https://buildtimetrend.herokuapp.com/">https://buildtimetrend.herokuapp.com/</a></p>
 
 <p>It's available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.</p>
 
@@ -226,7 +226,7 @@
 <div class="highlight highlight-yaml"><pre>    <span class="pl-s1"><span class="pl-ent">notifications:</span></span>
       <span class="pl-s1"><span class="pl-ent">webhooks:</span></span>
         <span class="pl-c"># trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io</span>
-        <span class="pl-s1">- <span class="pl-s1">http://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
+        <span class="pl-s1">- <span class="pl-s1">https://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
 
 <p>When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the <code>payload</code> that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.</p>
 
@@ -288,7 +288,7 @@ It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.<
 <h2>
 <a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h2>
 
-<p>Website : <a href="http://buildtimetrend.github.io/service">http://buildtimetrend.github.io/service</a></p>
+<p>Website : <a href="https://buildtimetrend.github.io/service">https://buildtimetrend.github.io/service</a></p>
 
 <p>Mailinglist : <a href="https://groups.google.com/d/forum/buildtimetrend-dev">Buildtime Trend Community</a></p>
 
