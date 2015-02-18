@@ -1,3 +1,5 @@
+v0.3 (not yet released)
+
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
 - set loglevel with environment variable BTT_LOGLEVEL and config file setting
