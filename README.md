@@ -3,6 +3,9 @@ Buildtime Trend as a Service
 
 Visualise what's trending in your build process
 
+[![Buildtime Trend as a Service](http://img.shields.io/badge/release-v0.2-blue.svg)](https://github.com/buildtimetrend/service/releases/latest)
+[![Buildtime Trend as a Service (dev)](http://img.shields.io/badge/dev-v0.3.dev-blue.svg)](https://github.com/buildtimetrend/service/zipball/master)
+
 [![Build Status](https://travis-ci.org/buildtimetrend/service.svg?branch=master)](https://travis-ci.org/buildtimetrend/service)
 [![Code Health](https://landscape.io/github/buildtimetrend/service/master/landscape.svg)](https://landscape.io/github/buildtimetrend/service/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/buildtimetrend/service/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/buildtimetrend/service/?branch=master)
