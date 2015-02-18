@@ -21,6 +21,7 @@
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar">&nbsp;</span>
         </button>
+        <a class="navbar-brand" href="https://buildtimetrend.github.io/"><img src="/apple-touch-icon.png" "Buildtime Trend Logo" width="27px" /></a>
         <a id="title" class="navbar-brand" href="./">Buildtime Trend as a Service</a>
       </div>
 
@@ -34,8 +35,15 @@
   </div>
 
   <div class="page-header">
+    <h2>Visualise what's trending in your build process</h2>
+    <p>
+    This application offers the <a href='http://buildtimetrend.github.io/'>Buildtime Trend project</a> as a service.<br />
+    Buildtime Trend generates and gathers timing data of build processes, like Travis CI. The aggregated data is used to create charts to visualise trends of the build process.
+    </p>
+    <p>More information can be found on the <a href='http://buildtimetrend.github.io/'>website</a>, check the <a href="/dashboard" >dashboard</a> for a demo, or follow the instructions below to start generating build data trends for your project.</p>
+
     <h2>Get started</h2>
-    <h3>Step 1 : setup Travis CI</h3>
+    <h3>Step 1 : Setup Travis CI</h3>
     <p>Add this to the <code>.travis.yml</code> file of your project:</p>
 
     <div class="highlight highlight-yaml"><pre>    <span class="pl-s1"><span class="pl-ent">notifications:</span></span>
@@ -46,12 +54,12 @@
     <p>This will trigger the service at the end of a Travis CI build, to retrieve and parse the Travis CI build log file and get the timing data.</p>
     <p>All required parameters (repo name and build number) are retrieved from the notification <code>payload</code> that is passed by Travis CI.</p>
 
-    <h3>Step 2 : go to the dashboard</h3>
+    <h3>Step 2 : View the generated trends on the dashboard</h3>
     <p>Visit the <a href="/dashboard" >dashboard</a> to see the trends and metrics of the builds of your project.</p>
     <p>Currently this service is available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.
     <p>Private projects will be supported soon.</p>
 
-    <h3>Step 3 : add a badge</h3>
+    <h3>Step 3 : Add a badge</h3>
     <p>Shield badges are available to add to the <code>README.md</code> file or website of your project.</p>
 
     <h4>Example : </h4>
@@ -59,11 +67,11 @@
     <p><a href="https://buildtimetrend.herokuapp.com/dashboard/buildtimetrend/service/"><img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest" alt="Buildtime Trend badge" /></a>
     <pre>
     MarkDown :
-    [![Buildtime trend](https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest)](https://buildtimetrend.herokuapp.com/dashboard/buildtimetrend/service/)
+    [![Buildtime trend](https://buildtimetrend.herokuapp.com/badge/&lt;USER/PROJECT&gt;/latest)](https://buildtimetrend.herokuapp.com/dashboard/&lt;USER/PROJECT&gt;/)
 
     HTML :
-    &lt;a href="https://buildtimetrend.herokuapp.com/dashboard/buildtimetrend/service/"&gt;&lt;img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest" alt="Buildtime Trend badge" /&gt;&lt;/a&gt;</pre>
-    Replace <b>buildtimetrend/service</b> by your project name on GitHub.<br />
+    &lt;a href="https://buildtimetrend.herokuapp.com/dashboard/&lt;USER/PROJECT&gt;/"&gt;&lt;img src="https://buildtimetrend.herokuapp.com/badge/&lt;USER/PROJECT&gt;/latest" alt="Buildtime Trend badge" /&gt;&lt;/a&gt;</pre>
+    Replace <b>&lt;USER/PROJECT&gt;</b> by your project name on GitHub (fe. buildtimetrend/service)<br />
     See <a href="https://buildtimetrend.github.io/service#shield-badges">documentation</a> for other badges.
     </p>
   </div>
