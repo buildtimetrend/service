@@ -1,7 +1,12 @@
-v0.1 (not yet released)
+v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
 - set loglevel with environment variable BTT_LOGLEVEL and config file setting
 - issue #17 : add build status badges
 - issue #74 : return custom favicon.ico and robots.txt
 - issue #71 : host dashboards of projects on service
 - schema change : save build job data in build_jobs.job (was builds.build)
+- issue #77 : add apple-touch-icon.png
+
+This project follows the version numbering of the other modules of the
+Buildtime Trend project. The service was introduced in version v0.2, hence the
+first release starts with v0.2

@@ -51,7 +51,7 @@ from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
 
 CLIENT_NAME = "buildtimetrend/service"
-CLIENT_VERSION = "0.2.dev"
+CLIENT_VERSION = "0.2"
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
                        "Buildtime Trend as a Service</a>"
@@ -62,7 +62,11 @@ BADGE_URL = '/badge'
 STATIC_DIR = os.path.join(os.path.abspath('.'), 'static')
 DASHBOARD_DIR = os.path.join(STATIC_DIR, 'dashboard')
 ASSETS_DIR = os.path.join(DASHBOARD_DIR, 'assets')
-FAVICON_PATH = os.path.join(ASSETS_DIR, 'images', 'favicon.ico')
+IMAGES_DIR = os.path.join(ASSETS_DIR, 'images')
+FAVICON_PATH = os.path.join(IMAGES_DIR, 'favicon.ico')
+APPLE_ICON_PATH = os.path.join(IMAGES_DIR, 'apple-touch-icon.png')
+APPLE_ICON_PRECOMPOSED_PATH = os.path.join(IMAGES_DIR,
+                                           'apple-touch-icon-precomposed.png')
 ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
 
 
@@ -505,6 +509,14 @@ if __name__ == "__main__":
         '/favicon.ico': {
             'tools.staticfile.on': True,
             'tools.staticfile.filename': FAVICON_PATH
+        },
+        '/apple-touch-icon.png': {
+            'tools.staticfile.on': True,
+            'tools.staticfile.filename': APPLE_ICON_PATH
+        },
+        '/apple-touch-icon-precomposed.png': {
+            'tools.staticfile.on': True,
+            'tools.staticfile.filename': APPLE_ICON_PRECOMPOSED_PATH
         },
         '/robots.txt': {
             'tools.staticfile.on': True,
