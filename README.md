@@ -3,6 +3,9 @@ Buildtime Trend as a Service
 
 Visualise what's trending in your build process
 
+[![Buildtime Trend as a Service](http://img.shields.io/badge/release-v0.2-blue.svg)](https://github.com/buildtimetrend/service/releases/latest)
+[![Buildtime Trend as a Service (dev)](http://img.shields.io/badge/dev-v0.3.dev-blue.svg)](https://github.com/buildtimetrend/service/zipball/master)
+
 [![Build Status](https://travis-ci.org/buildtimetrend/service.svg?branch=master)](https://travis-ci.org/buildtimetrend/service)
 [![Code Health](https://landscape.io/github/buildtimetrend/service/master/landscape.svg)](https://landscape.io/github/buildtimetrend/service/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/buildtimetrend/service/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/buildtimetrend/service/?branch=master)
@@ -16,7 +19,7 @@ Usage
 -----
 
 The service is available on Heroku :
-- production : http://buildtimetrend.herokuapp.com/
+- production : https://buildtimetrend.herokuapp.com/
 
     Currently in beta.
 
@@ -24,7 +27,7 @@ The service is available on Heroku :
 
     Private projects will be supported soon.
 
-- development : http://buildtimetrend-dev.herokuapp.com/
+- development : https://buildtimetrend-dev.herokuapp.com/
 
     Used for development, expect frequent changes, accepts only a limited number of projects.
     [Contact us](#Contact) if you'd like to test the development version. It's recommended to use the production version.
@@ -117,7 +120,7 @@ To trigger the service at the end of a Travis CI build, add this to your `.travi
     notifications:
       webhooks:
         # trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io
-        - http://buildtimetrend.herokuapp.com/travis
+        - https://buildtimetrend.herokuapp.com/travis
 ```
 
 When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the `payload` that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.
@@ -167,7 +170,7 @@ For an overview of who contributed to create Buildtime trend, see [Credits](http
 Contact
 -------
 
-Website : http://buildtimetrend.github.io/service
+Website : https://buildtimetrend.github.io/service
 
 Mailinglist : [Buildtime Trend Community](https://groups.google.com/d/forum/buildtimetrend-dev)
 
