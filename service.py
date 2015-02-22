@@ -34,7 +34,7 @@ from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
-from buildtimetrend.tools import get_logger
+from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
@@ -77,7 +77,7 @@ class Dashboard(object):
     def __init__(self):
         """Constructor."""
         self.settings = Settings()
-        self.logger = get_logger()
+        self.logger = logger
 
         self.file_projects = os.path.join(DASHBOARD_DIR, "projects.html")
         self.file_projects_service = os.path.join(
@@ -208,7 +208,7 @@ class Badges(object):
         self.settings = Settings()
 
         # get logger
-        self.logger = get_logger()
+        self.logger = logger
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
@@ -300,7 +300,7 @@ class Root(object):
         cherrypy.config.update({'error_page.404': self.error_page_404})
 
         # get logger
-        self.logger = get_logger()
+        self.logger = logger
 
     @cherrypy.expose
     def index(self):
@@ -332,7 +332,7 @@ class TravisParser(object):
         self.settings = Settings()
 
         # get logger
-        self.logger = get_logger()
+        self.logger = logger
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, build=None,
@@ -463,8 +463,6 @@ def is_repo_allowed(repo):
     Parameters:
     -repo : repo name
     """
-    logger = get_logger()
-
     if repo is None:
         logger.warning("Repo is not defined")
         return False
