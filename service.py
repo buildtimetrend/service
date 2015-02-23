@@ -394,6 +394,7 @@ class TravisParser(object):
         # retrieve build data using Travis CI API
         message = "Retrieve build #%s data of %s from Travis CI"
         self.logger.info(message, build, repo)
+        message += "\n"
         yield message % (cgi.escape(build), cgi.escape(repo))
         travis_data.get_build_data()
 
@@ -404,6 +405,7 @@ class TravisParser(object):
         for build_job in travis_data.build_jobs:
             message = "Send build job #%s data to Keen.io"
             self.logger.info(message, build_job)
+            message += "\n"
             yield message % cgi.escape(build_job)
             send_build_data_service(travis_data.build_jobs[build_job])
 
