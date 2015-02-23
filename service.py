@@ -392,7 +392,7 @@ class TravisParser(object):
         travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
-        message = "Retrieve build #%s data of %s from Travis CI",
+        message = "Retrieve build #%s data of %s from Travis CI"
         self.logger.info(message, build, repo)
         yield message % (cgi.escape(build), cgi.escape(repo))
         travis_data.get_build_data()
