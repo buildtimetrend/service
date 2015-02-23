@@ -348,6 +348,7 @@ class TravisParser(object):
         - repo_name : name of the Github repo, fe. `service`
         - build : build number
         """
+        cherrypy.response.headers['Content-Type'] = 'text/plain'
         # reset settings
         self.settings.set_project_name(None)
         self.settings.add_setting('build', None)
@@ -371,6 +372,7 @@ class TravisParser(object):
 
         # process travis build
         return self.process_travis_buildlog()
+    default._cp_config = {'response.stream': True}
 
     def process_travis_buildlog(self):
         """
@@ -384,13 +386,15 @@ class TravisParser(object):
 
         result = self.check_process_parameters(repo, build)
         if result is not None:
-            return result
+            yield result
+            return
 
         travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
-        self.logger.info("Retrieve build #%s data of %s from Travis CI",
-                         build, repo)
+        message = "Retrieve build #%s data of %s from Travis CI",
+        self.logger.info(message, build, repo)
+        yield message % (cgi.escape(build), cgi.escape(repo))
         travis_data.get_build_data()
 
         # process all build jobs
@@ -398,13 +402,15 @@ class TravisParser(object):
 
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
-            self.logger.info("Send build job #%s data to Keen.io", build_job)
+            message = "Send build job #%s data to Keen.io"
+            self.logger.info(message, build_job)
+            yield message % cgi.escape(build_job)
             send_build_data_service(travis_data.build_jobs[build_job])
 
         message = "Successfully retrieved build #%s data of %s" \
                   " from Travis CI and sent to Keen.io"
         self.logger.info(message, build, repo)
-        return message % (cgi.escape(build), cgi.escape(repo))
+        yield message % (cgi.escape(build), cgi.escape(repo))
 
     def check_process_parameters(self, repo, build):
         """
