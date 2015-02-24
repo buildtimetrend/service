@@ -49,6 +49,7 @@ from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
+from buildtimetrend.keenio import has_build_id
 
 CLIENT_NAME = "buildtimetrend/service"
 CLIENT_VERSION = "0.3.dev"
@@ -435,6 +436,13 @@ class TravisParser(object):
 
         if not keen_is_writable():
             return "Keen IO write key not set, no data was sent"
+
+        try:
+            if has_build_id(repo, build):
+                return "Build #%s of project %s already exists in database." % \
+                    (cgi.escape(build), cgi.escape(repo))
+        except:
+            return "Error checking if build exists"
 
         return None
 
