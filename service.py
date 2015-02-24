@@ -393,7 +393,7 @@ class TravisParser(object):
         travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
-        message = "Retrieve build #%s data of %s from Travis CI"
+        message = "Retrieving build #%s data of %s from Travis CI"
         self.logger.info(message, build, repo)
         message += "\n"
         yield message % (cgi.escape(build), cgi.escape(repo))
@@ -401,6 +401,12 @@ class TravisParser(object):
 
         # process all build jobs
         travis_data.process_build_jobs()
+
+        if len(travis_data.build_jobs) == 0:
+            message = "No data found for build #%s of %s"
+            self.logger.info(message, build, repo)
+            yield message % (cgi.escape(build), cgi.escape(repo))
+            return
 
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
