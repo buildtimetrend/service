@@ -34,7 +34,7 @@ from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
 from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
-from buildtimetrend.tools import get_logger
+from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
@@ -49,9 +49,10 @@ from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
+from buildtimetrend.keenio import has_build_id
 
 CLIENT_NAME = "buildtimetrend/service"
-CLIENT_VERSION = "0.2"
+CLIENT_VERSION = "0.3.dev"
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
                        "Buildtime Trend as a Service</a>"
@@ -77,7 +78,7 @@ class Dashboard(object):
     def __init__(self):
         """Constructor."""
         self.settings = Settings()
-        self.logger = get_logger()
+        self.logger = logger
 
         self.file_projects = os.path.join(DASHBOARD_DIR, "projects.html")
         self.file_projects_service = os.path.join(
@@ -208,7 +209,7 @@ class Badges(object):
         self.settings = Settings()
 
         # get logger
-        self.logger = get_logger()
+        self.logger = logger
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, badge_type="avg",
@@ -300,7 +301,7 @@ class Root(object):
         cherrypy.config.update({'error_page.404': self.error_page_404})
 
         # get logger
-        self.logger = get_logger()
+        self.logger = logger
 
     @cherrypy.expose
     def index(self):
@@ -332,7 +333,7 @@ class TravisParser(object):
         self.settings = Settings()
 
         # get logger
-        self.logger = get_logger()
+        self.logger = logger
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, build=None,
@@ -392,7 +393,7 @@ class TravisParser(object):
         travis_data = TravisData(repo, build)
 
         # retrieve build data using Travis CI API
-        message = "Retrieve build #%s data of %s from Travis CI"
+        message = "Retrieving build #%s data of %s from Travis CI"
         self.logger.info(message, build, repo)
         message += "\n"
         yield message % (cgi.escape(build), cgi.escape(repo))
@@ -400,6 +401,12 @@ class TravisParser(object):
 
         # process all build jobs
         travis_data.process_build_jobs()
+
+        if len(travis_data.build_jobs) == 0:
+            message = "No data found for build #%s of %s"
+            self.logger.info(message, build, repo)
+            yield message % (cgi.escape(build), cgi.escape(repo))
+            return
 
         # send build job data to Keen.io
         for build_job in travis_data.build_jobs:
@@ -436,6 +443,13 @@ class TravisParser(object):
         if not keen_is_writable():
             return "Keen IO write key not set, no data was sent"
 
+        try:
+            if has_build_id(repo, build):
+                return "Build #%s of project %s already exists in database." % \
+                    (cgi.escape(build), cgi.escape(repo))
+        except:
+            return "Error checking if build exists"
+
         return None
 
     def check_travis_notification(self):
@@ -471,8 +485,6 @@ def is_repo_allowed(repo):
     Parameters:
     -repo : repo name
     """
-    logger = get_logger()
-
     if repo is None:
         logger.warning("Repo is not defined")
         return False
