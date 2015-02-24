@@ -477,6 +477,12 @@ def is_repo_allowed(repo):
         logger.warning("Repo is not defined")
         return False
 
+    # temporary denied repo
+    if repo == "pyca/cryptography":
+        message = "Project '%s' is not allowed."
+        logger.warning(message, repo)
+        return False
+
     allowed_repo = Settings().get_setting("allowed_repo")
     if allowed_repo is not None and \
             not any(x in repo for x in allowed_repo):
