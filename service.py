@@ -428,24 +428,21 @@ class TravisParser(object):
         Check parameters (repo and build)
         Returns error message, None when all parameters are fine.
         """
-        if repo is None:
-            self.logger.warning("Repo is not set")
-            return "Repo is not set, use /travis/repo_owner/repo_name/build"
+        if repo is None or build is None:
+            self.logger.warning("Repo or build number are not set")
+            return "Repo or build are not set, format : " \
+                "/travis/<repo_owner>/<repo_name>/<build>"
 
         # check if repo is allowed
         if not is_repo_allowed(repo):
             return "Project '%s' is not allowed." % cgi.escape(repo)
-
-        if build is None:
-            self.logger.warning("Build number is not set")
-            return "Build number is not set, use build=build_id"
 
         if not keen_is_writable():
             return "Keen IO write key not set, no data was sent"
 
         try:
             if has_build_id(repo, build):
-                return "Build #%s of project %s already exists in database." % \
+                return "Build #%s of project %s already exists in database" % \
                     (cgi.escape(build), cgi.escape(repo))
         except:
             return "Error checking if build exists"
