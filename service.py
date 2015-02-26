@@ -486,11 +486,18 @@ def is_repo_allowed(repo):
         logger.warning("Repo is not defined")
         return False
 
+    denied_message = "Project '%s' is not allowed."
+
+    denied_repo = Settings().get_setting("denied_repo")
+    if denied_repo is not None and \
+            any(x in repo for x in denied_repo):
+        logger.warning(denied_message, repo)
+        return False
+
     allowed_repo = Settings().get_setting("allowed_repo")
     if allowed_repo is not None and \
             not any(x in repo for x in allowed_repo):
-        message = "Project '%s' is not allowed."
-        logger.warning(message, repo)
+        logger.warning(denied_message, repo)
         return False
 
     return True
