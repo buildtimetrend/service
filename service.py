@@ -399,25 +399,21 @@ class TravisParser(object):
         yield message % (cgi.escape(build), cgi.escape(repo))
         travis_data.get_build_data()
 
-        # process all build jobs
-        travis_data.process_build_jobs()
+        # process all build jobs and
+        # send build job data to Keen.io
+        for build_job in travis_data.process_build_jobs():
+            build_job_id = build_job.properties.get_items()["job"]
+            message = "Send build job #%s data to Keen.io"
+            self.logger.info(message, build_job_id)
+            message += "\n"
+            yield message % cgi.escape(build_job_id)
+            send_build_data_service(build_job)
 
         if len(travis_data.build_jobs) == 0:
             message = "No data found for build #%s of %s"
-            self.logger.info(message, build, repo)
-            yield message % (cgi.escape(build), cgi.escape(repo))
-            return
-
-        # send build job data to Keen.io
-        for build_job in travis_data.build_jobs:
-            message = "Send build job #%s data to Keen.io"
-            self.logger.info(message, build_job)
-            message += "\n"
-            yield message % cgi.escape(build_job)
-            send_build_data_service(travis_data.build_jobs[build_job])
-
-        message = "Successfully retrieved build #%s data of %s" \
-                  " from Travis CI and sent to Keen.io"
+        else:
+            message = "Successfully retrieved build #%s data of %s" \
+                " from Travis CI and sent to Keen.io"
         self.logger.info(message, build, repo)
         yield message % (cgi.escape(build), cgi.escape(repo))
 
@@ -428,24 +424,21 @@ class TravisParser(object):
         Check parameters (repo and build)
         Returns error message, None when all parameters are fine.
         """
-        if repo is None:
-            self.logger.warning("Repo is not set")
-            return "Repo is not set, use /travis/repo_owner/repo_name/build"
+        if repo is None or build is None:
+            self.logger.warning("Repo or build number are not set")
+            return "Repo or build are not set, format : " \
+                "/travis/<repo_owner>/<repo_name>/<build>"
 
         # check if repo is allowed
         if not is_repo_allowed(repo):
             return "Project '%s' is not allowed." % cgi.escape(repo)
-
-        if build is None:
-            self.logger.warning("Build number is not set")
-            return "Build number is not set, use build=build_id"
 
         if not keen_is_writable():
             return "Keen IO write key not set, no data was sent"
 
         try:
             if has_build_id(repo, build):
-                return "Build #%s of project %s already exists in database." % \
+                return "Build #%s of project %s already exists in database" % \
                     (cgi.escape(build), cgi.escape(repo))
         except:
             return "Error checking if build exists"
@@ -489,11 +482,18 @@ def is_repo_allowed(repo):
         logger.warning("Repo is not defined")
         return False
 
+    denied_message = "Project '%s' is not allowed."
+
+    denied_repo = Settings().get_setting("denied_repo")
+    if denied_repo is not None and \
+            any(x in repo for x in denied_repo):
+        logger.warning(denied_message, repo)
+        return False
+
     allowed_repo = Settings().get_setting("allowed_repo")
     if allowed_repo is not None and \
             not any(x in repo for x in allowed_repo):
-        message = "Project '%s' is not allowed."
-        logger.warning(message, repo)
+        logger.warning(denied_message, repo)
         return False
 
     return True

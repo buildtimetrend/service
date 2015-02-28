@@ -131,7 +131,19 @@ Config file
 
 Add a configfile named `config_service.yml` based on `config_sample.yml` to configure the way the service behaves.
 
-- `allowed_repo` : defines which repos are allowed by the service. If the `allowed_repo` setting is not defined, all repos are allowed. If substring matches the repo name, it is allowed, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
+- `denied_repo` : defines which repos are not allowed by the service. If the `denied_repo` setting is not defined, all repos are allowed (unless `allowed_repo` is defined, see below). If a substring matches the repo name, it is denied, so fe. `my_name` will disallow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is valid as well.
+> **Remark :** Setting `denied_repo` takes precedence over `allowed_repo`, if a repo name matches a rule in `denied_repo` setting, the repo will be denied, even if it matches a rule in `allowed_repo`.
+Multiple entries are allowed, fe. :
+
+```yaml
+buildtimetrend:
+  denied_repo:
+    - "my_name" # denying all repo names that contain my_name
+    - "another_name/some_repo" # denies this specific repo
+```
+
+- `allowed_repo` : defines which repos are allowed by the service. If the `allowed_repo` setting is not defined, all repos are allowed (unless denied by the `denied_repo` setting). If substring matches the repo name, it is allowed, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
+> **Remark :** Setting `denied_repo` takes precedence over `allowed_repo`, if a repo name matches a rule in `denied_repo` setting, the repo will be denied, even if it matches a rule in `allowed_repo`.
 Multiple entries are allowed, fe. :
 
 ```yaml
