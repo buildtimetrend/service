@@ -2,6 +2,7 @@ v0.3 (not yet released)
 - issue #82 : use generator to return updates of TravisParser
 - issue #83 : check if build exists in database before submitting
 - add `denied_repo` setting
+- TravisData.process_build_jobs is a generator
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously

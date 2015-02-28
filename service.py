@@ -399,25 +399,21 @@ class TravisParser(object):
         yield message % (cgi.escape(build), cgi.escape(repo))
         travis_data.get_build_data()
 
-        # process all build jobs
-        travis_data.process_build_jobs()
+        # process all build jobs and
+        # send build job data to Keen.io
+        for build_job in travis_data.process_build_jobs():
+            build_job_id = build_job.properties.get_items()["job"]
+            message = "Send build job #%s data to Keen.io"
+            self.logger.info(message, build_job_id)
+            message += "\n"
+            yield message % cgi.escape(build_job_id)
+            send_build_data_service(build_job)
 
         if len(travis_data.build_jobs) == 0:
             message = "No data found for build #%s of %s"
-            self.logger.info(message, build, repo)
-            yield message % (cgi.escape(build), cgi.escape(repo))
-            return
-
-        # send build job data to Keen.io
-        for build_job in travis_data.build_jobs:
-            message = "Send build job #%s data to Keen.io"
-            self.logger.info(message, build_job)
-            message += "\n"
-            yield message % cgi.escape(build_job)
-            send_build_data_service(travis_data.build_jobs[build_job])
-
-        message = "Successfully retrieved build #%s data of %s" \
-                  " from Travis CI and sent to Keen.io"
+        else:
+            message = "Successfully retrieved build #%s data of %s" \
+                " from Travis CI and sent to Keen.io"
         self.logger.info(message, build, repo)
         yield message % (cgi.escape(build), cgi.escape(repo))
 
