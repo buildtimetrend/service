@@ -473,7 +473,7 @@ def is_repo_allowed(repo):
     A repository name is checked against a list of denied and allowed repos.
     The 'denied_repo' check takes precendence over 'allowed_repo' check.
     The list of denied/allowed repos is defined with settings 'denied_repo'
-    and 'allowed_repo'. 
+    and 'allowed_repo'.
     If the settings are not defined,
     the repo is not checked against the denied/allowed lists.
     Both 'denied_repo' and 'allowed_repo' can have multiple values,
