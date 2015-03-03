@@ -51,6 +51,15 @@ class TestService(unittest.TestCase):
 
         self.assertTrue(is_repo_allowed("name/repo"))
         self.assertFalse(is_repo_allowed("name/test1"))
+        self.assertTrue(is_repo_allowed("name/test2"))
+
+    def test_is_repo_allowed_set_denied_multi(self):
+        # test multiple denied repos
+        self.settings.add_setting("denied_repo", {"test1", "test2"})
+
+        self.assertTrue(is_repo_allowed("name/repo"))
+        self.assertFalse(is_repo_allowed("name/test1"))
+        self.assertFalse(is_repo_allowed("name/test2"))
 
     def test_is_repo_allowed_set_allowed(self):
         # test allowed repo
@@ -58,3 +67,12 @@ class TestService(unittest.TestCase):
 
         self.assertFalse(is_repo_allowed("name/repo"))
         self.assertTrue(is_repo_allowed("name/test1"))
+        self.assertFalse(is_repo_allowed("name/test2"))
+        
+    def test_is_repo_allowed_set_allowed_multi(self):
+        # test multiple allowed repos
+        self.settings.add_setting("allowed_repo", {"test1", "test2"})
+
+        self.assertFalse(is_repo_allowed("name/repo"))
+        self.assertTrue(is_repo_allowed("name/test1"))
+        self.assertTrue(is_repo_allowed("name/test2"))
