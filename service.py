@@ -323,7 +323,7 @@ class Root(object):
 class TravisParser(object):
 
     """
-    Build date parser.
+    Travis CI build timing and build data parser.
 
     Retrieve timing data from Travis CI, parse it and store it in Keen.io.
     """
@@ -470,13 +470,17 @@ def is_repo_allowed(repo):
     """
     Check if repo is allowed.
 
-    List of allowed repos is set by setting 'allowed_repo',
-    if not defined, the repo is not checked,
-    'allowed_repo' can have multiple values, if any of them matches
-    a substring of the repo, the repo is allowed.
+    A repository name is checked against a list of denied and allowed repos.
+    The 'denied_repo' check takes precendence over 'allowed_repo' check.
+    The list of denied/allowed repos is defined with settings 'denied_repo'
+    and 'allowed_repo'.
+    If the settings are not defined,
+    the repo is not checked against the denied/allowed lists.
+    Both 'denied_repo' and 'allowed_repo' can have multiple values,
+    if any of them matches a substring of the repo, the repo is denied/allowed.
 
     Parameters:
-    -repo : repo name
+    -repo : repository name
     """
     if repo is None:
         logger.warning("Repo is not defined")
