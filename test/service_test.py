@@ -26,8 +26,14 @@ import unittest
 
 
 class TestService(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         self.settings = Settings()
+
+    def setUp(self):
+        # reinit settings singleton
+        if self.settings is not None:
+            self.settings.__init__()
 
     def test_is_repo_allowed(self):
         # error is thrown when called without parameters
@@ -38,3 +44,35 @@ class TestService(unittest.TestCase):
 
         # repo is allowed by default
         self.assertTrue(is_repo_allowed("name/repo"))
+
+    def test_is_repo_allowed_set_denied(self):
+        # test denied repo
+        self.settings.add_setting("denied_repo", {"test1"})
+
+        self.assertTrue(is_repo_allowed("name/repo"))
+        self.assertFalse(is_repo_allowed("name/test1"))
+        self.assertTrue(is_repo_allowed("name/test2"))
+
+    def test_is_repo_allowed_set_denied_multi(self):
+        # test multiple denied repos
+        self.settings.add_setting("denied_repo", {"test1", "test2"})
+
+        self.assertTrue(is_repo_allowed("name/repo"))
+        self.assertFalse(is_repo_allowed("name/test1"))
+        self.assertFalse(is_repo_allowed("name/test2"))
+
+    def test_is_repo_allowed_set_allowed(self):
+        # test allowed repo
+        self.settings.add_setting("allowed_repo", {"test1"})
+
+        self.assertFalse(is_repo_allowed("name/repo"))
+        self.assertTrue(is_repo_allowed("name/test1"))
+        self.assertFalse(is_repo_allowed("name/test2"))
+        
+    def test_is_repo_allowed_set_allowed_multi(self):
+        # test multiple allowed repos
+        self.settings.add_setting("allowed_repo", {"test1", "test2"})
+
+        self.assertFalse(is_repo_allowed("name/repo"))
+        self.assertTrue(is_repo_allowed("name/test1"))
+        self.assertTrue(is_repo_allowed("name/test2"))
