@@ -12,6 +12,9 @@ Visualise what's trending in your build process
 [![Codacy Badge](https://www.codacy.com/project/badge/4ff71ed6b542493ab6f407f4c37aeb01)](https://www.codacy.com/public/ruleant/service)
 [![Stack Share](http://img.shields.io/badge/tech-stack-0690fa.svg)](http://stackshare.io/ruleant/buildtime-trend)
 
+[![Buildtime trend](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/latest)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
+[![Total builds](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/month)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
+[![Percentage passed build jobs](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/month)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
 
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
