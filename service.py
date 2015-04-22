@@ -202,10 +202,10 @@ class Dashboard(object):
 
 class Badges(object):
 
-    """ Generate shield badges. """
+    """Generate shield badges."""
 
     def __init__(self):
-        """ Initialise class. """
+        """Initialise class."""
         self.settings = Settings()
 
         # get logger
@@ -284,7 +284,7 @@ class Badges(object):
 
 class Root(object):
 
-    """ Root handler. """
+    """Root handler."""
 
     def __init__(self):
         """
@@ -305,14 +305,14 @@ class Root(object):
 
     @cherrypy.expose
     def index(self):
-        """ Index page. """
+        """Index page."""
         if check_file(self.file_index):
             return open(self.file_index)
         else:
             raise cherrypy.HTTPError(404, "File not found")
 
     def error_page_404(self, status, message, traceback, version):
-        """ Error Page (404). """
+        """Error Page (404)."""
         self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
                           "Traceback : %s",
                           version, status, message, traceback)
@@ -329,7 +329,7 @@ class TravisParser(object):
     """
 
     def __init__(self):
-        """ Initialise class. """
+        """Initialise class."""
         self.settings = Settings()
 
         # get logger
