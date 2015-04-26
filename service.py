@@ -499,6 +499,27 @@ def is_repo_allowed(repo):
 
     return True
 
+def format_duration(duration):
+    """
+    Format duration from seconds to hours, minutes and seconds.
+
+    Parameters:
+    - duration : duration in seconds
+    """
+    seconds = duration % 60
+    duration = duration / 60
+    format_string = "{:.1f}s".format(seconds)
+
+    if duration >= 1:
+        minutes = int(duration % 60)
+        duration = duration / 60
+        format_string = "{:d}m {:s}".format(minutes, format_string)
+
+        if duration >= 1:
+            hours = int(duration % 60)
+            format_string = "{:d}h {:s}".format(hours, format_string)
+
+    return format_string
 
 def get_config_project_list():
     """
