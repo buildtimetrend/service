@@ -6,6 +6,8 @@ v0.3 (not yet released)
 - issue #21 : [dashboard] add charts with build job results
 - issue #52 : [dashboard] upgrade to Keen JS API 3.2
 - issue #39 : format buildtime duration badge
+- issue #23 : [dashboard] add charts with build job results grouped by branch or by build
+environment parameters
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
