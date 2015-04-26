@@ -240,34 +240,37 @@ class Badges(object):
         badge_subject = "buildtime"
         badge_status = "trend"
         badge_colour = "blue"
-        format_string = "{:.1f}s"
+        format_string = "{:d}"
 
         if repo is not None and is_repo_allowed(repo):
             if badge_type == "latest":
                 # get last duration
                 value = get_latest_buildtime(repo)
+                badge_status = format_duration(value)
             elif badge_type == "jobs":
                 badge_subject = "%s_(%s)" % (badge_type, interval)
                 value = get_total_build_jobs(repo, interval)
                 format_string = "{:d}"
+                badge_status = format_string.format(value)
             elif badge_type == "builds":
                 badge_subject = "%s_(%s)" % (badge_type, interval)
                 value = get_total_builds(repo, interval)
                 format_string = "{:d}"
+                badge_status = format_string.format(value)
             elif badge_type == "passed":
                 badge_subject = "%s_(%s)" % (badge_type, interval)
                 value = get_pct_passed_build_jobs(repo, interval)
                 badge_colour = get_result_color(value, 100, 75)
                 format_string = "{:d}%"
+                badge_status = format_string.format(value)
             else:
                 # calculate average
                 badge_subject = "%s_(%s)" % (badge_subject, interval)
                 value = get_avg_buildtime(repo, interval)
+                badge_status = format_duration(value)
 
             # valid duration is 0 or greater int or float
-            if type(value) in (float, int) and value >= 0:
-                badge_status = format_string.format(value)
-            else:
+            if not(type(value) in (float, int) and value >= 0):
                 badge_status = "unknown"
                 badge_colour = "lightgrey"
 

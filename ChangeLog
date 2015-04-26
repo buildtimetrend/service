@@ -5,6 +5,7 @@ v0.3 (not yet released)
 - TravisData.process_build_jobs is a generator
 - issue #21 : [dashboard] add charts with build job results
 - issue #52 : [dashboard] upgrade to Keen JS API 3.2
+- issue #39 : format buildtime duration badge
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
