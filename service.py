@@ -509,6 +509,9 @@ def format_duration(duration):
     Parameters:
     - duration : duration in seconds
     """
+    if type(duration) not in (float, int) or duration < 0:
+        return "unknown"
+
     seconds = duration % 60
     duration = duration / 60
     format_string = "{:.1f}s".format(seconds)

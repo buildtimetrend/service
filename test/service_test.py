@@ -91,6 +91,14 @@ class TestService(unittest.TestCase):
         self.assertFalse(is_repo_allowed("owner/repo"))
 
     def test_format_duration(self):
+        # error is thrown when called without parameters
+        self.assertRaises(TypeError, format_duration)
+
+        self.assertEquals("unknown", format_duration(None))
+        self.assertEquals("unknown", format_duration("string"))
+        self.assertEquals("unknown", format_duration(-1))
+
+        self.assertEquals("0.0s", format_duration(0))
         self.assertEquals("1.0s", format_duration(1))
         self.assertEquals("1.6s", format_duration(1.6))
         self.assertEquals("1.6s", format_duration(1.63))
