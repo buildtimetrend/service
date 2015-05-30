@@ -9,6 +9,7 @@ v0.3 (not yet released)
 - issue #23 : [dashboard] add charts with build job results grouped by branch or by build
 environment parameters
 - issue #92 : fix : duration formatting fails when time is undefined
+- issue #70 : [dashboard] use bootstrap buttons and ButtonClass on dashboard to select timeframe
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
