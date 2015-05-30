@@ -170,6 +170,7 @@ Dependencies
 
 - `buildtimetrend` : [Buildtime Trend library](https://github.com/buildtimetrend/python-lib)
 - `cherrypy` : [CherrPy](http://www.cherrypy.org/) A Minimalist Python Web Framework, making the API available as a web service
+- `rq` : [Redis Queue](http://python-rq.org/) is a simple Python library for queueing jobs and processing them in the background with workers
 
 Bugs and feature requests
 -------------------------
