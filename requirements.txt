@@ -1,4 +1,4 @@
 git+https://github.com/buildtimetrend/python-lib.git@master#egg=buildtimetrend==0.3.dev10
 cherrypy>=3.6.0
-rq==0.5.2
+celery==3.1.18
 newrelic==2.42.0.35
