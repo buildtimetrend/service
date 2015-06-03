@@ -52,6 +52,7 @@ from buildtimetrend.keenio import get_all_projects
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
 from buildtimetrend.service import check_process_parameters
+import tasks
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
                        "Buildtime Trend as a Service</a>"
@@ -377,8 +378,8 @@ class TravisParser(object):
             self.settings.add_setting('build', build)
 
         # process travis build
-        return self.process_travis_buildlog()
-    default._cp_config = {'response.stream': True}
+        task = tasks.process_travis_buildlog.delay(repo, build)
+        return "Processing buildlog #%s as task with ID %s" % (build, task.id)
 
     def process_travis_buildlog(self):
         """
