@@ -40,7 +40,6 @@ from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
 from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import send_build_data_service
-from buildtimetrend.keenio import keen_is_writable
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
 from buildtimetrend.keenio import get_pct_passed_build_jobs
@@ -49,9 +48,9 @@ from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
 from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
-from buildtimetrend.keenio import has_build_id
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
+from buildtimetrend.service import check_process_parameters
 
 CLIENT_NAME = "buildtimetrend/service"
 CLIENT_VERSION = "0.3.dev"
@@ -390,7 +389,7 @@ class TravisParser(object):
         repo = self.settings.get_project_name()
         build = self.settings.get_setting('build')
 
-        result = self.check_process_parameters(repo, build)
+        result = check_process_parameters(repo, build)
         if result is not None:
             yield result
             return
@@ -421,34 +420,6 @@ class TravisParser(object):
                 " from Travis CI and sent to Keen.io"
         self.logger.info(message, build, repo)
         yield message % (cgi.escape(build), cgi.escape(repo))
-
-    def check_process_parameters(self, repo, build):
-        """
-        Process setup parameters.
-
-        Check parameters (repo and build)
-        Returns error message, None when all parameters are fine.
-        """
-        if repo is None or build is None:
-            self.logger.warning("Repo or build number are not set")
-            return "Repo or build are not set, format : " \
-                "/travis/<repo_owner>/<repo_name>/<build>"
-
-        # check if repo is allowed
-        if not is_repo_allowed(repo):
-            return "Project '%s' is not allowed." % cgi.escape(repo)
-
-        if not keen_is_writable():
-            return "Keen IO write key not set, no data was sent"
-
-        try:
-            if has_build_id(repo, build):
-                return "Build #%s of project %s already exists in database" % \
-                    (cgi.escape(build), cgi.escape(repo))
-        except:
-            return "Error checking if build exists"
-
-        return None
 
     def check_travis_notification(self):
         """
