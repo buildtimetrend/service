@@ -31,9 +31,7 @@ from buildtimetrend.service import check_process_parameters
 app = Celery('tasks', backend='amqp', broker='amqp://')
 
 def is_worker_enabled():
-    """
-    Checks if a task queue is configured and a worker is available.
-    """
+    """Check if a task queue is configured and a worker is available."""
     return False
 
 @app.task(ignore_result=True)
