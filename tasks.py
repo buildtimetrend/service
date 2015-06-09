@@ -23,10 +23,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import cgi
 from celery import Celery
+from buildtimetrend.settings import Settings
 from buildtimetrend import logger
 from buildtimetrend.travis import TravisData
 from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
+import service
+
+# load settings
+settings = Settings()
+settings.load_settings(config_file="config_service.yml")
+settings.set_client(service.CLIENT_NAME, service.CLIENT_VERSION)
 
 app = Celery('tasks', backend='amqp', broker='amqp://')
 
