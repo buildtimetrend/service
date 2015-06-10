@@ -379,7 +379,8 @@ class TravisParser(object):
 
         # process travis build
         task = tasks.process_travis_buildlog.delay(repo, build)
-        return "Processing buildlog #%s as task with ID %s" % (build, task.id)
+        return "Build #%s of repo %s scheduled for processing as task %s" % \
+            (cgi.escape(build), cgi.escape(repo), cgi.escape(task.id))
 
     def process_travis_buildlog(self):
         """
