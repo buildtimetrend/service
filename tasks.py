@@ -28,12 +28,12 @@ from buildtimetrend import logger
 from buildtimetrend.travis import TravisData
 from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
-import service
+import constants
 
 # load settings
 settings = Settings()
-settings.load_settings(config_file="config_service.yml")
-settings.set_client(service.CLIENT_NAME, service.CLIENT_VERSION)
+settings.load_settings(config_file=constants.CONFIG_FILE)
+settings.set_client(constants.CLIENT_NAME, constants.CLIENT_VERSION)
 
 app = Celery('tasks', backend='amqp', broker='amqp://')
 
