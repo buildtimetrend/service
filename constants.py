@@ -24,3 +24,5 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 CLIENT_NAME = "buildtimetrend/service"
 CLIENT_VERSION = "0.3.dev"
+
+CONFIG_FILE = "config_service.yml"

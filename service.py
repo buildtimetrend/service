@@ -295,7 +295,7 @@ class Root(object):
         Load config file and set loglevel, define error page handler
         """
         self.settings = Settings()
-        self.settings.load_settings(config_file="config_service.yml")
+        self.settings.load_settings(config_file=constants.CONFIG_FILE)
         self.settings.set_client(
             constants.CLIENT_NAME,
             constants.CLIENT_VERSION
