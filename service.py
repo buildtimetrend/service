@@ -30,6 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import os
 import cgi
 import cherrypy
+import constants
 from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
 from buildtimetrend.travis import TravisData
@@ -51,9 +52,6 @@ from buildtimetrend.keenio import get_all_projects
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
 from buildtimetrend.service import check_process_parameters
-
-CLIENT_NAME = "buildtimetrend/service"
-CLIENT_VERSION = "0.3.dev"
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
                        "Buildtime Trend as a Service</a>"
@@ -298,7 +296,10 @@ class Root(object):
         """
         self.settings = Settings()
         self.settings.load_settings(config_file="config_service.yml")
-        self.settings.set_client(CLIENT_NAME, CLIENT_VERSION)
+        self.settings.set_client(
+            constants.CLIENT_NAME,
+            constants.CLIENT_VERSION
+        )
 
         self.file_index = os.path.join(STATIC_DIR, "index.html")
 
