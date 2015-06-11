@@ -37,9 +37,11 @@ settings.set_client(constants.CLIENT_NAME, constants.CLIENT_VERSION)
 
 app = Celery('tasks', backend='amqp', broker='amqp://')
 
+
 def is_worker_enabled():
     """Check if a task queue is configured and a worker is available."""
     return False
+
 
 @app.task(ignore_result=True)
 def process_travis_buildlog(repo, build):
