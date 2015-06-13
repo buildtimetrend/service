@@ -36,15 +36,28 @@ settings = Settings()
 settings.load_settings(config_file=constants.CONFIG_FILE)
 settings.set_client(constants.CLIENT_NAME, constants.CLIENT_VERSION)
 
-app = Celery('tasks', backend='amqp', broker='amqp://')
-
-
 def is_worker_enabled():
     """Check if a task queue is configured and a worker is available."""
     return check_dict(
         settings.get_setting("task_queue"),
         key_list=["broker_url", "backend"]
     )
+
+if is_worker_enabled():
+    task_queue = settings.get_setting("task_queue")
+    app = Celery(
+        'tasks',
+        backend=task_queue["backend"],
+        broker=task_queue["broker_url"]
+    )
+
+    if app is None:
+        logger.error("Error connection to task queue")
+    else:
+        logger.info("Connected to task queue : %s", task_queue["broker_url"])
+else:
+    logger.error("Task queue is not defined, check README.md to configure task queue")
+    quit()
 
 
 @app.task(ignore_result=True)
