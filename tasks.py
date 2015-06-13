@@ -28,6 +28,7 @@ from buildtimetrend import logger
 from buildtimetrend.travis import TravisData
 from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
+from buildtimetrend.tools import check_dict
 import constants
 
 # load settings
@@ -40,7 +41,10 @@ app = Celery('tasks', backend='amqp', broker='amqp://')
 
 def is_worker_enabled():
     """Check if a task queue is configured and a worker is available."""
-    return False
+    return check_dict(
+        settings.get_setting("task_queue"),
+        key_list=["broker_url", "backend"]
+    )
 
 
 @app.task(ignore_result=True)
