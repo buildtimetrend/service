@@ -56,8 +56,8 @@ if is_worker_enabled():
     else:
         logger.info("Connected to task queue : %s", task_queue["broker_url"])
 else:
-    logger.error("Task queue is not defined, check README.md to configure task queue")
-    quit()
+    app = Celery()
+    logger.warning("Task queue is not defined, check README.md to configure task queue")
 
 
 @app.task(ignore_result=True)
