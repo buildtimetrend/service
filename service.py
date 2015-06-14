@@ -362,26 +362,26 @@ class TravisParser(object):
 
         self.logger.info("Check Travis headers : %r", cherrypy.request.headers)
 
-        # load parameters from the Travis notification payload
-        if self.check_travis_notification():
-            process_notification_payload(payload)
-
         repo = get_repo_slug(repo_owner, repo_name)
 
-        # process url (GET) parameters
-        if repo is not None:
-            self.logger.info("Build repo : %s", repo)
-            self.settings.set_project_name(repo)
+        # load parameters from the Travis notification payload
+        if self.check_travis_notification():
+            payload_params = process_notification_payload(payload)
 
-        if build is not None:
-            self.logger.info("Build number : %s", str(build))
-            self.settings.add_setting('build', build)
+            # assign payload parameters
+            if repo is None and "repo" in payload_params:
+                repo = payload_params["repo"]
+            if build is None and "build" in payload_params:
+                build = payload_params["build"]
+
+        self.logger.info("Build repo : %s", str(repo))
+        self.logger.info("Build number : %s", str(build))
 
         # process travis build
         if tasks.is_worker_enabled():
             task = tasks.process_travis_buildlog.delay(repo, build)
             return "Build #%s of repo %s scheduled for processing as task %s" % \
-                (cgi.escape(build), cgi.escape(repo), cgi.escape(task.id))
+                (cgi.escape(str(build)), cgi.escape(str(repo)), cgi.escape(str(task.id)))
         else:
             return tasks.process_travis_buildlog(repo, build)
 
