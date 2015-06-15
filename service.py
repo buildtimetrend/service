@@ -360,7 +360,10 @@ class TravisParser(object):
         self.settings.set_project_name(None)
         self.settings.add_setting('build', None)
 
-        self.logger.debug("Check Travis headers : %r", cherrypy.request.headers)
+        self.logger.debug(
+            "Check Travis headers : %r",
+            cherrypy.request.headers
+        )
 
         repo = get_repo_slug(repo_owner, repo_name)
 
