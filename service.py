@@ -52,6 +52,7 @@ from buildtimetrend.keenio import get_all_projects
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
 from buildtimetrend.service import check_process_parameters
+from buildtimetrend.service import validate_travis_request
 import tasks
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
@@ -379,6 +380,12 @@ class TravisParser(object):
 
         self.logger.info("Build repo : %s", str(repo))
         self.logger.info("Build number : %s", str(build))
+
+        # check parameter validity, check returns error message
+        # or None if parameters are valid
+        params_valid = validate_travis_request(repo, build)
+        if params_valid is not None:
+            return params_valid
 
         # process travis build
         if tasks.is_worker_enabled():
