@@ -165,6 +165,25 @@ It can also be defined with the `TRAVIS_ACCOUNT_TOKEN` environment variable.
 - `loglevel` : defines loglevel, possible values : `DEBUG`, `INFO`, `WARNING` (default), `ERROR`
 It can also be defined with the `BTT_LOGLEVEL` environment variable.
 
+- `task_queue` : configures using a task queue, powered by Celery, to process background tasks by a worker. Celery supports different kinds of backend task queues, which can be configured :
+
+```yaml
+buildtimetrend:
+    task_queue:
+        backend: "" # backend type fe. amqp, redis, ...
+        broker_url: "" # backend instance url, format : transport://userid:password@hostname:port/virtual_host
+```
+If `task_queue` is defined, using a worker to execute heavy tasks, will be enabled. To disable using a worker, remove the `task_queue` directive from the config file.
+
+The `broker_url` can also be defined with several environment variables :
+- `BTT_AMQP_URL` : set a AMQP based task queue instance. (fe. RabbitMQ)
+- `BTT_REDIS_URL` : set a Redis based task queue instance. (fe. Redis)
+- `CLOUDAMQP_URL` : environment variable set when creating a [Clould AMQP RabbitMQ instance on Heroku](https://elements.heroku.com/addons/cloudamqp)
+- `REDISGREEN_URL` : environment variable set when creating a [Redis Green instance on Heroku](https://elements.heroku.com/addons/redisgreen)
+
+The environment variables are checked in this order, the first one that is defined, will be used.
+The backend type (amqp, redis, ...) associated with the environment variable will be set automatically.
+
 Dependencies
 ------------
 
