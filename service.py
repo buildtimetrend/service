@@ -390,8 +390,10 @@ class TravisParser(object):
         # process travis build
         if tasks.is_worker_enabled():
             task = tasks.process_travis_buildlog.delay(repo, build)
-            return "Build #%s of repo %s scheduled for processing as task %s" % \
-                (cgi.escape(str(build)), cgi.escape(str(repo)), cgi.escape(str(task.id)))
+            return "Task scheduled to process build #%s of repo %s : %s" % \
+                (cgi.escape(str(build)),
+                 cgi.escape(str(repo)),
+                 cgi.escape(str(task.id)))
         else:
             return tasks.process_travis_buildlog(repo, build)
 
