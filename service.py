@@ -381,10 +381,15 @@ class TravisParser(object):
         self.logger.info("Build repo : %s", str(repo))
         self.logger.info("Build number : %s", str(build))
 
+        return self.schedule_task(repo, build)
+
+    def schedule_task(self, repo, build):
+        """Check parameters and schedule task."""
         # check parameter validity, check returns error message
         # or None if parameters are valid
         params_valid = validate_travis_request(repo, build)
         if params_valid is not None:
+            self.logger.warning(params_valid)
             return params_valid
 
         # process travis build
