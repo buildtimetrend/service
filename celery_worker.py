@@ -65,10 +65,10 @@ def create_worker_app():
 
     return worker_app
 
-app = create_worker_app()
+APP = create_worker_app()
 
 if __name__ == '__main__':
     if is_worker_enabled():
-        app.start()
+        APP.start()
     else:
         quit()

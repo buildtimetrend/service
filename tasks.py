@@ -21,7 +21,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from celery_worker import app
+from celery_worker import APP
 import cgi
 from buildtimetrend import logger
 from buildtimetrend.travis import TravisData
@@ -29,7 +29,7 @@ from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
 
 
-@app.task(ignore_result=True)
+@APP.task(ignore_result=True)
 def process_travis_buildlog(repo, build):
     """
     Process Travis CI buildlog.
