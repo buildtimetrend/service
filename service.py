@@ -33,14 +33,12 @@ import cherrypy
 import constants
 from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
-from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
 from buildtimetrend.keenio import check_time_interval
-from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
 from buildtimetrend.keenio import get_pct_passed_build_jobs
@@ -51,7 +49,6 @@ from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
-from buildtimetrend.service import check_process_parameters
 from buildtimetrend.service import validate_travis_request
 from celery_worker import is_worker_enabled
 import tasks
