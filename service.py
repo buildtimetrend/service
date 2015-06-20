@@ -403,48 +403,6 @@ class TravisParser(object):
         else:
             return tasks.process_travis_buildlog(repo, build)
 
-    def process_travis_buildlog(self):
-        """
-        Process Travis CI buildlog.
-
-        Check parameters, load build data from Travis CI,
-        process it and send to Keen.io for storage.
-        """
-        repo = self.settings.get_project_name()
-        build = self.settings.get_setting('build')
-
-        result = check_process_parameters(repo, build)
-        if result is not None:
-            yield result
-            return
-
-        travis_data = TravisData(repo, build)
-
-        # retrieve build data using Travis CI API
-        message = "Retrieving build #%s data of %s from Travis CI"
-        self.logger.info(message, build, repo)
-        message += "\n"
-        yield message % (cgi.escape(build), cgi.escape(repo))
-        travis_data.get_build_data()
-
-        # process all build jobs and
-        # send build job data to Keen.io
-        for build_job in travis_data.process_build_jobs():
-            build_job_id = build_job.properties.get_items()["job"]
-            message = "Send build job #%s data to Keen.io"
-            self.logger.info(message, build_job_id)
-            message += "\n"
-            yield message % cgi.escape(build_job_id)
-            send_build_data_service(build_job)
-
-        if len(travis_data.build_jobs) == 0:
-            message = "No data found for build #%s of %s"
-        else:
-            message = "Successfully retrieved build #%s data of %s" \
-                " from Travis CI and sent to Keen.io"
-        self.logger.info(message, build, repo)
-        yield message % (cgi.escape(build), cgi.escape(repo))
-
     def check_travis_notification(self):
         """
         Check Travis CI notification request.
