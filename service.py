@@ -33,14 +33,12 @@ import cherrypy
 import constants
 from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
-from buildtimetrend.travis import TravisData
 from buildtimetrend.settings import Settings
 from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
 from buildtimetrend.keenio import check_time_interval
-from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
 from buildtimetrend.keenio import get_pct_passed_build_jobs
@@ -51,8 +49,8 @@ from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
-from buildtimetrend.service import check_process_parameters
 from buildtimetrend.service import validate_travis_request
+from celery_worker import is_worker_enabled
 import tasks
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
@@ -393,7 +391,7 @@ class TravisParser(object):
             return params_valid
 
         # process travis build
-        if tasks.is_worker_enabled():
+        if is_worker_enabled():
             task = tasks.process_travis_buildlog.delay(repo, build)
             return "Task scheduled to process build #%s of repo %s : %s" % \
                 (cgi.escape(str(build)),
@@ -401,48 +399,6 @@ class TravisParser(object):
                  cgi.escape(str(task.id)))
         else:
             return tasks.process_travis_buildlog(repo, build)
-
-    def process_travis_buildlog(self):
-        """
-        Process Travis CI buildlog.
-
-        Check parameters, load build data from Travis CI,
-        process it and send to Keen.io for storage.
-        """
-        repo = self.settings.get_project_name()
-        build = self.settings.get_setting('build')
-
-        result = check_process_parameters(repo, build)
-        if result is not None:
-            yield result
-            return
-
-        travis_data = TravisData(repo, build)
-
-        # retrieve build data using Travis CI API
-        message = "Retrieving build #%s data of %s from Travis CI"
-        self.logger.info(message, build, repo)
-        message += "\n"
-        yield message % (cgi.escape(build), cgi.escape(repo))
-        travis_data.get_build_data()
-
-        # process all build jobs and
-        # send build job data to Keen.io
-        for build_job in travis_data.process_build_jobs():
-            build_job_id = build_job.properties.get_items()["job"]
-            message = "Send build job #%s data to Keen.io"
-            self.logger.info(message, build_job_id)
-            message += "\n"
-            yield message % cgi.escape(build_job_id)
-            send_build_data_service(build_job)
-
-        if len(travis_data.build_jobs) == 0:
-            message = "No data found for build #%s of %s"
-        else:
-            message = "Successfully retrieved build #%s data of %s" \
-                " from Travis CI and sent to Keen.io"
-        self.logger.info(message, build, repo)
-        yield message % (cgi.escape(build), cgi.escape(repo))
 
     def check_travis_notification(self):
         """

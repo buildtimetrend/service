@@ -22,12 +22,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import os
-from tasks import is_worker_enabled
+from celery_worker import is_worker_enabled
 from buildtimetrend.settings import Settings
 import unittest
 
 
-class TestTasks(unittest.TestCase):
+class TestCeleryWorker(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.settings = Settings()
