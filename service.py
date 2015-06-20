@@ -381,17 +381,24 @@ class TravisParser(object):
         self.logger.info("Build repo : %s", str(repo))
         self.logger.info("Build number : %s", str(build))
 
+        return self.schedule_task(repo, build)
+
+    def schedule_task(self, repo, build):
+        """Check parameters and schedule task."""
         # check parameter validity, check returns error message
         # or None if parameters are valid
         params_valid = validate_travis_request(repo, build)
         if params_valid is not None:
+            self.logger.warning(params_valid)
             return params_valid
 
         # process travis build
         if tasks.is_worker_enabled():
             task = tasks.process_travis_buildlog.delay(repo, build)
-            return "Build #%s of repo %s scheduled for processing as task %s" % \
-                (cgi.escape(str(build)), cgi.escape(str(repo)), cgi.escape(str(task.id)))
+            return "Task scheduled to process build #%s of repo %s : %s" % \
+                (cgi.escape(str(build)),
+                 cgi.escape(str(repo)),
+                 cgi.escape(str(task.id)))
         else:
             return tasks.process_travis_buildlog(repo, build)
 

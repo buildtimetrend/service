@@ -37,11 +37,10 @@ settings.load_settings(config_file=constants.CONFIG_FILE)
 settings.set_client(constants.CLIENT_NAME, constants.CLIENT_VERSION)
 
 def is_worker_enabled():
-    """Check if a task queue is configured and a worker is available."""
-    return check_dict(
-        settings.get_setting("task_queue"),
-        key_list=["broker_url", "backend"]
-    )
+    """Check if a task queue is configured."""
+    task_queue = settings.get_setting("task_queue")
+    return check_dict(task_queue, key_list=["broker_url", "backend"]) and \
+        task_queue["broker_url"] and task_queue["backend"]
 
 if is_worker_enabled():
     task_queue = settings.get_setting("task_queue")
@@ -74,15 +73,14 @@ def process_travis_buildlog(repo, build):
     result = check_process_parameters(repo, build)
     if result is not None:
         logger.warning(result)
-        return
+        return result
 
     travis_data = TravisData(repo, build)
 
     # retrieve build data using Travis CI API
     message = "Retrieving build #%s data of %s from Travis CI"
     logger.info(message, build, repo)
-    message += "\n"
-    print message % (cgi.escape(build), cgi.escape(repo))
+    ret_msg = message % (cgi.escape(build), cgi.escape(repo))
     travis_data.get_build_data()
 
     # process all build jobs and
@@ -91,8 +89,7 @@ def process_travis_buildlog(repo, build):
         build_job_id = build_job.properties.get_items()["job"]
         message = "Send build job #%s data to Keen.io"
         logger.info(message, build_job_id)
-        message += "\n"
-        print message % cgi.escape(build_job_id)
+        ret_msg += "\n" + message % cgi.escape(build_job_id)
         send_build_data_service(build_job)
 
     if len(travis_data.build_jobs) == 0:
@@ -100,5 +97,6 @@ def process_travis_buildlog(repo, build):
     else:
         message = "Successfully retrieved build #%s data of %s" \
             " from Travis CI and sent to Keen.io"
-    logger.info(message, build, repo)
-    print message % (cgi.escape(build), cgi.escape(repo))
+    logger.warning(message, build, repo)
+    ret_msg += "\n" + message % (cgi.escape(build), cgi.escape(repo))
+    return ret_msg
