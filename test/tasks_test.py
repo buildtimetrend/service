@@ -41,6 +41,40 @@ class TestTasks(unittest.TestCase):
         # should return false when task queue url is not defined
         self.assertFalse(is_worker_enabled())
 
+        # should return false when task queue url is empty
+        self.settings.add_setting("task_queue", None)
+        self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", {})
+        self.assertFalse(is_worker_enabled())
+
+        # should return false when not both parameters are defined
+        self.settings.add_setting("task_queue", {"broker_url": ""})
+        self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", {"backend": ""})
+        self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", {"broker_url": "amqp://"})
+        self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", {"backend": "amqp"})
+        self.assertFalse(is_worker_enabled())
+        self.settings.add_setting(
+            "task_queue", {"broker_url": "", "backend": ""}
+        )
+        self.assertFalse(is_worker_enabled())
+        self.settings.add_setting(
+            "task_queue", {"broker_url": None, "backend": None}
+        )
+        self.assertFalse(is_worker_enabled())
+
+        # should return true when both parameters are defined
+        self.settings.add_setting(
+            "task_queue", {"broker_url": "redis://", "backend": "redis"}
+        )
+        self.assertTrue(is_worker_enabled())
+
+    def test_is_worker_enabled_env_var(self):
+        # should return false when task queue url is not defined
+        self.assertFalse(is_worker_enabled())
+
         # set and load test env vars
         os.environ["BTT_AMQP_URL"] = "amqp://"
         self.settings.load_env_vars_task_queue()

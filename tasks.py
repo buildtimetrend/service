@@ -37,11 +37,10 @@ settings.load_settings(config_file=constants.CONFIG_FILE)
 settings.set_client(constants.CLIENT_NAME, constants.CLIENT_VERSION)
 
 def is_worker_enabled():
-    """Check if a task queue is configured and a worker is available."""
-    return check_dict(
-        settings.get_setting("task_queue"),
-        key_list=["broker_url", "backend"]
-    )
+    """Check if a task queue is configured."""
+    task_queue = settings.get_setting("task_queue")
+    return check_dict(task_queue, key_list=["broker_url", "backend"]) and \
+        task_queue["broker_url"] and task_queue["backend"]
 
 if is_worker_enabled():
     task_queue = settings.get_setting("task_queue")
