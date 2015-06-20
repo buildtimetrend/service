@@ -1,6 +1,6 @@
 # vim: set expandtab sw=4 ts=4:
 """
-Celery Tasks Queue.
+Celery Tasks.
 
 Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
@@ -21,45 +21,12 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
+from celery_worker import app
 import cgi
-from celery import Celery
-from buildtimetrend.settings import Settings
 from buildtimetrend import logger
 from buildtimetrend.travis import TravisData
 from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
-from buildtimetrend.tools import check_dict
-import constants
-
-# load settings
-settings = Settings()
-settings.load_settings(config_file=constants.CONFIG_FILE)
-settings.set_client(constants.CLIENT_NAME, constants.CLIENT_VERSION)
-
-def is_worker_enabled():
-    """Check if a task queue is configured."""
-    task_queue = settings.get_setting("task_queue")
-    return check_dict(task_queue, key_list=["broker_url", "backend"]) and \
-        task_queue["broker_url"] and task_queue["backend"]
-
-if is_worker_enabled():
-    task_queue = settings.get_setting("task_queue")
-    app = Celery(
-        'tasks',
-        backend=task_queue["backend"],
-        broker=task_queue["broker_url"]
-    )
-
-    if app is None:
-        logger.error("Error connection to task queue")
-    else:
-        logger.info("Connected to task queue : %s", task_queue["broker_url"])
-else:
-    app = Celery()
-    logger.warning(
-        "Task queue is not defined," \
-        " check README.md to configure task queue"
-    )
 
 
 @app.task(ignore_result=True)

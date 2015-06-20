@@ -53,6 +53,7 @@ from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
 from buildtimetrend.service import check_process_parameters
 from buildtimetrend.service import validate_travis_request
+from celery_worker import is_worker_enabled
 import tasks
 
 SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
@@ -393,7 +394,7 @@ class TravisParser(object):
             return params_valid
 
         # process travis build
-        if tasks.is_worker_enabled():
+        if is_worker_enabled():
             task = tasks.process_travis_buildlog.delay(repo, build)
             return "Task scheduled to process build #%s of repo %s : %s" % \
                 (cgi.escape(str(build)),
