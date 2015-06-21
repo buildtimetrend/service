@@ -29,8 +29,13 @@ from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
 
 
-@APP.task(ignore_result=True)
-def process_travis_buildlog(repo, build):
+@APP.task(
+    bind=True,
+    ignore_result=True,
+    max_retries=5,
+    default_retry_delay=30 * 60 # 30 minutes in seconds
+)
+def process_travis_buildlog(self, repo, build):
     """
     Process Travis CI buildlog.
 
@@ -48,7 +53,13 @@ def process_travis_buildlog(repo, build):
     message = "Retrieving build #%s data of %s from Travis CI"
     logger.info(message, build, repo)
     ret_msg = message % (cgi.escape(build), cgi.escape(repo))
-    travis_data.get_build_data()
+    if not travis_data.get_build_data():
+        if self.request.called_directly:
+            ret_msg += "\nError retrieving build data."
+            return ret_msg
+        else:
+            # retry if retrieving build data failed.
+            raise self.retry()
 
     # process all build jobs and
     # send build job data to Keen.io
