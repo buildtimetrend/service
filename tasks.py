@@ -42,7 +42,16 @@ def process_travis_buildlog(self, repo, build):
     Check parameters, load build data from Travis CI,
     process it and send to Keen.io for storage.
     """
-    result = check_process_parameters(repo, build)
+    try:
+        result = check_process_parameters(repo, build)
+    except Exception, msg:
+        if self.request.called_directly:
+            return msg
+        else:
+            # When checking if build exists fails, retry later
+            # Keen.io API might be down
+            raise self.retry()
+
     if result is not None:
         logger.warning(result)
         return result
