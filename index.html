@@ -6,8 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="description" content="Buildtime Trend as a Service : Visualise what&#39;s trending in your build process">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/stylesheet.css">
-    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>Buildtime Trend as a Service</title>
   </head>
@@ -19,7 +18,6 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/buildtimetrend/service">View on GitHub</a>
 
-          <a href="https://buildtimetrend.github.io/"><img id="project_logo" src="/images/logo.png" width="100px" alt="Buildtime Trend logo" /></a>
           <h1 id="project_title">Buildtime Trend as a Service</h1>
           <h2 id="project_tagline">Visualise what&#39;s trending in your build process</h2>
 
@@ -38,7 +36,7 @@
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>The service is available (in beta) on Heroku, feel free to try it out : <a href="https://buildtimetrend.herokuapp.com/">https://buildtimetrend.herokuapp.com/</a></p>
+<p>The service is available (in beta) on Heroku, feel free to try it out : <a href="http://buildtimetrend.herokuapp.com/">http://buildtimetrend.herokuapp.com/</a></p>
 
 <p>It's available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.</p>
 
@@ -223,10 +221,10 @@
 
 <p>To trigger the service at the end of a Travis CI build, add this to your <code>.travis.yml</code> file:</p>
 
-<div class="highlight highlight-yaml"><pre>    <span class="pl-s1"><span class="pl-ent">notifications:</span></span>
-      <span class="pl-s1"><span class="pl-ent">webhooks:</span></span>
+<div class="highlight highlight-yaml"><pre>    <span class="pl-s"><span class="pl-ent">notifications:</span></span>
+      <span class="pl-s"><span class="pl-ent">webhooks:</span></span>
         <span class="pl-c"># trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io</span>
-        <span class="pl-s1">- <span class="pl-s1">https://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
+        <span class="pl-s">- <span class="pl-s">https://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
 
 <p>When Buildtime Trend Service is triggered by a Travis CI notification, it will get the necessary parameters (repo name and build number) from the <code>payload</code> that is passed by Travis CI. This will trigger loading and parsing the Travis CI log of the corresponding build, the analysed data is stored in the Keen.io database.</p>
 
@@ -237,14 +235,27 @@
 
 <ul>
 <li>
-<code>allowed_repo</code> : defines which repos are allowed by the service. If the <code>allowed_repo</code> setting is not defined, all repos are allowed. If substring matches the repo name, it is allowed, so fe. <code>my_name</code> will allow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is allowed as well.
+<code>denied_repo</code> : defines which repos are not allowed by the service. If the <code>denied_repo</code> setting is not defined, all repos are allowed (unless <code>allowed_repo</code> is defined, see below). If a substring matches the repo name, it is denied, so fe. <code>my_name</code> will disallow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is valid as well.
+&gt; <strong>Remark :</strong> Setting <code>denied_repo</code> takes precedence over <code>allowed_repo</code>, if a repo name matches a rule in <code>denied_repo</code> setting, the repo will be denied, even if it matches a rule in <code>allowed_repo</code>.
 Multiple entries are allowed, fe. :</li>
 </ul>
 
-<div class="highlight highlight-yaml"><pre><span class="pl-s1"><span class="pl-ent">buildtimetrend:</span></span>
-  <span class="pl-s1"><span class="pl-ent">allowed_repo:</span></span>
-    <span class="pl-s1">- <span class="pl-s1"><span class="pl-pds">"</span>my_name<span class="pl-pds">"</span></span><span class="pl-s1"> </span></span><span class="pl-c"># allowing all repo names that contain my_name</span>
-    <span class="pl-s1">- <span class="pl-s1"><span class="pl-pds">"</span>another_name/some_repo<span class="pl-pds">"</span></span><span class="pl-s1"> </span></span><span class="pl-c"># allows this specific repo</span></pre></div>
+<div class="highlight highlight-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+  <span class="pl-s"><span class="pl-ent">denied_repo:</span></span>
+    <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>my_name<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># denying all repo names that contain my_name</span>
+    <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>another_name/some_repo<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># denies this specific repo</span></pre></div>
+
+<ul>
+<li>
+<code>allowed_repo</code> : defines which repos are allowed by the service. If the <code>allowed_repo</code> setting is not defined, all repos are allowed (unless denied by the <code>denied_repo</code> setting). If substring matches the repo name, it is allowed, so fe. <code>my_name</code> will allow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is allowed as well.
+&gt; <strong>Remark :</strong> Setting <code>denied_repo</code> takes precedence over <code>allowed_repo</code>, if a repo name matches a rule in <code>denied_repo</code> setting, the repo will be denied, even if it matches a rule in <code>allowed_repo</code>.
+Multiple entries are allowed, fe. :</li>
+</ul>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+  <span class="pl-s"><span class="pl-ent">allowed_repo:</span></span>
+    <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>my_name<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># allowing all repo names that contain my_name</span>
+    <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>another_name/some_repo<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># allows this specific repo</span></pre></div>
 
 <ul>
 <li>
@@ -259,10 +270,35 @@ Multiple entries are allowed, fe. :</li>
 <p>It can also be defined with the <code>TRAVIS_ACCOUNT_TOKEN</code> environment variable.</p>
 
 <ul>
-<li>
-<code>loglevel</code> : defines loglevel, possible values : <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code> (default), <code>ERROR</code>
-It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.</li>
+<li><p><code>loglevel</code> : defines loglevel, possible values : <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code> (default), <code>ERROR</code>
+It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.</p></li>
+<li><p><code>task_queue</code> : configures using a task queue, powered by Celery, to process background tasks by a worker. Celery supports different kinds of backend task queues, which can be configured :</p></li>
 </ul>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+    <span class="pl-s"><span class="pl-ent">task_queue:</span></span>
+        <span class="pl-s"><span class="pl-ent">backend:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># backend type fe. amqp, redis, ...</span>
+        <span class="pl-s"><span class="pl-ent">broker_url:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># backend instance url, format : transport://userid:password@hostname:port/virtual_host</span></pre></div>
+
+<p>If <code>task_queue</code> is defined, this will be enable using a worker to execute heavy tasks. To disable using a worker, remove the <code>task_queue</code> directive from the config file.</p>
+
+<p>The <code>broker_url</code> can also be defined with several environment variables :</p>
+
+<ul>
+<li>
+<code>BTT_AMQP_URL</code> : set a AMQP based task queue instance. (fe. amqp://localhost/)</li>
+<li>
+<code>BTT_REDIS_URL</code> : set a Redis based task queue instance. (fe. redis://localhost/)</li>
+<li>
+<code>CLOUDAMQP_URL</code> : environment variable set when creating a <a href="https://elements.heroku.com/addons/cloudamqp">Clould AMQP RabbitMQ instance on Heroku</a>
+</li>
+<li>
+<code>REDISGREEN_URL</code> : environment variable set when creating a <a href="https://elements.heroku.com/addons/redisgreen">Redis Green instance on Heroku</a>
+</li>
+</ul>
+
+<p>The environment variables are checked in this order, the first one that is defined, will be used.
+The backend type (amqp, redis, ...) associated with the environment variable will be set automatically.</p>
 
 <h2>
 <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
@@ -273,6 +309,8 @@ It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.<
 </li>
 <li>
 <code>cherrypy</code> : <a href="http://www.cherrypy.org/">CherrPy</a> A Minimalist Python Web Framework, making the API available as a web service</li>
+<li>
+<code>celery</code> : <a href="http://www.celeryproject.org/">Celery</a> : Distributed Task Queue</li>
 </ul>
 
 <h2>
@@ -300,7 +338,7 @@ It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.<
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p class="copyright">Buildtime Trend as a Service maintained by <a href="https://github.com/buildtimetrend">buildtimetrend</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
