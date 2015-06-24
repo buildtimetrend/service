@@ -75,7 +75,7 @@ def process_travis_buildlog(self, repo, build):
     for build_job in travis_data.process_build_jobs():
         build_job_id = build_job.properties.get_items()["job"]
         message = "Send build job #%s data to Keen.io"
-        logger.info(message, build_job_id)
+        logger.warning(message, build_job_id)
         ret_msg += "\n" + message % cgi.escape(build_job_id)
         send_build_data_service(build_job)
 
