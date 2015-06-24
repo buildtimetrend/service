@@ -376,8 +376,9 @@ class TravisParser(object):
             if build is None and "build" in payload_params:
                 build = payload_params["build"]
 
-        self.logger.info("Build repo : %s", str(repo))
-        self.logger.info("Build number : %s", str(build))
+        self.logger.warning(
+            "Request to process build #%s of repo %s", str(build), str(repo)
+        )
 
         return self.schedule_task(repo, build)
 
