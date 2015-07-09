@@ -178,6 +178,7 @@ If `task_queue` is defined, this will be enable using a worker to execute heavy 
 The `broker_url` can also be defined with several environment variables :
 - `BTT_AMQP_URL` : set a AMQP based task queue instance. (fe. amqp://localhost/)
 - `BTT_REDIS_URL` : set a Redis based task queue instance. (fe. redis://localhost/)
+- `RABBITMQ_BIGWIG_URL` : environment variable set when creating a [RabbitMQ Bigwig instance on Heroku](https://elements.heroku.com/addons/rabbitmq-bigwig)
 - `CLOUDAMQP_URL` : environment variable set when creating a [Cloud AMQP RabbitMQ instance on Heroku](https://elements.heroku.com/addons/cloudamqp)
 - `REDISGREEN_URL` : environment variable set when creating a [Redis Green instance on Heroku](https://elements.heroku.com/addons/redisgreen)
 
