@@ -12,6 +12,7 @@ environment parameters
 - issue #70 : [dashboard] use bootstrap buttons and ButtonClass on dashboard to select timeframe
 - move is_repo_allowed(), check_process_parameters() and format_duration() from service to library
 - issue #64 : Use queue and worker in heroku
+- issue #84 : Add Service statistics page
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
