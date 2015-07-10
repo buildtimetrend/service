@@ -58,6 +58,7 @@ SERVICE_WEBSITE_LINK = "<a href='https://buildtimetrend.github.io/service'>" \
 TRAVIS_URL = '/travis'
 ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
+STATS_URL = '/stats'
 BADGE_URL = '/badge'
 STATIC_DIR = os.path.join(os.path.abspath('.'), 'static')
 DASHBOARD_DIR = os.path.join(STATIC_DIR, 'dashboard')
@@ -170,6 +171,79 @@ class Dashboard(object):
 
         # return config file
         return get_dashboard_config(repo, extra)
+
+    def modify_index(self, file_original, file_modified):
+        """
+        Create index file for Buildtime Trend as a Service.
+
+        It adjust paths to 'assets' :
+        the relative path is change to an absolute path.
+
+        Parameters:
+        - file_original : Path of the original file
+        - file_modified : Path of the modified file hosted on the service
+        """
+        if not file_is_newer(file_modified, file_original):
+            with open(file_original, 'r') as infile, \
+                    open(file_modified, 'w') as outfile:
+                for line in infile:
+                    line = line.replace("assets", ASSETS_URL)
+                    outfile.write(line)
+
+        if check_file(file_modified):
+            self.logger.info(
+                "Created index service file : %s",
+                file_modified
+            )
+            return True
+        else:
+            return False
+
+
+class Stats(object):
+
+    """Service stats page handler."""
+
+    def __init__(self):
+        """Constructor."""
+        self.settings = Settings()
+        self.logger = logger
+
+        self.file_stats = os.path.join(DASHBOARD_DIR, "stats.html")
+        self.file_stats_service = os.path.join(
+            DASHBOARD_DIR, "stats_service.html"
+        )
+
+    @cherrypy.expose
+    def index(self):
+        """Server stats page."""
+        # Create stats page for Buildtime Trend as a Service,
+        # if it doesn't exist, or if it is older than the file from
+        # which it is generated
+        if self.modify_index(self.file_stats, self.file_stats_service):
+            return open(self.file_stats_service)
+        else:
+            raise cherrypy.HTTPError(404, "File not found")
+
+    @cherrypy.expose
+    def config_js(self):
+        """
+        Config file for dashboard.
+
+        Parameters :
+        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
+        - repo_name : name of the Github repo, fe. `service`
+        """
+        # define extra settings
+        extra = {
+            'projectName': "Service stats"
+        }
+
+        # add project list
+        extra.update(get_config_project_list())
+
+        # return config file
+        return get_dashboard_config(None, extra)
 
     def modify_index(self, file_original, file_modified):
         """
@@ -473,6 +547,7 @@ if __name__ == "__main__":
     # assign handlers to entry paths
     cherrypy.tree.mount(Root(), '/', ROOT_CONFIG)
     cherrypy.tree.mount(Dashboard(), DASHBOARD_URL)
+    cherrypy.tree.mount(Stats(), STATS_URL)
     cherrypy.tree.mount(Badges(), BADGE_URL)
     cherrypy.tree.mount(TravisParser(), TRAVIS_URL)
 
