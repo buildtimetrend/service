@@ -95,7 +95,7 @@ class Dashboard(object):
         # Create project overview for Buildtime Trend as a Service :
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
-        if self.modify_index(self.file_projects, self.file_projects_service):
+        if modify_index(self.file_projects, self.file_projects_service):
             return open(self.file_projects_service)
         else:
             raise cherrypy.HTTPError(404, "File not found")
@@ -105,7 +105,7 @@ class Dashboard(object):
         # Create dashboard index for Buildtime Trend as a Service :
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
-        if self.modify_index(self.file_index, self.file_index_service):
+        if modify_index(self.file_index, self.file_index_service):
             return open(self.file_index_service)
         else:
             raise cherrypy.HTTPError(404, "File not found")
@@ -172,33 +172,6 @@ class Dashboard(object):
         # return config file
         return get_dashboard_config(repo, extra)
 
-    def modify_index(self, file_original, file_modified):
-        """
-        Create index file for Buildtime Trend as a Service.
-
-        It adjust paths to 'assets' :
-        the relative path is change to an absolute path.
-
-        Parameters:
-        - file_original : Path of the original file
-        - file_modified : Path of the modified file hosted on the service
-        """
-        if not file_is_newer(file_modified, file_original):
-            with open(file_original, 'r') as infile, \
-                    open(file_modified, 'w') as outfile:
-                for line in infile:
-                    line = line.replace("assets", ASSETS_URL)
-                    outfile.write(line)
-
-        if check_file(file_modified):
-            self.logger.info(
-                "Created index service file : %s",
-                file_modified
-            )
-            return True
-        else:
-            return False
-
 
 class Stats(object):
 
@@ -220,7 +193,7 @@ class Stats(object):
         # Create stats page for Buildtime Trend as a Service,
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
-        if self.modify_index(self.file_stats, self.file_stats_service):
+        if modify_index(self.file_stats, self.file_stats_service):
             return open(self.file_stats_service)
         else:
             raise cherrypy.HTTPError(404, "File not found")
@@ -244,33 +217,6 @@ class Stats(object):
 
         # return config file
         return get_dashboard_config(None, extra)
-
-    def modify_index(self, file_original, file_modified):
-        """
-        Create index file for Buildtime Trend as a Service.
-
-        It adjust paths to 'assets' :
-        the relative path is change to an absolute path.
-
-        Parameters:
-        - file_original : Path of the original file
-        - file_modified : Path of the modified file hosted on the service
-        """
-        if not file_is_newer(file_modified, file_original):
-            with open(file_original, 'r') as infile, \
-                    open(file_modified, 'w') as outfile:
-                for line in infile:
-                    line = line.replace("assets", ASSETS_URL)
-                    outfile.write(line)
-
-        if check_file(file_modified):
-            self.logger.info(
-                "Created index service file : %s",
-                file_modified
-            )
-            return True
-        else:
-            return False
 
 
 class Badges(object):
@@ -511,6 +457,34 @@ def get_config_project_list():
         return {'projectList': allowed_projects}
     else:
         return {}
+
+
+def modify_index(file_original, file_modified):
+    """
+    Create index file for Buildtime Trend as a Service.
+
+    It adjust paths to 'assets' :
+    the relative path is change to an absolute path.
+
+    Parameters:
+    - file_original : Path of the original file
+    - file_modified : Path of the modified file hosted on the service
+    """
+    if not file_is_newer(file_modified, file_original):
+        with open(file_original, 'r') as infile, \
+                open(file_modified, 'w') as outfile:
+            for line in infile:
+                line = line.replace("assets", ASSETS_URL)
+                outfile.write(line)
+
+    if check_file(file_modified):
+        logger.info(
+            "Created index service file : %s",
+            file_modified
+        )
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
