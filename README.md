@@ -49,6 +49,7 @@ This will launch a CherryPy instance hosting the service on port 5000.
 
 - [Index page](#index-page)
 - [Dashboard](#dashboard)
+- [Service statistics](#service-statistics)
 - [Shield badges](#shield-badges)
 - [Process Travis CI build log](#process-travis-ci-build-log)
 
@@ -66,6 +67,12 @@ Display a dashboard with Buildtime Trend charts
   - `repo_name` : name of the Github repo, fe. `service`
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
+
+### Service statistics
+
+Display a dashboard with Buildtime Trend service statistics
+
+- path : `/stats`
 
 ### Shield badges
 

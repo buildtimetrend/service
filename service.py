@@ -5,6 +5,7 @@ Buildtime Trend as a Service Cherrypy handlers.
 
 Service components :
 - /dashboard : display Buildtime Trend dashboard of hosted projects
+- /stats     : display Buildtime Trend dashboard with service statistics
 - /badge     : generate badges with metrics of project build data
 - /travis    : retrieve and parse build data from Travis CI
 
