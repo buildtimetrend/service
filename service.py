@@ -5,7 +5,7 @@ Buildtime Trend as a Service Cherrypy handlers.
 
 Service components :
 - /dashboard : display Buildtime Trend dashboard of hosted projects
-- /stats     : display Buildtime Trend dashboard with service statistics
+- /stats     : display Buildtime Trend dashboard with service usage statistics
 - /badge     : generate badges with metrics of project build data
 - /travis    : retrieve and parse build data from Travis CI
 
@@ -176,7 +176,7 @@ class Dashboard(object):
 
 class Stats(object):
 
-    """Service stats page handler."""
+    """Service usage stats page handler."""
 
     def __init__(self):
         """Constructor."""
@@ -190,8 +190,8 @@ class Stats(object):
 
     @cherrypy.expose
     def index(self):
-        """Server stats page."""
-        # Create stats page for Buildtime Trend as a Service,
+        """Service usage stats page."""
+        # Create usage stats page for Buildtime Trend as a Service,
         # if it doesn't exist, or if it is older than the file from
         # which it is generated
         if modify_index(self.file_stats, self.file_stats_service):
@@ -201,16 +201,10 @@ class Stats(object):
 
     @cherrypy.expose
     def config_js(self):
-        """
-        Config file for dashboard.
-
-        Parameters :
-        - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
-        - repo_name : name of the Github repo, fe. `service`
-        """
+        """Config file for usage stats dashboard."""
         # define extra settings
         extra = {
-            'projectName': "Service stats"
+            'projectName': "Service usage stats"
         }
 
         # add project list
@@ -462,10 +456,10 @@ def get_config_project_list():
 
 def modify_index(file_original, file_modified):
     """
-    Create index file for Buildtime Trend as a Service.
+    Modify html file for Buildtime Trend as a Service.
 
-    It adjust paths to 'assets' :
-    the relative path is change to an absolute path.
+    Adjust paths to 'assets' :
+    the relative path is changed to an absolute path.
 
     Parameters:
     - file_original : Path of the original file
