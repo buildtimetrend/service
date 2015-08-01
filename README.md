@@ -49,6 +49,7 @@ This will launch a CherryPy instance hosting the service on port 5000.
 
 - [Index page](#index-page)
 - [Dashboard](#dashboard)
+- [Service usage statistics](#service-usage-statistics)
 - [Shield badges](#shield-badges)
 - [Process Travis CI build log](#process-travis-ci-build-log)
 
@@ -60,12 +61,19 @@ This will launch a CherryPy instance hosting the service on port 5000.
 Display a dashboard with Buildtime Trend charts
 
 - path : `/dashboard`
-- usage : `/dashboard/repo_owner/repo_name`
+- usage : `/dashboard/repo_owner/repo_name?refresh=<refresh_rate>`
 - parameters :
   - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
   - `repo_name` : name of the Github repo, fe. `service`
+  - `refresh` (optional) : enables auto-refreshing the dashboard charts. 0 = disabled (default), a positive integer is the number of minutes after which the charts are refreshed, a value of 10 will refresh the charts every 10 minutes. The refresh rate should at least be equal to maximum age of the Query cache, if it is less, the cache max age value will be used (typically, 10 min).
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
+
+### Service usage statistics
+
+Display a dashboard with Buildtime Trend service usage statistics
+
+- path : `/stats`
 
 ### Shield badges
 
@@ -178,7 +186,8 @@ If `task_queue` is defined, this will be enable using a worker to execute heavy 
 The `broker_url` can also be defined with several environment variables :
 - `BTT_AMQP_URL` : set a AMQP based task queue instance. (fe. amqp://localhost/)
 - `BTT_REDIS_URL` : set a Redis based task queue instance. (fe. redis://localhost/)
-- `CLOUDAMQP_URL` : environment variable set when creating a [Clould AMQP RabbitMQ instance on Heroku](https://elements.heroku.com/addons/cloudamqp)
+- `RABBITMQ_BIGWIG_URL` : environment variable set when creating a [RabbitMQ Bigwig instance on Heroku](https://elements.heroku.com/addons/rabbitmq-bigwig)
+- `CLOUDAMQP_URL` : environment variable set when creating a [Cloud AMQP RabbitMQ instance on Heroku](https://elements.heroku.com/addons/cloudamqp)
 - `REDISGREEN_URL` : environment variable set when creating a [Redis Green instance on Heroku](https://elements.heroku.com/addons/redisgreen)
 
 The environment variables are checked in this order, the first one that is defined, will be used.
