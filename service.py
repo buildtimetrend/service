@@ -112,7 +112,7 @@ class Dashboard(object):
             raise cherrypy.HTTPError(404, "File not found")
 
     @cherrypy.expose
-    def default(self, repo_owner=None, repo_name=None, page=""):
+    def default(self, repo_owner=None, repo_name=None, page="", refresh=None):
         """
         Default page.
 
@@ -138,6 +138,8 @@ class Dashboard(object):
                 repo_slug = get_repo_slug(repo_owner, repo_name)
                 url = "%s/%s/index.html" % \
                     (DASHBOARD_URL, cgi.escape(repo_slug))
+                if refresh is not None:
+                    url = "%s?refresh=%s" % (url, cgi.escape(refresh))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)

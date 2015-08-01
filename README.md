@@ -61,10 +61,11 @@ This will launch a CherryPy instance hosting the service on port 5000.
 Display a dashboard with Buildtime Trend charts
 
 - path : `/dashboard`
-- usage : `/dashboard/repo_owner/repo_name`
+- usage : `/dashboard/repo_owner/repo_name?refresh=<refresh_rate>`
 - parameters :
   - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
   - `repo_name` : name of the Github repo, fe. `service`
+  - `refresh` (optional) : enables auto-refreshing the dashboard charts. 0 = disabled (default), a positive integer is the number of minutes after which the charts are refreshed, a value of 10 will refresh the charts every 10 minutes. The refresh rate should at least be equal to maximum age of the Query cache, if it is less, the cache max age value will be used (typically, 10 min).
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
 
