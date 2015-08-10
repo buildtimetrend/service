@@ -70,6 +70,7 @@ APPLE_ICON_PATH = os.path.join(IMAGES_DIR, 'apple-touch-icon.png')
 APPLE_ICON_PRECOMPOSED_PATH = os.path.join(IMAGES_DIR,
                                            'apple-touch-icon-precomposed.png')
 ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
+MAX_MULTI_BUILDS = 50
 
 
 class Dashboard(object):
@@ -418,6 +419,9 @@ class TravisParser(object):
         if last_build < first_build:
             self.logger.warning("last_build should be equal or larger than first_build")
             last_build = first_build
+        if (last_build - first_build) > MAX_MULTI_BUILDS:
+            self.logger.warning("number of multiple builds is limited to %s", MAX_MULTI_BUILDS)
+            last_build = first_build + MAX_MULTI_BUILDS
         build = first_build
         while build <= last_build:
             self.logger.warning(
