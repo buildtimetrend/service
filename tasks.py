@@ -42,6 +42,9 @@ def process_travis_buildlog(self, repo, build):
     Check parameters, load build data from Travis CI,
     process it and send to Keen.io for storage.
     """
+    repo = str(repo)
+    build = str(build)
+
     try:
         result = check_process_parameters(repo, build)
     except Exception, msg:
