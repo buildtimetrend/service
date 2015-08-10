@@ -358,7 +358,8 @@ class TravisParser(object):
         self.logger = logger
 
     @cherrypy.expose
-    def default(self, repo_owner=None, repo_name=None, build=None,
+    def default(self, repo_owner=None, repo_name=None,
+                first_build=None, last_build=None,
                 payload=None):
         """
         Default handler.
@@ -366,10 +367,18 @@ class TravisParser(object):
         Visiting this page triggers loading and processing the build log
         and data of a travis CI build process.
 
+        If last_build is defined, all builds from first_build until last_build
+        will be retrieved and processed.
+
+        If only payload is defined, repo and build data
+        will be extracted from the payload.
+
         Parameters:
         - repo_owner : name of the Github repo owner, fe. `buildtimetrend`
         - repo_name : name of the Github repo, fe. `service`
-        - build : build number
+        - first_build : first build number to process (int)
+        - last_build : last build number to process (int)
+        - payload : Travis CI notification payload (json)
         """
         cherrypy.response.headers['Content-Type'] = 'text/plain'
         # reset settings
@@ -390,24 +399,41 @@ class TravisParser(object):
             # assign payload parameters
             if repo is None and "repo" in payload_params:
                 repo = payload_params["repo"]
-            if build is None and "build" in payload_params:
-                build = payload_params["build"]
+            if first_build is None and last_build is None and \
+                    "build" in payload_params:
+                first_build = last_build = payload_params["build"]
 
-        self.logger.warning(
-            "Request to process build #%s of repo %s", str(build), str(repo)
-        )
-
-        return self.schedule_task(repo, build)
-
-    def schedule_task(self, repo, build):
-        """Check parameters and schedule task."""
         # check parameter validity, check returns error message
         # or None if parameters are valid
-        params_valid = validate_travis_request(repo, build)
+        params_valid = validate_travis_request(repo, first_build)
         if params_valid is not None:
             self.logger.warning(params_valid)
             return params_valid
 
+        first_build = int(first_build)
+        if last_build is None:
+            last_build = first_build
+        else:
+            last_build = int(last_build)
+        if last_build < first_build:
+            self.logger.warning("last_build should be equal or larger than first_build")
+            last_build = first_build
+        build = first_build
+        while build <= last_build:
+            self.logger.warning(
+                "Request to process build #%s of repo %s", str(build), str(repo)
+            )
+
+            self.schedule_task(repo, build)
+            build += 1
+
+        return "Request to process build(s) #%s to #%s of repo %s" % \
+            (cgi.escape(str(first_build)),
+            cgi.escape(str(last_build)),
+            cgi.escape(str(repo)))
+
+    def schedule_task(self, repo, build):
+        """Check parameters and schedule task."""
         # process travis build
         if is_worker_enabled():
             task = tasks.process_travis_buildlog.delay(repo, build)
