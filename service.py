@@ -70,7 +70,8 @@ APPLE_ICON_PATH = os.path.join(IMAGES_DIR, 'apple-touch-icon.png')
 APPLE_ICON_PRECOMPOSED_PATH = os.path.join(IMAGES_DIR,
                                            'apple-touch-icon-precomposed.png')
 ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
-MAX_MULTI_BUILDS = 50
+MAX_MULTI_BUILDS = 100
+MULTI_BUILD_DELAY = 3
 
 
 class Dashboard(object):
@@ -443,18 +444,29 @@ class TravisParser(object):
             cgi.escape(str(repo)))
 
         build = first_build
+        delay = 0
 
         while build <= last_build:
-            message += self.schedule_task(repo, build) + "\n"
+            message += self.schedule_task(repo, build, delay) + "\n"
+            delay += MULTI_BUILD_DELAY
             build += 1
 
         return message
 
-    def schedule_task(self, repo, build):
-        """Check parameters and schedule task."""
+    def schedule_task(self, repo, build, delay = 0):
+        """
+        Schedule task.
+
+        Parameters:
+        - repo : repo name (fe. buildtimetrend/service)
+        - build : build number to process (int)
+        - delay : delay before task should be started, in seconds
+        """
         # process travis build
         if is_worker_enabled():
-            task = tasks.process_travis_buildlog.delay(repo, build)
+            task = tasks.process_travis_buildlog.apply_async(
+                (repo, build), countdown=int(delay)
+            )
             return "Task scheduled to process build #%s of repo %s : %s" % \
                 (cgi.escape(str(build)),
                  cgi.escape(str(repo)),
