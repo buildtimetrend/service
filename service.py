@@ -402,7 +402,7 @@ class TravisParser(object):
                 repo = payload_params["repo"]
             if first_build is None and last_build is None and \
                     "build" in payload_params:
-                first_build = last_build = payload_params["build"]
+                first_build = payload_params["build"]
 
         # check parameter validity, check returns error message
         # or None if parameters are valid
@@ -411,30 +411,44 @@ class TravisParser(object):
             self.logger.warning(params_valid)
             return params_valid
 
-        first_build = int(first_build)
         if last_build is None:
-            last_build = first_build
-        else:
-            last_build = int(last_build)
-        if last_build < first_build:
-            self.logger.warning("last_build should be equal or larger than first_build")
-            last_build = first_build
-        if (last_build - first_build) > MAX_MULTI_BUILDS:
-            self.logger.warning("number of multiple builds is limited to %s", MAX_MULTI_BUILDS)
-            last_build = first_build + MAX_MULTI_BUILDS
-        build = first_build
-        while build <= last_build:
             self.logger.warning(
-                "Request to process build #%s of repo %s", str(build), str(repo)
+                "Request to process build #%s of repo %s", str(first_build), str(repo)
             )
 
-            self.schedule_task(repo, build)
-            build += 1
+            return self.schedule_task(repo, first_build)
 
-        return "Request to process build(s) #%s to #%s of repo %s" % \
+        return self.multi_build(repo, first_build, last_build)
+
+    def multi_build(self, repo, first_build, last_build):
+        first_build = int(first_build)
+        last_build = int(last_build)
+        message = ""
+
+        if last_build < first_build:
+            temp_message = "Warning : last_build should be equal or larger than first_build"
+            self.logger.warning(temp_message)
+            message += temp_message + "\n"
+            last_build = first_build
+
+        if (last_build - first_build) > MAX_MULTI_BUILDS:
+            temp_message = "Warning : number of multiple builds is limited to %s"
+            self.logger.warning(temp_message, MAX_MULTI_BUILDS)
+            message += temp_message % MAX_MULTI_BUILDS + "\n"
+            last_build = first_build + MAX_MULTI_BUILDS
+
+        message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
             (cgi.escape(str(first_build)),
             cgi.escape(str(last_build)),
             cgi.escape(str(repo)))
+
+        build = first_build
+
+        while build <= last_build:
+            message += self.schedule_task(repo, build) + "\n"
+            build += 1
+
+        return message
 
     def schedule_task(self, repo, build):
         """Check parameters and schedule task."""
