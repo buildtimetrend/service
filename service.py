@@ -70,7 +70,8 @@ APPLE_ICON_PATH = os.path.join(IMAGES_DIR, 'apple-touch-icon.png')
 APPLE_ICON_PRECOMPOSED_PATH = os.path.join(IMAGES_DIR,
                                            'apple-touch-icon-precomposed.png')
 ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
-MAX_MULTI_BUILDS = 50
+MAX_MULTI_BUILDS = 100
+MULTI_BUILD_DELAY = 3
 
 
 class Dashboard(object):
@@ -402,7 +403,7 @@ class TravisParser(object):
                 repo = payload_params["repo"]
             if first_build is None and last_build is None and \
                     "build" in payload_params:
-                first_build = last_build = payload_params["build"]
+                first_build = payload_params["build"]
 
         # check parameter validity, check returns error message
         # or None if parameters are valid
@@ -411,37 +412,64 @@ class TravisParser(object):
             self.logger.warning(params_valid)
             return params_valid
 
-        first_build = int(first_build)
         if last_build is None:
-            last_build = first_build
-        else:
-            last_build = int(last_build)
-        if last_build < first_build:
-            self.logger.warning("last_build should be equal or larger than first_build")
-            last_build = first_build
-        if (last_build - first_build) > MAX_MULTI_BUILDS:
-            self.logger.warning("number of multiple builds is limited to %s", MAX_MULTI_BUILDS)
-            last_build = first_build + MAX_MULTI_BUILDS
-        build = first_build
-        while build <= last_build:
             self.logger.warning(
-                "Request to process build #%s of repo %s", str(build), str(repo)
+                "Request to process build #%s of repo %s", str(first_build), str(repo)
             )
 
-            self.schedule_task(repo, build)
-            build += 1
+            return self.schedule_task(repo, first_build)
 
-        return "Request to process build(s) #%s to #%s of repo %s" % \
+        return self.multi_build(repo, first_build, last_build)
+
+    def multi_build(self, repo, first_build, last_build):
+        first_build = int(first_build)
+        last_build = int(last_build)
+        message = ""
+
+        if last_build < first_build:
+            temp_message = "Warning : last_build should be equal or larger than first_build"
+            self.logger.warning(temp_message)
+            message += temp_message + "\n"
+            last_build = first_build
+
+        if (last_build - first_build) > MAX_MULTI_BUILDS:
+            temp_message = "Warning : number of multiple builds is limited to %s"
+            self.logger.warning(temp_message, MAX_MULTI_BUILDS)
+            message += temp_message % MAX_MULTI_BUILDS + "\n"
+            last_build = first_build + MAX_MULTI_BUILDS
+
+        message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
             (cgi.escape(str(first_build)),
             cgi.escape(str(last_build)),
             cgi.escape(str(repo)))
 
-    def schedule_task(self, repo, build):
-        """Check parameters and schedule task."""
+        build = first_build
+        delay = 0
+
+        while build <= last_build:
+            message += self.schedule_task(repo, build, delay) + "\n"
+            delay += MULTI_BUILD_DELAY
+            build += 1
+
+        return message
+
+    def schedule_task(self, repo, build, delay = 0):
+        """
+        Schedule task.
+
+        Parameters:
+        - repo : repo name (fe. buildtimetrend/service)
+        - build : build number to process (int)
+        - delay : delay before task should be started, in seconds
+        """
         # process travis build
         if is_worker_enabled():
-            task = tasks.process_travis_buildlog.delay(repo, build)
-            return "Task scheduled to process build #%s of repo %s : %s" % \
+            task = tasks.process_travis_buildlog.apply_async(
+                (repo, build), countdown=int(delay)
+            )
+            temp_msg = "Task scheduled to process build #%s of repo %s : %s"
+            self.logger.warning(temp_msg, str(build), str(repo), str(task.id))
+            return temp_msg % \
                 (cgi.escape(str(build)),
                  cgi.escape(str(repo)),
                  cgi.escape(str(task.id)))
