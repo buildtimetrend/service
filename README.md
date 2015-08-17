@@ -115,11 +115,18 @@ Generate a shield badges
 Loads a Travis CI build log file, processes it and sends the data to Keen.io.
 
 - path : `/travis`
-- usage : `/travis/repo_owner/repo_name/build`
+- usage : `/travis/<repo_owner>/<repo_name>/<first_build>/<last_build>`
 - parameters :
   - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
   - `repo_name` : name of the Github repo, fe. `service`
-  - `build` : Travis CI build ID
+  - `first_build` : Travis CI build number of the first build to be processed
+  - `last_build` : (optional) Travis CI build number of the last build to be processed
+
+If `last_build` is not defined, only the build referenced by `first_build` will be loaded and processed.
+If `last_build` is defined, all builds from `first_build` to and including `last_build` will be scheduled to be processed.
+To limit the load on the worker, a delay is added to every next build. F.e. build #1 will be executed immediately, build #2 after x seconds, build #3 after x*2 seconds, ...
+Currently the delay is set to 3 seconds.
+The maximum number of builds that can be imported at once is currently limited to 100.
 
 OR
 
