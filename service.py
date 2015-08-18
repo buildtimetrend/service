@@ -417,7 +417,9 @@ class TravisParser(object):
                 "Request to process build #%s of repo %s", str(first_build), str(repo)
             )
 
-            return self.schedule_task(repo, first_build)
+            # schedule task with 10 second delay to give Travis CI time
+            # to add the finished_at property. (issue #96)
+            return self.schedule_task(repo, first_build, 10)
 
         return self.multi_build(repo, first_build, last_build)
 
