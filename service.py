@@ -70,8 +70,6 @@ APPLE_ICON_PATH = os.path.join(IMAGES_DIR, 'apple-touch-icon.png')
 APPLE_ICON_PRECOMPOSED_PATH = os.path.join(IMAGES_DIR,
                                            'apple-touch-icon-precomposed.png')
 ROBOTS_PATH = os.path.join(STATIC_DIR, 'robots.txt')
-MAX_MULTI_BUILDS = 100
-MULTI_BUILD_DELAY = 3
 
 
 class Dashboard(object):
@@ -427,6 +425,8 @@ class TravisParser(object):
         first_build = int(first_build)
         last_build = int(last_build)
         message = ""
+        multi_import = Settings().get_setting("multi_import")
+        max_multi_builds = multi_import["max_builds"]
 
         if last_build < first_build:
             temp_message = "Warning : last_build should be equal or larger than first_build"
@@ -434,11 +434,11 @@ class TravisParser(object):
             message += temp_message + "\n"
             last_build = first_build
 
-        if (last_build - first_build) > MAX_MULTI_BUILDS:
+        if (last_build - first_build) > max_multi_builds:
             temp_message = "Warning : number of multiple builds is limited to %s"
-            self.logger.warning(temp_message, MAX_MULTI_BUILDS)
-            message += temp_message % MAX_MULTI_BUILDS + "\n"
-            last_build = first_build + MAX_MULTI_BUILDS
+            self.logger.warning(temp_message, max_multi_builds)
+            message += temp_message % max_multi_builds + "\n"
+            last_build = first_build + max_multi_builds
 
         message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
             (cgi.escape(str(first_build)),
@@ -450,7 +450,7 @@ class TravisParser(object):
 
         while build <= last_build:
             message += self.schedule_task(repo, build, delay) + "\n"
-            delay += MULTI_BUILD_DELAY
+            delay += multi_import["delay"]
             build += 1
 
         return message
