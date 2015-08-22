@@ -437,7 +437,7 @@ class TravisParser(object):
         if (last_build - first_build) > max_multi_builds:
             temp_message = "Warning : number of multiple builds is limited to %s"
             self.logger.warning(temp_message, max_multi_builds)
-            message += temp_message % max_multi_builds + "\n"
+            message += temp_message % cgi.escape(str(max_multi_builds)) + "\n"
             last_build = first_build + max_multi_builds
 
         message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
