@@ -14,6 +14,7 @@ environment parameters
 - issue #64 : Use queue and worker in heroku
 - issue #84 : Add Service statistics page
 - issue #99 : Enable auto refreshing dashboard charts with `refresh` url parameter
+- issue #89 : add batch mode to process multiple builds
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
