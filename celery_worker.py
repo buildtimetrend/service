@@ -31,8 +31,10 @@ import constants
 def is_worker_enabled():
     """Check if a task queue is configured."""
     task_queue = Settings().get_setting("task_queue")
+    # use double not to force boolean evaluation
     return check_dict(task_queue, key_list=["broker_url", "backend"]) and \
-        task_queue["broker_url"] and task_queue["backend"]
+        not (not task_queue["broker_url"]) and \
+        not (not task_queue["backend"])
 
 
 def create_worker_app():
