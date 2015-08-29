@@ -48,24 +48,31 @@ class TestCeleryWorker(unittest.TestCase):
         self.assertFalse(is_worker_enabled())
 
         # should return false when not both parameters are defined
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting("task_queue", {"broker_url": ""})
         self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting("task_queue", {"backend": ""})
         self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting("task_queue", {"broker_url": "amqp://"})
         self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting("task_queue", {"backend": "amqp"})
         self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting(
             "task_queue", {"broker_url": "", "backend": ""}
         )
         self.assertFalse(is_worker_enabled())
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting(
             "task_queue", {"broker_url": None, "backend": None}
         )
         self.assertFalse(is_worker_enabled())
 
         # should return true when both parameters are defined
+        self.settings.add_setting("task_queue", None)
         self.settings.add_setting(
             "task_queue", {"broker_url": "redis://", "backend": "redis"}
         )
