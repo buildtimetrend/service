@@ -205,8 +205,8 @@ The backend type (amqp, redis, ...) associated with the environment variable wil
 ```yaml
 buildtimetrend:
     multi_import:
-        max_builds: "100" # maximum number of builds allowed in one batch
-        delay: "3" # number of seconds between the start of each build
+        max_builds: 100 # maximum number of builds allowed in one batch
+        delay: 3 # number of seconds between the start of each build
 ```
 Setting `max_builds` is 100 by default, and can also be set with the `BTT_MULTI_MAX_BUILDS` environment variable.
 Setting `delay` is 3 seconds by default, and can also be set with the `BTT_MULTI_DELAY` environment variable.
