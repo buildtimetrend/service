@@ -52,6 +52,12 @@ def create_worker_app():
             broker=task_queue["broker_url"]
         )
 
+        # configure worker
+        worker_app.conf.update(
+            CELERY_TASK_SERIALIZER = 'json',
+            CELERY_ACCEPT_CONTENT = ['json']
+        )
+
         if worker_app is None:
             logger.error("Error connection to task queue")
         else:
