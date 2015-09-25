@@ -15,6 +15,7 @@ environment parameters
 - issue #84 : Add Service statistics page
 - issue #99 : Enable auto refreshing dashboard charts with `refresh` url parameter
 - issue #89 : add batch mode to process multiple builds
+- issue #95 : don't use pickle as the celery serialiser, due to security concerns
 
 v0.2 (released on 18Feb2015)
 - issue #4, #51 : Use heroku to process Travis logs asynchronously
