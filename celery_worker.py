@@ -54,8 +54,8 @@ def create_worker_app():
 
         # configure worker
         worker_app.conf.update(
-            CELERY_TASK_SERIALIZER = 'json',
-            CELERY_ACCEPT_CONTENT = ['json']
+            CELERY_TASK_SERIALIZER='json',
+            CELERY_ACCEPT_CONTENT=['json']
         )
 
         if worker_app is None:
