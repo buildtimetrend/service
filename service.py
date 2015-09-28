@@ -455,7 +455,7 @@ class TravisParser(object):
 
         return message
 
-    def schedule_task(self, repo, build, delay = 0):
+    def schedule_task(self, repo, build, delay=0):
         """
         Schedule task.
 
