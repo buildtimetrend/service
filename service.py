@@ -443,9 +443,11 @@ class TravisParser(object):
             last_build = first_build + max_multi_builds
 
         message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
-            (cgi.escape(str(first_build)),
-            cgi.escape(str(last_build)),
-            cgi.escape(str(repo)))
+            (
+                cgi.escape(str(first_build)),
+                cgi.escape(str(last_build)),
+                cgi.escape(str(repo))
+            )
 
         build = first_build
         delay = 0
