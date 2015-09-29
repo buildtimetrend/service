@@ -412,7 +412,8 @@ class TravisParser(object):
 
         if last_build is None:
             self.logger.warning(
-                "Request to process build #%s of repo %s", str(first_build), str(repo)
+                "Request to process build #%s of repo %s",
+                str(first_build), str(repo)
             )
 
             # schedule task with 10 second delay to give Travis CI time
@@ -429,15 +430,16 @@ class TravisParser(object):
         max_multi_builds = multi_import["max_builds"]
 
         if last_build < first_build:
-            temp_message = "Warning : last_build should be equal or larger than first_build"
-            self.logger.warning(temp_message)
-            message += temp_message + "\n"
+            tmp_msg = "Warning : last_build should be equal" \
+                " or larger than first_build"
+            self.logger.warning(tmp_msg)
+            message += tmp_msg + "\n"
             last_build = first_build
 
         if (last_build - first_build) > max_multi_builds:
-            temp_message = "Warning : number of multiple builds is limited to %s"
-            self.logger.warning(temp_message, max_multi_builds)
-            message += temp_message % cgi.escape(str(max_multi_builds)) + "\n"
+            tmp_msg = "Warning : number of multiple builds is limited to %s"
+            self.logger.warning(tmp_msg, max_multi_builds)
+            message += tmp_msg % cgi.escape(str(max_multi_builds)) + "\n"
             last_build = first_build + max_multi_builds
 
         message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
