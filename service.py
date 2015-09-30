@@ -423,6 +423,23 @@ class TravisParser(object):
         return self.multi_build(repo, first_build, last_build)
 
     def multi_build(self, repo, first_build, last_build):
+        """
+        Schedule processing multiple consecutive builds.
+
+        All builds from first_build until last_build
+        will be retrieved and processed.
+
+        The total number of builds to be scheduled is limited by the
+        `multi_import.max_builds` config parameter.
+
+        Every next scheduled build will be delayed by the
+        `multi_import.delay` config parameter.
+
+        Parameters:
+        - repo : repo name (fe. buildtimetrend/service)
+        - first_build : first build number to process (int)
+        - last_build : last build number to process (int)
+        """
         first_build = int(first_build)
         last_build = int(last_build)
         message = ""
