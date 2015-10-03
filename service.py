@@ -142,14 +142,14 @@ class Dashboard(object):
                     (DASHBOARD_URL, cgi.escape(repo_slug))
 
                 # add url parameters
-                urlParams = {}
+                url_params = {}
                 if refresh is not None:
-                    urlParams['refresh'] = refresh
+                    url_params['refresh'] = refresh
                 if timeframe is not None:
-                    urlParams['timeframe'] = timeframe
+                    url_params['timeframe'] = timeframe
 
-                if urlParams:
-                    url = "%s?%s" % (url, urllib.urlencode(urlParams))
+                if url_params:
+                    url = "%s?%s" % (url, urllib.urlencode(url_params))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
