@@ -33,7 +33,7 @@ from buildtimetrend.service import check_process_parameters
     bind=True,
     ignore_result=True,
     max_retries=5,
-    default_retry_delay=30 * 60 # 30 minutes in seconds
+    default_retry_delay=30 * 60  # 30 minutes in seconds
 )
 def process_travis_buildlog(self, repo, build):
     """
