@@ -61,11 +61,12 @@ This will launch a CherryPy instance hosting the service on port 5000.
 Display a dashboard with Buildtime Trend charts
 
 - path : `/dashboard`
-- usage : `/dashboard/repo_owner/repo_name?refresh=<refresh_rate>`
+- usage : `/dashboard/repo_owner/repo_name?refresh=<refresh_rate>&timeframe=<timeframe_setting>`
 - parameters :
   - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
   - `repo_name` : name of the Github repo, fe. `service`
   - `refresh` (optional) : enables auto-refreshing the dashboard charts. 0 = disabled (default), a positive integer is the number of minutes after which the charts are refreshed, a value of 10 will refresh the charts every 10 minutes. The refresh rate should at least be equal to maximum age of the Query cache, if it is less, the cache max age value will be used (typically, 10 min).
+  - `timeframe` (optional) : the default timeframe can be set with this url parameter. Possible values : `day`, `week`, `month`, `year`. If it is not defined the default timeframe is used (`week`)
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
 
@@ -74,6 +75,9 @@ Display a dashboard with Buildtime Trend charts
 Display a dashboard with Buildtime Trend service usage statistics
 
 - path : `/stats`
+- usage : `/stats?timeframe=<timeframe_setting>`
+- parameters :
+  - `timeframe` (optional) : the default timeframe can be set with this url parameter. Possible values : `day`, `week`, `month`, `year`. If it is not defined the default timeframe is used (`week`)
 
 ### Shield badges
 

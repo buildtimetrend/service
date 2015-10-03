@@ -31,6 +31,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import os
 import cgi
 import cherrypy
+import urllib
 import constants
 from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
@@ -112,7 +113,8 @@ class Dashboard(object):
             raise cherrypy.HTTPError(404, "File not found")
 
     @cherrypy.expose
-    def default(self, repo_owner=None, repo_name=None, page="", refresh=None):
+    def default(self, repo_owner=None, repo_name=None, page="",
+                refresh=None, timeframe=None):
         """
         Default page.
 
@@ -138,8 +140,16 @@ class Dashboard(object):
                 repo_slug = get_repo_slug(repo_owner, repo_name)
                 url = "%s/%s/index.html" % \
                     (DASHBOARD_URL, cgi.escape(repo_slug))
+
+                # add url parameters
+                urlParams = {}
                 if refresh is not None:
-                    url = "%s?refresh=%s" % (url, cgi.escape(refresh))
+                    urlParams['refresh'] = refresh
+                if timeframe is not None:
+                    urlParams['timeframe'] = timeframe
+
+                if urlParams:
+                    url = "%s?%s" % (url, urllib.urlencode(urlParams))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
@@ -191,7 +201,7 @@ class Stats(object):
         )
 
     @cherrypy.expose
-    def index(self):
+    def index(self, timeframe=None, count=None):
         """Service usage stats page."""
         # Create usage stats page for Buildtime Trend as a Service,
         # if it doesn't exist, or if it is older than the file from
