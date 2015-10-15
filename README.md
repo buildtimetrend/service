@@ -67,6 +67,12 @@ Display a dashboard with Buildtime Trend charts
   - `repo_name` : name of the Github repo, fe. `service`
   - `refresh` (optional) : enables auto-refreshing the dashboard charts. 0 = disabled (default), a positive integer is the number of minutes after which the charts are refreshed, a value of 10 will refresh the charts every 10 minutes. The refresh rate should at least be equal to maximum age of the Query cache, if it is less, the cache max age value will be used (typically, 10 min).
   - `timeframe` (optional) : the default timeframe can be set with this url parameter. Possible values : `day`, `week`, `month`, `year`. If it is not defined the default timeframe is used (`week`)
+  - `filter_*` : set the default filter value. When this url parameter is defined, the corresponding filter dropdown will be set to this value and it will be applied to the queries of all charts and metrics. Available filters :
+    - `filter_build_matrix` : Build matrix environment settings, usually a combination of language, language version and operating system : fe. `python 2.7 linux`
+    - `filter_build_result` : Build job result, possible values : `passed`, `errored`, `failed`, ...
+    - `filter_build_trigger` : What triggered the build job, possible values : `pull_request`, `push` (git push)
+    - `filter_branch` : Repository branch that was build : fe. `master`
+
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
 

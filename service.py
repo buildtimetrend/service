@@ -114,7 +114,9 @@ class Dashboard(object):
 
     @cherrypy.expose
     def default(self, repo_owner=None, repo_name=None, page="",
-                refresh=None, timeframe=None):
+                refresh=None, timeframe=None,
+                filter_build_matrix=None, filter_build_result=None,
+                filter_build_trigger=None, filter_branch=None):
         """
         Default page.
 
@@ -147,6 +149,14 @@ class Dashboard(object):
                     url_params['refresh'] = refresh
                 if timeframe is not None:
                     url_params['timeframe'] = timeframe
+                if filter_build_matrix is not None:
+                    url_params['filter_build_matrix'] = filter_build_matrix
+                if filter_build_result is not None:
+                    url_params['filter_build_result'] = filter_build_result
+                if filter_build_trigger is not None:
+                    url_params['filter_build_trigger'] = filter_build_trigger
+                if filter_branch is not None:
+                    url_params['filter_branch'] = filter_branch
 
                 if url_params:
                     url = "%s?%s" % (url, urllib.urlencode(url_params))
