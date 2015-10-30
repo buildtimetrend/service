@@ -33,8 +33,8 @@ def is_worker_enabled():
     task_queue = Settings().get_setting("task_queue")
     # use double not to force boolean evaluation
     return check_dict(task_queue, key_list=["broker_url", "backend"]) and \
-        not (not task_queue["broker_url"]) and \
-        not (not task_queue["backend"])
+        not not task_queue["broker_url"] and \
+        not not task_queue["backend"]
 
 
 def create_worker_app():
