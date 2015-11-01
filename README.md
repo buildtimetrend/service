@@ -39,11 +39,23 @@ Or you can clone the project and deploy it to Heroku.
 
 Or run it on your own server :
 
+- Launch a CherryPy instance hosting the service :
+
 ```bash
 python service.py
 ```
 
-This will launch a CherryPy instance hosting the service on port 5000.
+> **Remark :** By default it will attach to port 5000, use environment variable `PORT` to override this.
+
+More [configuration options](#config-file) are available.
+
+- To enable a worker to handle the task queue (optional) :
+
+```bash
+utils/start_worker.sh
+```
+
+A Celery compatible task queue service is required to use the task queue, see the `task_queue` config parameter in the [configuration options](#config-file) section.
 
 ## Components
 
