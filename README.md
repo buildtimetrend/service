@@ -146,7 +146,7 @@ Loads a Travis CI build log file, processes it and sends the data to Keen.io.
 
 If `last_build` is not defined, only a single build will be processed, namely the one defined by `first_build`.
 If `last_build` is defined, it turns into batch mode : multiple builds will be processed : all builds from `first_build` to and including `last_build` will be scheduled to be processed.
-To limit the load on the worker, a delay is added to every next build. F.e. build #1 will be executed immediately, build #2 after x seconds, build #3 after x*2 seconds, build #n after x*(n-1) seconds.
+To limit the load on the worker, a delay is added to every next build. F.e. build #1 will be executed immediately, build #2 after x seconds, build #3 after x\*2 seconds, build #n after x\*(n-1) seconds.
 By default the delay is 3 seconds, but this can be configured with the `multi_import`.`delay` setting in `config_service.yml` or `BTT_MULTI_DELAY` env variable.
 The maximum number of builds that can be imported at once in batch mode is by default limited to 100. This can be configured with the `multi_import`.`max_builds` setting in `config_service.yml` or `BTT_MULTI_MAX_BUILDS` env variable.
 
