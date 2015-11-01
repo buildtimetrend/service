@@ -18,10 +18,10 @@ Visualise what's trending in your build process
 
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
-Usage
------
+## Usage
 
-The service is available on Heroku :
+### Use the service available on Heroku
+
 - production : https://buildtimetrend.herokuapp.com/
 
     Currently in beta.
@@ -35,9 +35,11 @@ The service is available on Heroku :
     Used for development, expect frequent changes, accepts only a limited number of projects.
     [Contact us](#Contact) if you'd like to test the development version. It's recommended to use the production version.
 
-Or you can clone the project and deploy it to Heroku.
+### Clone the project and deploy it to Heroku
 
-Or run it on your own server :
+See [instructions on the wiki](https://github.com/buildtimetrend/python-lib/wiki/Running-service-on-Heroku) on how to configure the service on Heroku.
+
+### Run it on your own server
 
 - Launch a CherryPy instance hosting the service :
 
