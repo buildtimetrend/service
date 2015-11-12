@@ -31,6 +31,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import os
 import cgi
 import cherrypy
+import urllib
 import constants
 from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
@@ -112,7 +113,10 @@ class Dashboard(object):
             raise cherrypy.HTTPError(404, "File not found")
 
     @cherrypy.expose
-    def default(self, repo_owner=None, repo_name=None, page="", refresh=None):
+    def default(self, repo_owner=None, repo_name=None, page="",
+                refresh=None, timeframe=None,
+                filter_build_matrix=None, filter_build_result=None,
+                filter_build_trigger=None, filter_branch=None):
         """
         Default page.
 
@@ -138,8 +142,24 @@ class Dashboard(object):
                 repo_slug = get_repo_slug(repo_owner, repo_name)
                 url = "%s/%s/index.html" % \
                     (DASHBOARD_URL, cgi.escape(repo_slug))
+
+                # add url parameters
+                url_params = {}
                 if refresh is not None:
-                    url = "%s?refresh=%s" % (url, cgi.escape(refresh))
+                    url_params['refresh'] = refresh
+                if timeframe is not None:
+                    url_params['timeframe'] = timeframe
+                if filter_build_matrix is not None:
+                    url_params['filter_build_matrix'] = filter_build_matrix
+                if filter_build_result is not None:
+                    url_params['filter_build_result'] = filter_build_result
+                if filter_build_trigger is not None:
+                    url_params['filter_build_trigger'] = filter_build_trigger
+                if filter_branch is not None:
+                    url_params['filter_branch'] = filter_branch
+
+                if url_params:
+                    url = "%s?%s" % (url, urllib.urlencode(url_params))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
@@ -191,7 +211,7 @@ class Stats(object):
         )
 
     @cherrypy.expose
-    def index(self):
+    def index(self, timeframe=None, count=None):
         """Service usage stats page."""
         # Create usage stats page for Buildtime Trend as a Service,
         # if it doesn't exist, or if it is older than the file from
@@ -412,7 +432,8 @@ class TravisParser(object):
 
         if last_build is None:
             self.logger.warning(
-                "Request to process build #%s of repo %s", str(first_build), str(repo)
+                "Request to process build #%s of repo %s",
+                str(first_build), str(repo)
             )
 
             # schedule task with 10 second delay to give Travis CI time
@@ -422,6 +443,23 @@ class TravisParser(object):
         return self.multi_build(repo, first_build, last_build)
 
     def multi_build(self, repo, first_build, last_build):
+        """
+        Schedule processing multiple consecutive builds.
+
+        All builds from first_build until last_build
+        will be retrieved and processed.
+
+        The total number of builds to be scheduled is limited by the
+        `multi_import.max_builds` config parameter.
+
+        Every next scheduled build will be delayed by the
+        `multi_import.delay` config parameter.
+
+        Parameters:
+        - repo : repo name (fe. buildtimetrend/service)
+        - first_build : first build number to process (int)
+        - last_build : last build number to process (int)
+        """
         first_build = int(first_build)
         last_build = int(last_build)
         message = ""
@@ -429,21 +467,24 @@ class TravisParser(object):
         max_multi_builds = multi_import["max_builds"]
 
         if last_build < first_build:
-            temp_message = "Warning : last_build should be equal or larger than first_build"
-            self.logger.warning(temp_message)
-            message += temp_message + "\n"
+            tmp_msg = "Warning : last_build should be equal" \
+                " or larger than first_build"
+            self.logger.warning(tmp_msg)
+            message += tmp_msg + "\n"
             last_build = first_build
 
         if (last_build - first_build) > max_multi_builds:
-            temp_message = "Warning : number of multiple builds is limited to %s"
-            self.logger.warning(temp_message, max_multi_builds)
-            message += temp_message % cgi.escape(str(max_multi_builds)) + "\n"
+            tmp_msg = "Warning : number of multiple builds is limited to %s"
+            self.logger.warning(tmp_msg, max_multi_builds)
+            message += tmp_msg % cgi.escape(str(max_multi_builds)) + "\n"
             last_build = first_build + max_multi_builds
 
         message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
-            (cgi.escape(str(first_build)),
-            cgi.escape(str(last_build)),
-            cgi.escape(str(repo)))
+            (
+                cgi.escape(str(first_build)),
+                cgi.escape(str(last_build)),
+                cgi.escape(str(repo))
+            )
 
         build = first_build
         delay = 0
@@ -455,7 +496,7 @@ class TravisParser(object):
 
         return message
 
-    def schedule_task(self, repo, build, delay = 0):
+    def schedule_task(self, repo, build, delay=0):
         """
         Schedule task.
 

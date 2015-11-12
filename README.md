@@ -18,10 +18,10 @@ Visualise what's trending in your build process
 
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
-Usage
------
+## Usage
 
-The service is available on Heroku :
+### Use the service available on Heroku
+
 - production : https://buildtimetrend.herokuapp.com/
 
     Currently in beta.
@@ -35,15 +35,29 @@ The service is available on Heroku :
     Used for development, expect frequent changes, accepts only a limited number of projects.
     [Contact us](#Contact) if you'd like to test the development version. It's recommended to use the production version.
 
-Or you can clone the project and deploy it to Heroku.
+### Clone the project and deploy it to Heroku
 
-Or run it on your own server :
+See [instructions on the wiki](https://github.com/buildtimetrend/python-lib/wiki/Running-service-on-Heroku) on how to configure the service on Heroku.
+
+### Run it on your own server
+
+- Launch a CherryPy instance hosting the service :
 
 ```bash
 python service.py
 ```
 
-This will launch a CherryPy instance hosting the service on port 5000.
+> **Remark :** By default it will attach to port 5000, use environment variable `PORT` to override this.
+
+More [configuration options](#config-file) are available.
+
+- To enable a worker to handle the task queue (optional) :
+
+```bash
+utils/start_worker.sh
+```
+
+A Celery compatible task queue service is required to use the task queue, see the `task_queue` config parameter in the [configuration options](#config-file) section.
 
 ## Components
 
@@ -61,11 +75,18 @@ This will launch a CherryPy instance hosting the service on port 5000.
 Display a dashboard with Buildtime Trend charts
 
 - path : `/dashboard`
-- usage : `/dashboard/repo_owner/repo_name?refresh=<refresh_rate>`
+- usage : `/dashboard/repo_owner/repo_name?refresh=<refresh_rate>&timeframe=<timeframe_setting>`
 - parameters :
   - `repo_owner` : name of the Github repo owner, fe. `buildtimetrend`
   - `repo_name` : name of the Github repo, fe. `service`
   - `refresh` (optional) : enables auto-refreshing the dashboard charts. 0 = disabled (default), a positive integer is the number of minutes after which the charts are refreshed, a value of 10 will refresh the charts every 10 minutes. The refresh rate should at least be equal to maximum age of the Query cache, if it is less, the cache max age value will be used (typically, 10 min).
+  - `timeframe` (optional) : the default timeframe can be set with this url parameter. Possible values : `day`, `week`, `month`, `year`. If it is not defined the default timeframe is used (`week`)
+  - `filter_*` : set the default filter value. When this url parameter is defined, the corresponding filter dropdown will be set to this value and it will be applied to the queries of all charts and metrics. Available filters :
+    - `filter_build_matrix` : Build matrix environment settings, usually a combination of language, language version and operating system : fe. `python 2.7 linux`
+    - `filter_build_result` : Build job result, possible values : `passed`, `errored`, `failed`, ...
+    - `filter_build_trigger` : What triggered the build job, possible values : `pull_request`, `push` (git push)
+    - `filter_branch` : Repository branch that was build : fe. `master`
+
 
 > **Remark :** When visiting `/dashboard` (without parameters), an overview of all hosted projects is displayed.
 
@@ -74,6 +95,9 @@ Display a dashboard with Buildtime Trend charts
 Display a dashboard with Buildtime Trend service usage statistics
 
 - path : `/stats`
+- usage : `/stats?timeframe=<timeframe_setting>`
+- parameters :
+  - `timeframe` (optional) : the default timeframe can be set with this url parameter. Possible values : `day`, `week`, `month`, `year`. If it is not defined the default timeframe is used (`week`)
 
 ### Shield badges
 
@@ -124,7 +148,7 @@ Loads a Travis CI build log file, processes it and sends the data to Keen.io.
 
 If `last_build` is not defined, only a single build will be processed, namely the one defined by `first_build`.
 If `last_build` is defined, it turns into batch mode : multiple builds will be processed : all builds from `first_build` to and including `last_build` will be scheduled to be processed.
-To limit the load on the worker, a delay is added to every next build. F.e. build #1 will be executed immediately, build #2 after x seconds, build #3 after x*2 seconds, build #n after x*(n-1) seconds.
+To limit the load on the worker, a delay is added to every next build. F.e. build #1 will be executed immediately, build #2 after x seconds, build #3 after x\*2 seconds, build #n after x\*(n-1) seconds.
 By default the delay is 3 seconds, but this can be configured with the `multi_import`.`delay` setting in `config_service.yml` or `BTT_MULTI_DELAY` env variable.
 The maximum number of builds that can be imported at once in batch mode is by default limited to 100. This can be configured with the `multi_import`.`max_builds` setting in `config_service.yml` or `BTT_MULTI_MAX_BUILDS` env variable.
 
@@ -150,6 +174,7 @@ Config file
 Add a configfile named `config_service.yml` based on `config_sample.yml` to configure the way the service behaves.
 
 - `denied_repo` : defines which repos are not allowed by the service. If the `denied_repo` setting is not defined, all repos are allowed (unless `allowed_repo` is defined, see below). If a substring matches the repo name, it is denied, so fe. `my_name` will disallow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is valid as well.
+
 > **Remark :** Setting `denied_repo` takes precedence over `allowed_repo`, if a repo name matches a rule in `denied_repo` setting, the repo will be denied, even if it matches a rule in `allowed_repo`.
 Multiple entries are allowed, fe. :
 
@@ -161,6 +186,7 @@ buildtimetrend:
 ```
 
 - `allowed_repo` : defines which repos are allowed by the service. If the `allowed_repo` setting is not defined, all repos are allowed (unless denied by the `denied_repo` setting). If substring matches the repo name, it is allowed, so fe. `my_name` will allow `my_name/my_first_repo` and `my_name/another_repo`. A complete repo name is allowed as well.
+
 > **Remark :** Setting `denied_repo` takes precedence over `allowed_repo`, if a repo name matches a rule in `denied_repo` setting, the repo will be denied, even if it matches a rule in `allowed_repo`.
 Multiple entries are allowed, fe. :
 
@@ -218,6 +244,8 @@ Dependencies
 - `cherrypy` : [CherrPy](http://www.cherrypy.org/) A Minimalist Python Web Framework, making the API available as a web service
 - `celery` : [Celery](http://www.celeryproject.org/) : Distributed Task Queue
 
+See `requirements.txt` for package names and versions.
+
 Bugs and feature requests
 -------------------------
 
@@ -232,7 +260,7 @@ We are looking for testers, developers, designers, ... and what more. [Contact u
 Donations
 ---------
 
-You can also support the project by making a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG9M6QTBS9LKL). They will help pay for the hosting and support further development.
+You can support the project by making a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LG9M6QTBS9LKL). The donations will help pay for the hosting and support further development.
 
 Credits
 -------
