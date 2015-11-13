@@ -47,7 +47,7 @@ def process_travis_buildlog(self, repo, build):
 
     try:
         result = check_process_parameters(repo, build)
-    except Exception, msg:
+    except Exception as msg:
         if self.request.called_directly:
             return msg
         else:
