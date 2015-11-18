@@ -7,7 +7,6 @@
     <meta name="description" content="Buildtime Trend as a Service : Visualise what&#39;s trending in your build process">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
 
     <title>Buildtime Trend as a Service</title>
   </head>
@@ -18,8 +17,7 @@
     <div id="header_wrap" class="outer">
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/buildtimetrend/service">View on GitHub</a>
-          <a href="https://buildtimetrend.github.io/"><img id="project_logo" src="/images/logo.png" width="100px" alt="Buildtime Trend logo" /></a>
-          
+
           <h1 id="project_title">Buildtime Trend as a Service</h1>
           <h2 id="project_tagline">Visualise what&#39;s trending in your build process</h2>
 
@@ -33,16 +31,59 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>This project offers the Buildtime Trend project as a service. The <a href="https://github.com/buildtimetrend/python-lib">Buildtime Trend library</a> powers this service.</p>
+        <p>This project contains the files that offer Buildtime Trend as a service. The <a href="https://github.com/buildtimetrend/python-lib">Buildtime Trend library</a> powers this service.</p>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>The service is available (in beta) on Heroku, feel free to try it out : <a href="http://buildtimetrend.herokuapp.com/">http://buildtimetrend.herokuapp.com/</a></p>
+<h3>
+<a id="use-the-service-available-on-heroku" class="anchor" href="#use-the-service-available-on-heroku" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use the service available on Heroku</h3>
 
-<p>It's available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.</p>
+<ul>
+<li>
+<p>production : <a href="https://buildtimetrend.herokuapp.com/">https://buildtimetrend.herokuapp.com/</a></p>
+
+<p>Currently in beta.</p>
+
+<p>Available for free for Open Source projects (public on GitHub), thanks to <a href="https://keen.io">Keen.io</a> for hosting the timing data.</p>
 
 <p>Private projects will be supported soon.</p>
+</li>
+<li>
+<p>development : <a href="https://buildtimetrend-dev.herokuapp.com/">https://buildtimetrend-dev.herokuapp.com/</a></p>
+
+<p>Used for development, expect frequent changes, accepts only a limited number of projects.
+<a href="#Contact">Contact us</a> if you'd like to test the development version. It's recommended to use the production version.</p>
+</li>
+</ul>
+
+<h3>
+<a id="clone-the-project-and-deploy-it-to-heroku" class="anchor" href="#clone-the-project-and-deploy-it-to-heroku" aria-hidden="true"><span class="octicon octicon-link"></span></a>Clone the project and deploy it to Heroku</h3>
+
+<p>See <a href="https://github.com/buildtimetrend/python-lib/wiki/Running-service-on-Heroku">instructions on the wiki</a> on how to configure the service on Heroku.</p>
+
+<h3>
+<a id="run-it-on-your-own-server" class="anchor" href="#run-it-on-your-own-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run it on your own server</h3>
+
+<ul>
+<li>Launch a CherryPy instance hosting the service :</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre>python service.py</pre></div>
+
+<blockquote>
+<p><strong>Remark :</strong> By default it will attach to port 5000, use environment variable <code>PORT</code> to override this.</p>
+</blockquote>
+
+<p>More <a href="#config-file">configuration options</a> are available.</p>
+
+<ul>
+<li>To enable a worker to handle the task queue (optional) :</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre>utils/start_worker.sh</pre></div>
+
+<p>A Celery compatible task queue service is required to use the task queue, see the <code>task_queue</code> config parameter in the <a href="#config-file">configuration options</a> section.</p>
 
 <h2>
 <a id="components" class="anchor" href="#components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Components</h2>
@@ -50,6 +91,7 @@
 <ul>
 <li><a href="#index-page">Index page</a></li>
 <li><a href="#dashboard">Dashboard</a></li>
+<li><a href="#service-usage-statistics">Service usage statistics</a></li>
 <li><a href="#shield-badges">Shield badges</a></li>
 <li><a href="#process-travis-ci-build-log">Process Travis CI build log</a></li>
 </ul>
@@ -70,7 +112,7 @@
 <ul>
 <li>path : <code>/dashboard</code>
 </li>
-<li>usage : <code>/dashboard/repo_owner/repo_name</code>
+<li>usage : <code>/dashboard/repo_owner/repo_name?refresh=&lt;refresh_rate&gt;&amp;timeframe=&lt;timeframe_setting&gt;</code>
 </li>
 <li>parameters :
 
@@ -81,6 +123,26 @@
 <li>
 <code>repo_name</code> : name of the Github repo, fe. <code>service</code>
 </li>
+<li>
+<code>refresh</code> (optional) : enables auto-refreshing the dashboard charts. 0 = disabled (default), a positive integer is the number of minutes after which the charts are refreshed, a value of 10 will refresh the charts every 10 minutes. The refresh rate should at least be equal to maximum age of the Query cache, if it is less, the cache max age value will be used (typically, 10 min).</li>
+<li>
+<code>timeframe</code> (optional) : the default timeframe can be set with this url parameter. Possible values : <code>day</code>, <code>week</code>, <code>month</code>, <code>year</code>. If it is not defined the default timeframe is used (<code>week</code>)</li>
+<li>
+<code>filter_*</code> : set the default filter value. When this url parameter is defined, the corresponding filter dropdown will be set to this value and it will be applied to the queries of all charts and metrics. Available filters :
+
+<ul>
+<li>
+<code>filter_build_matrix</code> : Build matrix environment settings, usually a combination of language, language version and operating system : fe. <code>python 2.7 linux</code>
+</li>
+<li>
+<code>filter_build_result</code> : Build job result, possible values : <code>passed</code>, <code>errored</code>, <code>failed</code>, ...</li>
+<li>
+<code>filter_build_trigger</code> : What triggered the build job, possible values : <code>pull_request</code>, <code>push</code> (git push)</li>
+<li>
+<code>filter_branch</code> : Repository branch that was build : fe. <code>master</code>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -88,6 +150,25 @@
 <blockquote>
 <p><strong>Remark :</strong> When visiting <code>/dashboard</code> (without parameters), an overview of all hosted projects is displayed.</p>
 </blockquote>
+
+<h3>
+<a id="service-usage-statistics" class="anchor" href="#service-usage-statistics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Service usage statistics</h3>
+
+<p>Display a dashboard with Buildtime Trend service usage statistics</p>
+
+<ul>
+<li>path : <code>/stats</code>
+</li>
+<li>usage : <code>/stats?timeframe=&lt;timeframe_setting&gt;</code>
+</li>
+<li>parameters :
+
+<ul>
+<li>
+<code>timeframe</code> (optional) : the default timeframe can be set with this url parameter. Possible values : <code>day</code>, <code>week</code>, <code>month</code>, <code>year</code>. If it is not defined the default timeframe is used (<code>week</code>)</li>
+</ul>
+</li>
+</ul>
 
 <h3>
 <a id="shield-badges" class="anchor" href="#shield-badges" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shield badges</h3>
@@ -148,43 +229,43 @@
 
 <ul>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/latest" alt="Latest build duration"> : <code>/badge/buildtimetrend/service/latest</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/latest" alt="Latest build duration"> : <code>/badge/buildtimetrend/service/latest</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/avg/week" alt="Average buildtime (week)"> : <code>/badge/buildtimetrend/service/avg/week</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/avg/week" alt="Average buildtime (week)"> : <code>/badge/buildtimetrend/service/avg/week</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/avg/month" alt="Average buildtime (month)"> : <code>/badge/buildtimetrend/service/avg/month</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/avg/month" alt="Average buildtime (month)"> : <code>/badge/buildtimetrend/service/avg/month</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/avg/year" alt="Average buildtime (year)"> : <code>/buildtimetrend/service/avg/year</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/avg/year" alt="Average buildtime (year)"> : <code>/buildtimetrend/service/avg/year</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/jobs/week" alt="Build jobs (week)"> : <code>/badge/buildtimetrend/service/jobs/week</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/jobs/week" alt="Build jobs (week)"> : <code>/badge/buildtimetrend/service/jobs/week</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/jobs/month" alt="Build jobs (month)"> : <code>/badge/buildtimetrend/service/jobs/month</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/jobs/month" alt="Build jobs (month)"> : <code>/badge/buildtimetrend/service/jobs/month</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/jobs/year" alt="Build jobs (year)"> : <code>/buildtimetrend/service/jobs/year</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/jobs/year" alt="Build jobs (year)"> : <code>/buildtimetrend/service/jobs/year</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/builds/week" alt="Builds (week)"> : <code>/badge/buildtimetrend/service/builds/week</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/week" alt="Builds (week)"> : <code>/badge/buildtimetrend/service/builds/week</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/builds/month" alt="Builds (month)"> : <code>/badge/buildtimetrend/service/builds/month</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/month" alt="Builds (month)"> : <code>/badge/buildtimetrend/service/builds/month</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/builds/year" alt="Builds (year)"> : <code>/buildtimetrend/service/builds/year</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/year" alt="Builds (year)"> : <code>/buildtimetrend/service/builds/year</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/passed/week" alt="% passed build jobs (week)"> : <code>/badge/buildtimetrend/service/passed/week</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/week" alt="% passed build jobs (week)"> : <code>/badge/buildtimetrend/service/passed/week</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/passed/month" alt="% passed build jobs (month)"> : <code>/badge/buildtimetrend/service/passed/month</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/month" alt="% passed build jobs (month)"> : <code>/badge/buildtimetrend/service/passed/month</code>
 </li>
 <li>
-<img src="https://buildtimetrend.herokuapp.com/badge/buildtimetrend/service/passed/year" alt="% passed build jobs (year)"> : <code>/badge/buildtimetrend/service/passed/year</code>
+<img src="https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/year" alt="% passed build jobs (year)"> : <code>/badge/buildtimetrend/service/passed/year</code>
 </li>
 </ul>
 
@@ -196,7 +277,7 @@
 <ul>
 <li>path : <code>/travis</code>
 </li>
-<li>usage : <code>/travis/repo_owner/repo_name/build</code>
+<li>usage : <code>/travis/&lt;repo_owner&gt;/&lt;repo_name&gt;/&lt;first_build&gt;/&lt;last_build&gt;</code>
 </li>
 <li>parameters :
 
@@ -208,10 +289,18 @@
 <code>repo_name</code> : name of the Github repo, fe. <code>service</code>
 </li>
 <li>
-<code>build</code> : Travis CI build ID</li>
+<code>first_build</code> : Travis CI build number of the first build to be processed</li>
+<li>
+<code>last_build</code> : (optional) Travis CI build number of the last build to be processed</li>
 </ul>
 </li>
 </ul>
+
+<p>If <code>last_build</code> is not defined, only a single build will be processed, namely the one defined by <code>first_build</code>.
+If <code>last_build</code> is defined, it turns into batch mode : multiple builds will be processed : all builds from <code>first_build</code> to and including <code>last_build</code> will be scheduled to be processed.
+To limit the load on the worker, a delay is added to every next build. F.e. build #1 will be executed immediately, build #2 after x seconds, build #3 after x*2 seconds, build #n after x*(n-1) seconds.
+By default the delay is 3 seconds, but this can be configured with the <code>multi_import</code>.<code>delay</code> setting in <code>config_service.yml</code> or <code>BTT_MULTI_DELAY</code> env variable.
+The maximum number of builds that can be imported at once in batch mode is by default limited to 100. This can be configured with the <code>multi_import</code>.<code>max_builds</code> setting in <code>config_service.yml</code> or <code>BTT_MULTI_MAX_BUILDS</code> env variable.</p>
 
 <p>OR</p>
 
@@ -223,7 +312,7 @@
 
 <p>To trigger the service at the end of a Travis CI build, add this to your <code>.travis.yml</code> file:</p>
 
-<div class="highlight highlight-yaml"><pre>    <span class="pl-s"><span class="pl-ent">notifications:</span></span>
+<div class="highlight highlight-source-yaml"><pre>    <span class="pl-s"><span class="pl-ent">notifications:</span></span>
       <span class="pl-s"><span class="pl-ent">webhooks:</span></span>
         <span class="pl-c"># trigger Buildtime Trend Service to parse Travis CI log and send result to Keen.io</span>
         <span class="pl-s">- <span class="pl-s">https://buildtimetrend.herokuapp.com/travis</span></span></pre></div>
@@ -237,24 +326,30 @@
 
 <ul>
 <li>
-<code>denied_repo</code> : defines which repos are not allowed by the service. If the <code>denied_repo</code> setting is not defined, all repos are allowed (unless <code>allowed_repo</code> is defined, see below). If a substring matches the repo name, it is denied, so fe. <code>my_name</code> will disallow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is valid as well.
-&gt; <strong>Remark :</strong> Setting <code>denied_repo</code> takes precedence over <code>allowed_repo</code>, if a repo name matches a rule in <code>denied_repo</code> setting, the repo will be denied, even if it matches a rule in <code>allowed_repo</code>.
-Multiple entries are allowed, fe. :</li>
+<code>denied_repo</code> : defines which repos are not allowed by the service. If the <code>denied_repo</code> setting is not defined, all repos are allowed (unless <code>allowed_repo</code> is defined, see below). If a substring matches the repo name, it is denied, so fe. <code>my_name</code> will disallow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is valid as well.</li>
 </ul>
 
-<div class="highlight highlight-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+<blockquote>
+<p><strong>Remark :</strong> Setting <code>denied_repo</code> takes precedence over <code>allowed_repo</code>, if a repo name matches a rule in <code>denied_repo</code> setting, the repo will be denied, even if it matches a rule in <code>allowed_repo</code>.
+Multiple entries are allowed, fe. :</p>
+</blockquote>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
   <span class="pl-s"><span class="pl-ent">denied_repo:</span></span>
     <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>my_name<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># denying all repo names that contain my_name</span>
     <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>another_name/some_repo<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># denies this specific repo</span></pre></div>
 
 <ul>
 <li>
-<code>allowed_repo</code> : defines which repos are allowed by the service. If the <code>allowed_repo</code> setting is not defined, all repos are allowed (unless denied by the <code>denied_repo</code> setting). If substring matches the repo name, it is allowed, so fe. <code>my_name</code> will allow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is allowed as well.
-&gt; <strong>Remark :</strong> Setting <code>denied_repo</code> takes precedence over <code>allowed_repo</code>, if a repo name matches a rule in <code>denied_repo</code> setting, the repo will be denied, even if it matches a rule in <code>allowed_repo</code>.
-Multiple entries are allowed, fe. :</li>
+<code>allowed_repo</code> : defines which repos are allowed by the service. If the <code>allowed_repo</code> setting is not defined, all repos are allowed (unless denied by the <code>denied_repo</code> setting). If substring matches the repo name, it is allowed, so fe. <code>my_name</code> will allow <code>my_name/my_first_repo</code> and <code>my_name/another_repo</code>. A complete repo name is allowed as well.</li>
 </ul>
 
-<div class="highlight highlight-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+<blockquote>
+<p><strong>Remark :</strong> Setting <code>denied_repo</code> takes precedence over <code>allowed_repo</code>, if a repo name matches a rule in <code>denied_repo</code> setting, the repo will be denied, even if it matches a rule in <code>allowed_repo</code>.
+Multiple entries are allowed, fe. :</p>
+</blockquote>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
   <span class="pl-s"><span class="pl-ent">allowed_repo:</span></span>
     <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>my_name<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># allowing all repo names that contain my_name</span>
     <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>another_name/some_repo<span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># allows this specific repo</span></pre></div>
@@ -277,7 +372,7 @@ It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.<
 <li><p><code>task_queue</code> : configures using a task queue, powered by Celery, to process background tasks by a worker. Celery supports different kinds of backend task queues, which can be configured :</p></li>
 </ul>
 
-<div class="highlight highlight-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
     <span class="pl-s"><span class="pl-ent">task_queue:</span></span>
         <span class="pl-s"><span class="pl-ent">backend:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># backend type fe. amqp, redis, ...</span>
         <span class="pl-s"><span class="pl-ent">broker_url:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span><span class="pl-s"> </span></span><span class="pl-c"># backend instance url, format : transport://userid:password@hostname:port/virtual_host</span></pre></div>
@@ -292,6 +387,9 @@ It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.<
 <li>
 <code>BTT_REDIS_URL</code> : set a Redis based task queue instance. (fe. redis://localhost/)</li>
 <li>
+<code>RABBITMQ_BIGWIG_URL</code> : environment variable set when creating a <a href="https://elements.heroku.com/addons/rabbitmq-bigwig">RabbitMQ Bigwig instance on Heroku</a>
+</li>
+<li>
 <code>CLOUDAMQP_URL</code> : environment variable set when creating a <a href="https://elements.heroku.com/addons/cloudamqp">Cloud AMQP RabbitMQ instance on Heroku</a>
 </li>
 <li>
@@ -301,6 +399,19 @@ It can also be defined with the <code>BTT_LOGLEVEL</code> environment variable.<
 
 <p>The environment variables are checked in this order, the first one that is defined, will be used.
 The backend type (amqp, redis, ...) associated with the environment variable will be set automatically.</p>
+
+<ul>
+<li>
+<code>multi_import</code> : configures batch mode when importing build timing data.</li>
+</ul>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">buildtimetrend:</span></span>
+    <span class="pl-s"><span class="pl-ent">multi_import:</span></span>
+        <span class="pl-c1"><span class="pl-ent">max_builds:</span> 100 </span><span class="pl-c"># maximum number of builds allowed in one batch</span>
+        <span class="pl-c1"><span class="pl-ent">delay:</span> 3 </span><span class="pl-c"># number of seconds between the start of each build</span></pre></div>
+
+<p>Setting <code>max_builds</code> is 100 by default, and can also be set with the <code>BTT_MULTI_MAX_BUILDS</code> environment variable.
+Setting <code>delay</code> is 3 seconds by default, and can also be set with the <code>BTT_MULTI_DELAY</code> environment variable.</p>
 
 <h2>
 <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
@@ -315,10 +426,23 @@ The backend type (amqp, redis, ...) associated with the environment variable wil
 <code>celery</code> : <a href="http://www.celeryproject.org/">Celery</a> : Distributed Task Queue</li>
 </ul>
 
+<p>See <code>requirements.txt</code> for package names and versions.</p>
+
 <h2>
 <a id="bugs-and-feature-requests" class="anchor" href="#bugs-and-feature-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bugs and feature requests</h2>
 
 <p>Please report bugs and add feature requests in the Github <a href="https://github.com/buildtimetrend/python-lib/issues">issue tracker</a>.</p>
+
+<h2>
+<a id="contribute" class="anchor" href="#contribute" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contribute</h2>
+
+<p>If you want to contribute to make Buildtime Trend even better, check out the <a href="https://github.com/buildtimetrend/python-lib/wiki/Contribute">contribution</a> page.
+We are looking for testers, developers, designers, ... and what more. <a href="#contact">Contact us</a> if you want to help out.</p>
+
+<h2>
+<a id="donations" class="anchor" href="#donations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Donations</h2>
+
+<p>You can support the project by making a <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=LG9M6QTBS9LKL">donation</a>. The donations will help pay for the hosting and support further development.</p>
 
 <h2>
 <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
