@@ -1,3 +1,5 @@
+v0.4 (not yet released)
+
 v0.3 (released on 18Nov2015)
 - issue #82 : use generator to return updates of TravisParser
 - issue #83 : check if build exists in database before submitting
