@@ -548,7 +548,7 @@ def get_config_project_list():
     and convert values from unicode to UTF8
     """
     allowed_projects = [
-        x.encode('UTF8') for x in get_all_projects() if is_repo_allowed(x)
+        str(x) for x in get_all_projects() if is_repo_allowed(x)
     ]
 
     if len(allowed_projects) > 0:
