@@ -144,8 +144,9 @@ class Dashboard(object):
                 url = DASHBOARD_URL
             else:
                 repo_slug = get_repo_slug(repo_owner, repo_name)
-                url = "%s/%s/index.html" % \
-                    (DASHBOARD_URL, cgi.escape(repo_slug))
+                url = '{:s}/{:s}/index.html'.format(
+                    DASHBOARD_URL, cgi.escape(repo_slug)
+                )
 
                 # add url parameters
                 url_params = {}
@@ -163,7 +164,9 @@ class Dashboard(object):
                     url_params['filter_branch'] = filter_branch
 
                 if url_params:
-                    url = "%s?%s" % (url, urllib.parse.urlencode(url_params))
+                    url = '{:s}?{:s}'.format(
+                        url, urllib.parse.urlencode(url_params)
+                    )
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
