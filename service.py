@@ -27,11 +27,15 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 
 import os
 import cgi
 import cherrypy
-import urllib
+import urllib.parse
 import constants
 from buildtimetrend.travis import process_notification_payload
 from buildtimetrend.travis import check_authorization
@@ -159,7 +163,7 @@ class Dashboard(object):
                     url_params['filter_branch'] = filter_branch
 
                 if url_params:
-                    url = "%s?%s" % (url, urllib.urlencode(url_params))
+                    url = "%s?%s" % (url, urllib.parse.urlencode(url_params))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
