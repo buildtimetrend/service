@@ -507,12 +507,14 @@ class TravisParser(object):
             task = tasks.process_travis_buildlog.apply_async(
                 (repo, build), countdown=int(delay)
             )
-            temp_msg = "Task scheduled to process build #%s of repo %s : %s"
-            self.logger.warning(temp_msg, str(build), str(repo), str(task.id))
-            return temp_msg % \
-                (cgi.escape(str(build)),
-                 cgi.escape(str(repo)),
-                 cgi.escape(str(task.id)))
+            temp_msg = "Task scheduled to process build #{build}" \
+                " of repo {repo} : {task_id}"
+            self.logger.warning(temp_msg.format(build=build, repo=repo, task_id=task.id))
+            return temp_msg.format(
+                build=cgi.escape(str(build)),
+                repo=cgi.escape(str(repo)),
+                task_id=cgi.escape(str(task.id))
+            )
         else:
             return tasks.process_travis_buildlog(repo, build)
 
