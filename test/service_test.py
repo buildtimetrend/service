@@ -39,8 +39,10 @@ class TestService(unittest.TestCase):
 
     @mock.patch('service.get_all_projects', return_value=[])
     def test_get_config_project_list(self, get_all_projects_func):
+        # test with empty project list
         self.assertDictEqual({}, get_config_project_list())
 
+        # test with project list with some items
         get_all_projects_func.return_value = [
             'ruleant/test',
             'ruleant/test1',
@@ -54,10 +56,12 @@ class TestService(unittest.TestCase):
             ]}, get_config_project_list()
         )
  
+        # test with limited list matching allowed repo name
         self.settings.add_setting("allowed_repo", {"test1"})
         self.assertDictEqual(
             {'projectList': ['ruleant/test1']}, get_config_project_list()
         )
 
+        # test with no repo matching allowed repo name
         self.settings.add_setting("allowed_repo", {"something"})
         self.assertDictEqual({}, get_config_project_list())
