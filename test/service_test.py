@@ -1,0 +1,63 @@
+# vim: set expandtab sw=4 ts=4:
+"""
+Unit tests for Service
+
+Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+
+This file is part of buildtimetrend/service
+<https://github.com/buildtimetrend/service/>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+"""
+
+from service import get_config_project_list
+from buildtimetrend.settings import Settings
+import unittest
+import mock
+
+
+class TestService(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.settings = Settings()
+
+    def setUp(self):
+        # reinit settings singleton
+        if self.settings is not None:
+            self.settings.__init__()
+
+    @mock.patch('service.get_all_projects', return_value=[])
+    def test_get_config_project_list(self, get_all_projects_func):
+        self.assertDictEqual({}, get_config_project_list())
+
+        get_all_projects_func.return_value = [
+            'ruleant/test',
+            'ruleant/test1',
+            'ruleant/test2'
+        ]
+        self.assertDictEqual(
+            {'projectList': [
+                'ruleant/test',
+                'ruleant/test1',
+                'ruleant/test2'
+            ]}, get_config_project_list()
+        )
+ 
+        self.settings.add_setting("allowed_repo", {"test1"})
+        self.assertDictEqual(
+            {'projectList': ['ruleant/test1']}, get_config_project_list()
+        )
+
+        self.settings.add_setting("allowed_repo", {"something"})
+        self.assertDictEqual({}, get_config_project_list())

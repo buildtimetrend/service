@@ -189,12 +189,12 @@ class Dashboard(object):
 
         # Check if repo is allowed
         if repo is not None and not is_repo_allowed(repo):
-            message = "Project '%s' is not allowed."
-            self.logger.info(message, repo)
-            extra['message'] = message % cgi.escape(repo)
+            message = "Project '{}' is not allowed."
+            self.logger.info(message.format(repo))
+            extra['message'] = message.format(cgi.escape(repo))
             repo = None
         else:
-            self.logger.info("Generated dashboard config for project %s", repo)
+            self.logger.info("Generated dashboard config for project {}".format(repo))
 
         # add project list
         extra.update(get_config_project_list())
@@ -362,11 +362,12 @@ class Root(object):
 
     def error_page_404(self, status, message, traceback, version):
         """Error Page (404)."""
-        self.logger.error("Cherrypy %s : Error loading page (%s) : %s\n"
-                          "Traceback : %s",
-                          version, status, message, traceback)
+        self.logger.error(
+            "Cherrypy {version} : Error loading page ({status}) : {message}\n"
+            "Traceback : {traceback}".format(**locals())
+        )
         return "This page doesn't exist, please check usage on " \
-               "the %s website." % SERVICE_WEBSITE_LINK
+               "the {} website.".format(SERVICE_WEBSITE_LINK)
 
 
 class TravisParser(object):
@@ -439,9 +440,9 @@ class TravisParser(object):
 
         if last_build is None:
             self.logger.warning(
-                "Request to process build #%s of repo %s",
-                str(first_build), str(repo)
-            )
+                "Request to process build #{build} of repo {repo}".format(
+                build=first_build, repo=repo
+            ))
 
             # schedule task with 10 second delay to give Travis CI time
             # to add the finished_at property. (issue #96)
@@ -471,7 +472,7 @@ class TravisParser(object):
         last_build = int(last_build)
         message = ""
         multi_import = Settings().get_setting("multi_import")
-        max_multi_builds = multi_import["max_builds"]
+        max_multi_builds = int(multi_import["max_builds"])
 
         if last_build < first_build:
             tmp_msg = "Warning : last_build should be equal" \
@@ -481,17 +482,13 @@ class TravisParser(object):
             last_build = first_build
 
         if (last_build - first_build) > max_multi_builds:
-            tmp_msg = "Warning : number of multiple builds is limited to %s"
-            self.logger.warning(tmp_msg, max_multi_builds)
-            message += tmp_msg % cgi.escape(str(max_multi_builds)) + "\n"
+            tmp_msg = "Warning : number of multiple builds is limited to {:d}"
+            self.logger.warning(tmp_msg.format(max_multi_builds))
+            message += tmp_msg.format(max_multi_builds) + "\n"
             last_build = first_build + max_multi_builds
 
-        message += "Request to process build(s) #%s to #%s of repo %s:\n" % \
-            (
-                cgi.escape(str(first_build)),
-                cgi.escape(str(last_build)),
-                cgi.escape(str(repo))
-            )
+        message += "Request to process build(s) #{first_build:d} to" \
+            " #{last_build:d} of repo {repo}:\n".format(**locals())
 
         build = first_build
         delay = 0
@@ -517,12 +514,14 @@ class TravisParser(object):
             task = tasks.process_travis_buildlog.apply_async(
                 (repo, build), countdown=int(delay)
             )
-            temp_msg = "Task scheduled to process build #%s of repo %s : %s"
-            self.logger.warning(temp_msg, str(build), str(repo), str(task.id))
-            return temp_msg % \
-                (cgi.escape(str(build)),
-                 cgi.escape(str(repo)),
-                 cgi.escape(str(task.id)))
+            temp_msg = "Task scheduled to process build #{build}" \
+                " of repo {repo} : {task_id}"
+            self.logger.warning(temp_msg.format(build=build, repo=repo, task_id=task.id))
+            return temp_msg.format(
+                build=cgi.escape(str(build)),
+                repo=cgi.escape(str(repo)),
+                task_id=cgi.escape(str(task.id))
+            )
         else:
             return tasks.process_travis_buildlog(repo, build)
 
@@ -555,7 +554,7 @@ def get_config_project_list():
     and convert values from unicode to UTF8
     """
     allowed_projects = [
-        x.encode('UTF8') for x in get_all_projects() if is_repo_allowed(x)
+        str(x) for x in get_all_projects() if is_repo_allowed(x)
     ]
 
     if len(allowed_projects) > 0:
