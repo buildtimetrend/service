@@ -187,7 +187,9 @@ class Dashboard(object):
             extra['message'] = message.format(cgi.escape(repo))
             repo = None
         else:
-            self.logger.info("Generated dashboard config for project {}".format(repo))
+            self.logger.info(
+              "Generated dashboard config for project '{}'".format(repo)
+            )
 
         # add project list
         extra.update(get_config_project_list())
@@ -509,7 +511,9 @@ class TravisParser(object):
             )
             temp_msg = "Task scheduled to process build #{build}" \
                 " of repo {repo} : {task_id}"
-            self.logger.warning(temp_msg.format(build=build, repo=repo, task_id=task.id))
+            self.logger.warning(
+              temp_msg.format(build=build, repo=repo, task_id=task.id)
+            )
             return temp_msg.format(
                 build=cgi.escape(str(build)),
                 repo=cgi.escape(str(repo)),
