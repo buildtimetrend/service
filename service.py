@@ -554,7 +554,8 @@ def get_config_project_list():
         str(x) for x in get_all_projects() if is_repo_allowed(x)
     ]
 
-    if len(allowed_projects) > 0:
+    # check if collection is empty
+    if allowed_projects:
         return {'projectList': allowed_projects}
     else:
         return {}

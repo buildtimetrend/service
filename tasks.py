@@ -82,11 +82,12 @@ def process_travis_buildlog(self, repo, build):
         ret_msg += "\n" + message % cgi.escape(build_job_id)
         send_build_data_service(build_job)
 
-    if len(travis_data.build_jobs) == 0:
-        message = "No data found for build #%s of %s"
-    else:
+    # check if collection is empty
+    if travis_data.build_jobs:
         message = "Successfully retrieved build #%s data of %s" \
             " from Travis CI and sent to Keen.io"
+    else:
+        message = "No data found for build #%s of %s"
     logger.warning(message, build, repo)
     ret_msg += "\n" + message % (cgi.escape(build), cgi.escape(repo))
     return ret_msg
