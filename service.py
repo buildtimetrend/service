@@ -47,8 +47,8 @@ from buildtimetrend.keenio import get_pct_passed_build_jobs
 from buildtimetrend.keenio import get_result_color
 from buildtimetrend.keenio import get_total_build_jobs
 from buildtimetrend.keenio import get_latest_buildtime
-from buildtimetrend.keenio import get_dashboard_config
 from buildtimetrend.keenio import get_all_projects
+from buildtimetrend.dashboard import get_config_string
 from buildtimetrend.service import is_repo_allowed
 from buildtimetrend.service import format_duration
 from buildtimetrend.service import validate_travis_request
@@ -195,7 +195,7 @@ class Dashboard(object):
         extra.update(get_config_project_list())
 
         # return config file
-        return get_dashboard_config(repo, extra)
+        return get_config_string(repo, extra)
 
 
 class Stats(object):
@@ -235,7 +235,7 @@ class Stats(object):
         extra.update(get_config_project_list())
 
         # return config file
-        return get_dashboard_config(None, extra)
+        return get_config_string(None, extra)
 
 
 class Badges(object):
