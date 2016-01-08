@@ -281,7 +281,7 @@ Follow us on [Twitter](https://twitter.com/buildtime_trend), [Github](https://gi
 License
 -------
 
-Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by

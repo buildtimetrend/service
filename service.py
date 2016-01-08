@@ -9,7 +9,7 @@ Service components :
 - /badge     : generate badges with metrics of project build data
 - /travis    : retrieve and parse build data from Travis CI
 
-Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This file is part of buildtimetrend/service
 <https://github.com/buildtimetrend/service/>
