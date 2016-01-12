@@ -24,7 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 from celery_worker import APP
 import cgi
 from buildtimetrend import logger
-from buildtimetrend.travis import TravisData
+from buildtimetrend.travis.parser import TravisData
 from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
 

@@ -33,8 +33,8 @@ import cgi
 import cherrypy
 import urllib
 import constants
-from buildtimetrend.travis import process_notification_payload
-from buildtimetrend.travis import check_authorization
+from buildtimetrend.travis.tools import process_notification_payload
+from buildtimetrend.travis.tools import check_authorization
 from buildtimetrend.settings import Settings
 from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
