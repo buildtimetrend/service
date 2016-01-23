@@ -24,8 +24,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 from celery_worker import APP
 import cgi
 from buildtimetrend import logger
+from buildtimetrend import keenio
+from buildtimetrend import service
 from buildtimetrend.travis.parser import TravisData
-from buildtimetrend.keenio import send_build_data_service
 from buildtimetrend.service import check_process_parameters
 
 
@@ -60,6 +61,7 @@ def process_travis_buildlog(self, repo, build):
         return result
 
     travis_data = TravisData(repo, build)
+    data_detail = service.get_repo_data_detail(repo)
 
     # retrieve build data using Travis CI API
     message = "Retrieving build #%s data of %s from Travis CI"
@@ -80,7 +82,7 @@ def process_travis_buildlog(self, repo, build):
         message = "Send build job #%s data to Keen.io"
         logger.warning(message, build_job_id)
         ret_msg += "\n" + message % cgi.escape(build_job_id)
-        send_build_data_service(build_job)
+        keenio.send_build_data_service(build_job, data_detail)
 
     # check if collection is empty
     if travis_data.build_jobs:
