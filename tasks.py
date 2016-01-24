@@ -79,9 +79,9 @@ def process_travis_buildlog(self, repo, build):
     # send build job data to Keen.io
     for build_job in travis_data.process_build_jobs():
         build_job_id = build_job.properties.get_items()["job"]
-        message = "Send build job #%s data to Keen.io"
-        logger.warning(message, build_job_id)
-        ret_msg += "\n" + message % cgi.escape(build_job_id)
+        message = "Send %s build job #%s data to Keen.io"
+        logger.warning(message, repo, build_job_id)
+        ret_msg += "\n" + message % (cgi.escape(repo), cgi.escape(build_job_id))
         keenio.send_build_data_service(build_job, data_detail)
 
     # check if collection is empty
