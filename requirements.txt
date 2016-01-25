@@ -1,4 +1,7 @@
-git+https://github.com/buildtimetrend/python-lib.git#egg=buildtimetrend>=0.3
+git+https://github.com/buildtimetrend/python-lib.git#egg=buildtimetrend>=0.4.dev6
 cherrypy>=3.6.0
 celery==3.1.18
+kombu
+billiard
+pytz
 newrelic==2.42.0.35
