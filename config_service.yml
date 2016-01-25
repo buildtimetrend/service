@@ -4,3 +4,6 @@ buildtimetrend:
       - "buildtimetrend"
       - "ruleant"
     loglevel: "INFO"
+    data_detail: "full"
+    repo_data_detail:
+      - "buildtimetrend/service": "basic"
