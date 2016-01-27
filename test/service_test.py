@@ -55,7 +55,7 @@ class TestService(unittest.TestCase):
                 'ruleant/test2'
             ]}, get_config_project_list()
         )
- 
+
         # test with limited list matching allowed repo name
         self.settings.add_setting("allowed_repo", {"test1"})
         self.assertDictEqual(

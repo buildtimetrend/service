@@ -8,6 +8,11 @@ buildtimetrend:
       - "my_name/repo_name"
     travis_account_token: "Travis CI account token of user who set up the repo"
     loglevel: "WARNING" # possible values : "DEBUG", "INFO", "WARNING", "ERROR"
+    data_detail: "full" # level of detail when storing build job data : "minimal", "basic", "full", "extended"
+    repo_data_detail:
+        "user/repo": "minimal"
+        "user2/repo": "basic"
+        "user3/": "full"
     task_queue:
         backend: "" # fe. amqp, redis, ...
         broker_url: "" # format : transport://userid:password@hostname:port/virtual_host
