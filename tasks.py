@@ -2,7 +2,7 @@
 """
 Celery Tasks.
 
-Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This file is part of buildtimetrend/python-service
 <https://github.com/buildtimetrend/python-service/>
@@ -24,8 +24,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 from celery_worker import APP
 import cgi
 from buildtimetrend import logger
-from buildtimetrend.travis import TravisData
-from buildtimetrend.keenio import send_build_data_service
+from buildtimetrend import keenio
+from buildtimetrend import service
+from buildtimetrend.travis.parser import TravisData
 from buildtimetrend.service import check_process_parameters
 
 
@@ -60,6 +61,7 @@ def process_travis_buildlog(self, repo, build):
         return result
 
     travis_data = TravisData(repo, build)
+    data_detail = service.get_repo_data_detail(repo)
 
     # retrieve build data using Travis CI API
     message = "Retrieving build #%s data of %s from Travis CI"
@@ -77,16 +79,17 @@ def process_travis_buildlog(self, repo, build):
     # send build job data to Keen.io
     for build_job in travis_data.process_build_jobs():
         build_job_id = build_job.properties.get_items()["job"]
-        message = "Send build job #%s data to Keen.io"
-        logger.warning(message, build_job_id)
-        ret_msg += "\n" + message % cgi.escape(build_job_id)
-        send_build_data_service(build_job)
+        message = "Send %s build job #%s data to Keen.io"
+        logger.warning(message, repo, build_job_id)
+        ret_msg += "\n" + message % (cgi.escape(repo), cgi.escape(build_job_id))
+        keenio.send_build_data_service(build_job, data_detail)
 
-    if len(travis_data.build_jobs) == 0:
-        message = "No data found for build #%s of %s"
-    else:
+    # check if collection is empty
+    if travis_data.build_jobs:
         message = "Successfully retrieved build #%s data of %s" \
             " from Travis CI and sent to Keen.io"
+    else:
+        message = "No data found for build #%s of %s"
     logger.warning(message, build, repo)
     ret_msg += "\n" + message % (cgi.escape(build), cgi.escape(repo))
     return ret_msg

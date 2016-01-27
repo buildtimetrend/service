@@ -3,7 +3,7 @@
 """
 Common constants.
 
-Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This file is part of buildtimetrend/service
 <https://github.com/buildtimetrend/service/>
@@ -23,6 +23,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 CLIENT_NAME = "buildtimetrend/service"
-CLIENT_VERSION = "0.3"
+CLIENT_VERSION = "0.4.dev"
 
 CONFIG_FILE = "config_service.yml"

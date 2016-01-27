@@ -2,7 +2,7 @@
 """
 Unit tests for Service
 
-Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This file is part of buildtimetrend/service
 <https://github.com/buildtimetrend/service/>
@@ -29,8 +29,8 @@ import unittest
 
 class TestCeleryWorker(unittest.TestCase):
     @classmethod
-    def setUpClass(self):
-        self.settings = Settings()
+    def setUpClass(cls):
+        cls.settings = Settings()
 
     def setUp(self):
         # reinit settings singleton

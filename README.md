@@ -4,12 +4,13 @@ Buildtime Trend as a Service
 Visualise what's trending in your build process
 
 [![Buildtime Trend as a Service](http://img.shields.io/badge/release-v0.3-blue.svg)](https://github.com/buildtimetrend/service/releases/latest)
-[![Buildtime Trend as a Service (dev)](http://img.shields.io/badge/dev-v0.3.dev-blue.svg)](https://github.com/buildtimetrend/service/zipball/master)
+[![Buildtime Trend as a Service (dev)](http://img.shields.io/badge/dev-v0.4.dev-blue.svg)](https://github.com/buildtimetrend/service/zipball/master)
 
 [![Build Status](https://travis-ci.org/buildtimetrend/service.svg?branch=master)](https://travis-ci.org/buildtimetrend/service)
 [![Code Health](https://landscape.io/github/buildtimetrend/service/master/landscape.svg)](https://landscape.io/github/buildtimetrend/service/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/buildtimetrend/service/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/buildtimetrend/service/?branch=master)
 [![Codacy Badge](https://www.codacy.com/project/badge/4ff71ed6b542493ab6f407f4c37aeb01)](https://www.codacy.com/public/ruleant/service)
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/88a900bee57a41ec82a3fd75e8e2bb0a/badge.svg)](https://www.quantifiedcode.com/app/project/88a900bee57a41ec82a3fd75e8e2bb0a)
 [![Stack Share](http://img.shields.io/badge/tech-stack-0690fa.svg)](http://stackshare.io/ruleant/buildtime-trend)
 
 [![Buildtime trend](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/latest)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
@@ -280,7 +281,7 @@ Follow us on [Twitter](https://twitter.com/buildtime_trend), [Github](https://gi
 License
 -------
 
-Copyright (C) 2014-2015 Dieter Adriaenssens <ruleant@users.sourceforge.net>
+Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
