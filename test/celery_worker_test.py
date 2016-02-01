@@ -1,6 +1,6 @@
 # vim: set expandtab sw=4 ts=4:
 """
-Unit tests for Service
+Unit tests for Celery worker related methods
 
 Copyright (C) 2014-2016 Dieter Adriaenssens <ruleant@users.sourceforge.net>
 
@@ -28,16 +28,22 @@ import unittest
 
 
 class TestCeleryWorker(unittest.TestCase):
+
+    """Unit tests for Celery worker related methods"""
+
     @classmethod
     def setUpClass(cls):
+        """Set up test fixture."""
         cls.settings = Settings()
 
     def setUp(self):
+        """Initialise test environment before each test."""
         # reinit settings singleton
         if self.settings is not None:
             self.settings.__init__()
 
     def test_is_worker_enabled(self):
+        """Test is_worker_enabled()"""
         # should return false when task queue url is not defined
         self.assertFalse(is_worker_enabled())
 
@@ -79,6 +85,7 @@ class TestCeleryWorker(unittest.TestCase):
         self.assertTrue(is_worker_enabled())
 
     def test_is_worker_enabled_env_var(self):
+        """Test is_worker_enabled() set by env vars"""
         # should return false when task queue url is not defined
         self.assertFalse(is_worker_enabled())
 
