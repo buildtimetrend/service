@@ -9,6 +9,9 @@ config_service.yml
 
 venv/
 
+# Vagrant runtime
+.vagrant/
+
 # C extensions
 *.so
 
