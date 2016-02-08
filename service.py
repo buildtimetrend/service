@@ -31,6 +31,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import os
 import cgi
 import cherrypy
+from cherrypy.process.plugins import Daemonizer
+from cherrypy.process.plugins import PIDFile
 import urllib
 import constants
 from buildtimetrend.travis.tools import process_notification_payload
@@ -590,6 +592,10 @@ def modify_index(file_original, file_modified):
 
 
 if __name__ == "__main__":
+    # run service as daemon
+    Daemonizer(cherrypy.engine).subscribe()
+    PIDFile(cherrypy.engine, '/tmp/btt_service.pid').subscribe()
+
     # configure cherrypy webserver host and port
     # inspired by https://github.com/craigkerstiens/cherrypy-helloworld
     cherrypy.config.update({
