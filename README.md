@@ -238,6 +238,24 @@ buildtimetrend:
 Setting `max_builds` is 100 by default, and can also be set with the `BTT_MULTI_MAX_BUILDS` environment variable.
 Setting `delay` is 3 seconds by default, and can also be set with the `BTT_MULTI_DELAY` environment variable.
 
+- `data_detail` : level of detail when storing build job data, possible values :
+  - "minimal" : only get build(job) data, with total time, no detailed (sub)stages data is stored
+  - "basic" : `minimal` + substages grouped into stages (for future use : currently equals `minimal`)
+  - "full": `basic` + substages and stages details are stored (default)
+  - "extended" : `full` + also store data of custom timestamps (for future use : currently equals `full`)
+It can also be defined with the `BTT_DATA_DETAIL` environment variable.
+
+- `repo_data_detail` : level of detail when storing build job data, but defined per repository. See `data_detail` for possible values. If a setting matches the repository name, the corresponding setting is used. Substrings are allowed, if a substring is part of a repo name, the corresponding setting is used. If no (sub)string matches a repo, the default setting `data_detail` is used.
+Be carefull with substrings, if a repository name matches more than one entry, only the first one that matches will be used (not necessarily in the order as listed in the config file)
+Don't use '-' to prepend the different repositories
+
+```yaml
+buildtimetrend:
+  repo_data_detail:
+    "my_name": "minimal" # sets `data_detail` to `minimal` for all repo names that contain my_name
+    "another_name/some_repo": "basic # set `data_detail` to `basic` for this repositiry
+```
+
 Dependencies
 ------------
 
