@@ -8,7 +8,7 @@
 # Description:       Buildtime Trend as a Service daemon
 ### END INIT INFO
 
-SCRIPT='python service.py'
+SCRIPT='python /vagrant/service.py'
 
 PIDFILE=/tmp/btt_service.pid
 LOGFILE=/var/log/btt_service.log
@@ -19,7 +19,7 @@ start() {
     return 1
   fi
   echo 'Starting service...' >&2
-  `$SCRIPT`
+  `$SCRIPT` &
   echo 'Service started' >&2
 }
 
