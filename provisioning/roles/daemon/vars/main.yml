@@ -1,0 +1,5 @@
+user: vagrant
+daemon: python /vagrant/service.py
+pidfile: /tmp/btt_service.pid
+daemon_opts: ""
+service_name: btt_service
