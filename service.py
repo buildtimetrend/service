@@ -31,7 +31,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import os
 import cgi
 import cherrypy
-from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import PIDFile
 import urllib
 import constants
@@ -592,8 +591,7 @@ def modify_index(file_original, file_modified):
 
 
 if __name__ == "__main__":
-    # run service as daemon
-    Daemonizer(cherrypy.engine).subscribe()
+    # write pid to a file
     PIDFile(cherrypy.engine, '/tmp/btt_service.pid').subscribe()
 
     # configure cherrypy webserver host and port
