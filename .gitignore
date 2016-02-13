@@ -8,6 +8,9 @@ config.yml
 
 venv/
 
+# Vagrant runtime
+.vagrant/
+
 # C extensions
 *.so
 

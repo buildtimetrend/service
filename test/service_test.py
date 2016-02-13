@@ -28,17 +28,23 @@ import mock
 
 
 class TestService(unittest.TestCase):
+
+    """Unit tests for Service methods"""
+
     @classmethod
     def setUpClass(cls):
+        """Set up test fixture."""
         cls.settings = Settings()
 
     def setUp(self):
+        """Initialise test environment before each test."""
         # reinit settings singleton
         if self.settings is not None:
             self.settings.__init__()
 
     @mock.patch('service.get_all_projects', return_value=[])
     def test_get_config_project_list(self, get_all_projects_func):
+        """Test get_config_project_list()"""
         # test with empty project list
         self.assertDictEqual({}, get_config_project_list())
 
