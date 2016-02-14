@@ -437,8 +437,9 @@ class TravisParser(object):
         if last_build is None:
             self.logger.warning(
                 "Request to process build #{build} of repo {repo}".format(
-                build=first_build, repo=repo
-            ))
+                    build=first_build, repo=repo
+                )
+            )
 
             # schedule task with 10 second delay to give Travis CI time
             # to add the finished_at property. (issue #96)
