@@ -1,4 +1,4 @@
 - name: Add init.d daemon script
-  action: template src=init.d-template.j2 dest=/etc/init.d/{{service_name}} mode=0751
+  action: template src=init.d-template.j2 dest=/etc/init.d/{{service_name}} mode=0755
 - name: Ensure the daemon is started
   action: service name={{service_name}} state=started
