@@ -8,8 +8,8 @@
     - {role: python_deps, python_exec: python3, pip_exec: pip3}
     - Stouts.rabbitmq
     - {role: celeryd}
-    - {role: daemon, service_name: btt_service, daemon: python /vagrant/service.py}
-    - {role: daemon, service_name: btt_worker, daemon: /usr/local/bin/celeryd}
+    - {role: daemon, service_name: btt_service, daemon: /vagrant/service.py}
+    - {role: daemon, service_name: btt_worker, daemon: /usr/local/bin/celery, daemon_opts: worker}
 
   vars:
     rabbitmq_vhosts: [localhost]
