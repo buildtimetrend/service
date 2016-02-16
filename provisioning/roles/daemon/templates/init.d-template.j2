@@ -22,7 +22,7 @@ fi
 
 start_service() {
   echo -n " * Starting $SERVICE_NAME... "
-  start-stop-daemon -Sq -p $PIDFILE -x $DAEMON -- $DAEMON_OPTS
+  start-stop-daemon -b -Sq -p $PIDFILE -x $DAEMON -- $DAEMON_OPTS
   e=$?
   if [ $e -eq 1 ]; then
     echo "already running"
