@@ -2,3 +2,6 @@
   action: template src=init.d-template.j2 dest=/etc/init.d/{{service_name}} mode=0755
   notify:
     - start the {{service_name}} daemon
+
+- name: Start {{service_name}} daemon on boot
+  action: service name={{service_name}} enabled=yes
