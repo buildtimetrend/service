@@ -63,7 +63,8 @@ ASSETS_URL = '/assets'
 DASHBOARD_URL = '/dashboard'
 STATS_URL = '/stats'
 BADGE_URL = '/badge'
-STATIC_DIR = os.path.join(os.path.abspath('.'), 'static')
+ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
+STATIC_DIR = os.path.join(ROOT_DIR, 'static')
 DASHBOARD_DIR = os.path.join(STATIC_DIR, 'dashboard')
 ASSETS_DIR = os.path.join(DASHBOARD_DIR, 'assets')
 IMAGES_DIR = os.path.join(ASSETS_DIR, 'images')
@@ -437,8 +438,9 @@ class TravisParser(object):
         if last_build is None:
             self.logger.warning(
                 "Request to process build #{build} of repo {repo}".format(
-                build=first_build, repo=repo
-            ))
+                    build=first_build, repo=repo
+                )
+            )
 
             # schedule task with 10 second delay to give Travis CI time
             # to add the finished_at property. (issue #96)
