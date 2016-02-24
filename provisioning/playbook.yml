@@ -17,7 +17,7 @@
         python_deps_python_version: "3"
       }
     - Stouts.rabbitmq
-    - {role: celeryd}
+    - celeryd
     - {
         role: daemon,
         service_name: btt_service,
