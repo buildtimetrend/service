@@ -1,3 +1,4 @@
+---
 service_name: btt_service
 daemon: python /vagrant/service.py
 pidfile: "/var/run/{{ service_name }}.pid"
