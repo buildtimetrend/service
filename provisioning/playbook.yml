@@ -4,8 +4,8 @@
       apt: name=git state=latest
 
   roles:
-    - {role: python_deps, python_exec: python, pip_exec: pip}
-    - {role: python_deps, python_exec: python3, pip_exec: pip3}
+    - {role: buildtimetrend.python_deps, python_deps_requirements: "{{ reqs }}", python_deps_extra_libs: "{{ extra_libs }}"}
+    - {role: buildtimetrend.python_deps, python_deps_requirements: "{{ reqs }}", python_deps_extra_libs: "{{ extra_libs }}", python_deps_python_version: "3"}
     - Stouts.rabbitmq
     - {role: celeryd}
     - {role: daemon, service_name: btt_service, daemon: /vagrant/service.py, pidfile: /tmp/btt_service.pid}
@@ -13,3 +13,11 @@
 
   vars:
     rabbitmq_vhosts: [localhost]
+    reqs:
+      - '/vagrant/requirements.txt'
+    extra_libs:
+      - libxml2-dev
+      - libxslt1-dev
+      - zlib1g-dev
+      - python-libxml2
+      - python-libxslt1
