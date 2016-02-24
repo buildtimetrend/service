@@ -5,12 +5,31 @@
       apt: name=git state=latest
 
   roles:
-    - {role: buildtimetrend.python_deps, python_deps_requirements: "{{ reqs }}", python_deps_extra_libs: "{{ extra_libs }}"}
-    - {role: buildtimetrend.python_deps, python_deps_requirements: "{{ reqs }}", python_deps_extra_libs: "{{ extra_libs }}", python_deps_python_version: "3"}
+    - {
+        role: buildtimetrend.python_deps,
+        python_deps_requirements: "{{ reqs }}",
+        python_deps_extra_libs: "{{ extra_libs }}"
+      }
+    - {
+        role: buildtimetrend.python_deps,
+        python_deps_requirements: "{{ reqs }}",
+        python_deps_extra_libs: "{{ extra_libs }}",
+        python_deps_python_version: "3"
+      }
     - Stouts.rabbitmq
     - {role: celeryd}
-    - {role: daemon, service_name: btt_service, daemon: /vagrant/service.py, pidfile: /tmp/btt_service.pid}
-    - {role: daemon, service_name: btt_worker, daemon: /usr/local/bin/celery, daemon_opts: worker}
+    - {
+        role: daemon,
+        service_name: btt_service,
+        daemon: /vagrant/service.py,
+        pidfile: /tmp/btt_service.pid
+      }
+    - {
+        role: daemon,
+        service_name: btt_worker,
+        daemon: /usr/local/bin/celery,
+        daemon_opts: worker
+      }
 
   vars:
     rabbitmq_vhosts: [localhost]
