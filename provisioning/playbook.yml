@@ -5,6 +5,8 @@
       apt: name=git state=latest
     - name: "Create service start script"
       action: template src=templates/start_service_script-template.j2 dest={{service_start_script}} mode=0755
+    - name: "Create worker start script"
+      action: template src=templates/start_worker_script-template.j2 dest={{ worker_start_script }} mode=0755
 
   roles:
     - {
@@ -14,7 +16,6 @@
         python_deps_python_version: "{{ ansible_python_version }}"
       }
     - Stouts.rabbitmq
-    - celeryd
     - {
         role: daemon,
         service_name: btt_service,
@@ -24,14 +25,14 @@
     - {
         role: daemon,
         service_name: btt_worker,
-        daemon: /usr/local/bin/celery,
-        daemon_opts: worker
+        daemon: "{{ worker_start_script }}"
       }
 
   vars:
     rabbitmq_vhosts: [localhost]
     ansible_python_version: ''
     service_start_script: '/home/vagrant/btt_service_start.sh'
+    worker_start_script: '/home/vagrant/btt_worker_start.sh'
     reqs:
       - '/vagrant/requirements.txt'
     extra_libs:
