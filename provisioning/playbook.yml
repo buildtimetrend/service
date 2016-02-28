@@ -3,10 +3,6 @@
   pre_tasks:
     - name: "Install git"
       apt: name=git state=latest
-    - name: "Create service start script"
-      action: template src=templates/start_service_script-template.j2 dest={{service_start_script}} mode=0755
-    - name: "Create worker start script"
-      action: template src=templates/start_worker_script-template.j2 dest={{ worker_start_script }} mode=0755
 
   roles:
     - {
@@ -17,10 +13,22 @@
       }
     - Stouts.rabbitmq
     - {
+        role: start_script,
+        start_script_python_version: "{{ ansible_python_version }}",
+        start_script_command : './service.py',
+        start_script_path : "{{ service_start_script }}"
+      }
+    - {
         role: daemon,
         service_name: btt_service,
         daemon: "{{ service_start_script }}",
         pidfile: /tmp/btt_service.pid
+      }
+    - {
+        role: start_script,
+        start_script_python_version: "{{ ansible_python_version }}",
+        start_script_command : '/usr/local/bin/celery worker -A tasks',
+        start_script_path : "{{ worker_start_script }}"
       }
     - {
         role: daemon,
