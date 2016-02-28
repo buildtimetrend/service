@@ -1,0 +1,4 @@
+---
+- name: "Create start script"
+  action: template src=start_script-template.j2 dest={{ start_script_path }} mode=0755
+
