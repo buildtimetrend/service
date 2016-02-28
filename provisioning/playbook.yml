@@ -4,7 +4,7 @@
     - name: "Install git"
       apt: name=git state=latest
     - name: "Create service start script"
-      action: template src=templates/start_script-template.j2 dest={{service_start_script}} mode=0755
+      action: template src=templates/start_service_script-template.j2 dest={{service_start_script}} mode=0755
 
   roles:
     - {
