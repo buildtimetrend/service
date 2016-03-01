@@ -1,2 +1,0 @@
-- name: Add default celery config file
-  action: template src=default_config-template.j2 dest=/etc/default/celeryd mode=0644

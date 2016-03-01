@@ -1,15 +1,51 @@
+---
 - hosts: all
-  tasks:
+  pre_tasks:
     - name: "Install git"
       apt: name=git state=latest
 
   roles:
-    - {role: python_deps, python_exec: python, pip_exec: pip}
-    - {role: python_deps, python_exec: python3, pip_exec: pip3}
+    - {
+        role: buildtimetrend.python_deps,
+        python_deps_requirements: "{{ reqs }}",
+        python_deps_extra_libs: "{{ extra_libs }}",
+        python_deps_python_version: "{{ ansible_python_version }}"
+      }
     - Stouts.rabbitmq
-    - {role: celeryd}
-    - {role: daemon, service_name: btt_service, daemon: /vagrant/service.py, pidfile: /tmp/btt_service.pid}
-    - {role: daemon, service_name: btt_worker, daemon: /usr/local/bin/celery, daemon_opts: worker}
+    - {
+        role: start_script,
+        start_script_python_version: "{{ ansible_python_version }}",
+        start_script_command : './service.py',
+        start_script_path : "{{ service_start_script }}"
+      }
+    - {
+        role: daemon,
+        service_name: btt_service,
+        daemon: "{{ service_start_script }}",
+        pidfile: /tmp/btt_service.pid
+      }
+    - {
+        role: start_script,
+        start_script_python_version: "{{ ansible_python_version }}",
+        start_script_command : '/usr/local/bin/celery worker -A tasks',
+        start_script_path : "{{ worker_start_script }}"
+      }
+    - {
+        role: daemon,
+        service_name: btt_worker,
+        daemon: "{{ worker_start_script }}"
+      }
 
   vars:
     rabbitmq_vhosts: [localhost]
+    ansible_python_version: ''
+    service_start_script: '/home/vagrant/btt_service_start.sh'
+    worker_start_script: '/home/vagrant/btt_worker_start.sh'
+    reqs:
+      - '/vagrant/requirements.txt'
+    extra_libs:
+      - libxml2-dev
+      - libxslt1-dev
+      - zlib1g-dev
+      - python-libxml2
+      - python-libxslt1

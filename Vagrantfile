@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu/vivid64"
+  config.vm.box = "ubuntu/trusty64"
 
   # increase memory of virtualbox
   config.vm.provider "virtualbox" do |v|
@@ -21,12 +21,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
-
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 5000, host: 5000
-  config.vm.network "forwarded_port", guest: 15672, host: 15672
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -47,10 +41,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # start Ansible provisioning
-  config.vm.provision "ansible" do |ansible|
-    ansible.verbose = "v"
-    ansible.sudo = true
-    ansible.playbook = "provisioning/playbook.yml"
+  config.vm.define "python2" do |python2|
+    python2.vm.network "forwarded_port", guest: 5000, host: 5002
+    python2.vm.network "forwarded_port", guest: 15672, host: 15672
+
+    # start Ansible provisioning
+    python2.vm.provision "ansible" do |ansible|
+      ansible.verbose = "v"
+      ansible.sudo = true
+      ansible.playbook = "provisioning/playbook.yml"
+    end
+  end
+
+  config.vm.define "python3", primary: true do |python3|
+    python3.vm.network "forwarded_port", guest: 5000, host: 5003
+    python3.vm.network "forwarded_port", guest: 15672, host: 15673
+
+    # start Ansible provisioning
+    python3.vm.provision "ansible" do |ansible|
+      ansible.verbose = "v"
+      ansible.sudo = true
+      ansible.playbook = "provisioning/playbook.yml"
+      ansible.extra_vars = { ansible_python_version: '3' }
+    end
   end
 end
