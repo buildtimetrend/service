@@ -310,7 +310,7 @@ class Badges(object):
                 badge_status = format_duration(value)
 
             # valid duration is 0 or greater int or float
-            if not(type(value) in (float, int) and value >= 0):
+            if type(value) not in (float, int) or value < 0:
                 badge_status = "unknown"
                 badge_colour = "lightgrey"
 
