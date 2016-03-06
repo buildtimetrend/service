@@ -41,6 +41,7 @@ from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
+from buildtimetrend import keenio
 from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
@@ -190,7 +191,7 @@ class Dashboard(object):
             repo = None
         else:
             self.logger.info(
-              "Generated dashboard config for project '{}'".format(repo)
+                "Generated dashboard config for project '{}'".format(repo)
             )
 
         # add project list
@@ -303,6 +304,12 @@ class Badges(object):
                 badge_colour = get_result_color(value, 100, 75)
                 format_string = "{:d}%"
                 badge_status = format_string.format(value)
+            elif badge_type == "last_fail":
+                badge_subject = "%s" % (badge_type)
+                value = keenio.get_days_since_fail(repo)
+                badge_colour = get_result_color(value, 3, 0)
+                format_string = "{:d} days"
+                badge_status = format_string.format(value)
             else:
                 # calculate average
                 badge_subject = "%s_(%s)" % (badge_subject, interval)
@@ -310,7 +317,7 @@ class Badges(object):
                 badge_status = format_duration(value)
 
             # valid duration is 0 or greater int or float
-            if not(type(value) in (float, int) and value >= 0):
+            if type(value) not in (float, int) or value < 0:
                 badge_status = "unknown"
                 badge_colour = "lightgrey"
 
@@ -515,7 +522,7 @@ class TravisParser(object):
             temp_msg = "Task scheduled to process build #{build}" \
                 " of repo {repo} : {task_id}"
             self.logger.warning(
-              temp_msg.format(build=build, repo=repo, task_id=task.id)
+                temp_msg.format(build=build, repo=repo, task_id=task.id)
             )
             return temp_msg.format(
                 build=cgi.escape(str(build)),

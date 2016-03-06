@@ -1,4 +1,5 @@
 v0.4 (not yet released)
+- issue #38 : add 'days since last failed build job' badge
 
 v0.3 (released on 18Nov2015)
 - issue #82 : use generator to return updates of TravisParser
