@@ -115,6 +115,7 @@ Generate a shield badges
     - `jobs` : number of build jobs in period set by `interval`
     - `builds` : number of builds in period set by `interval`
     - `passed` : percentage of successful build jobs during `interval`
+    - `last_fail` : days since last failed build job
   - `interval` : time interval, options :
     - `week` (default) : events of last week (last 7 days)
     - `month` : events of last month (last 30 days)
@@ -134,6 +135,7 @@ Generate a shield badges
 - ![% passed build jobs (week)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/week) : `/badge/buildtimetrend/service/passed/week`
 - ![% passed build jobs (month)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/month) : `/badge/buildtimetrend/service/passed/month`
 - ![% passed build jobs (year)](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/year) : `/badge/buildtimetrend/service/passed/year`
+- ![days since last failed build job](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/last_fail) : `/badge/buildtimetrend/service/last_fail`
 
 ### Process Travis CI build log
 

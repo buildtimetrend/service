@@ -41,6 +41,7 @@ from buildtimetrend import logger
 from buildtimetrend.tools import get_repo_slug
 from buildtimetrend.tools import check_file
 from buildtimetrend.tools import file_is_newer
+from buildtimetrend import keenio
 from buildtimetrend.keenio import check_time_interval
 from buildtimetrend.keenio import get_avg_buildtime
 from buildtimetrend.keenio import get_total_builds
@@ -302,6 +303,12 @@ class Badges(object):
                 value = get_pct_passed_build_jobs(repo, interval)
                 badge_colour = get_result_color(value, 100, 75)
                 format_string = "{:d}%"
+                badge_status = format_string.format(value)
+            elif badge_type == "last_fail":
+                badge_subject = "%s" % (badge_type)
+                value = keenio.get_days_since_fail(repo)
+                badge_colour = get_result_color(value, 3, 0)
+                format_string = "{:d} days"
                 badge_status = format_string.format(value)
             else:
                 # calculate average
