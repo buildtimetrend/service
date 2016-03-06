@@ -16,6 +16,8 @@ deploy:
   app:
     deploy-dev: buildtimetrend-dev
     deploy-prod: buildtimetrend
+  on:
+    python: 3.5
 notifications:
   webhooks:
     # parse Travis CI log and send result to Keen.io, using Builtime Trend Service

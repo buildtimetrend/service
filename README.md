@@ -16,6 +16,7 @@ Visualise what's trending in your build process
 [![Buildtime trend](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/latest)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
 [![Total builds](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/builds/month)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
 [![Percentage passed build jobs](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/passed/month)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
+[![Days since last failed build job](https://buildtimetrend-dev.herokuapp.com/badge/buildtimetrend/service/last_fail)](https://buildtimetrend-dev.herokuapp.com/dashboard/buildtimetrend/service/index.html)
 
 This project contains the files that offer Buildtime Trend as a service. The [Buildtime Trend library](https://github.com/buildtimetrend/python-lib) powers this service.
 
