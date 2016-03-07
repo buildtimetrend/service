@@ -143,7 +143,9 @@ class Dashboard(object):
                 url = DASHBOARD_URL
             else:
                 repo_slug = get_repo_slug(repo_owner, repo_name)
-                url = "{0!s}/{1!s}/index.html".format(DASHBOARD_URL, cgi.escape(repo_slug))
+                url = "{0!s}/{1!s}/index.html".format(
+                    DASHBOARD_URL, cgi.escape(repo_slug)
+                )
 
                 # add url parameters
                 url_params = {}
@@ -161,7 +163,9 @@ class Dashboard(object):
                     url_params['filter_branch'] = filter_branch
 
                 if url_params:
-                    url = "{0!s}?{1!s}".format(url, urllib.urlencode(url_params))
+                    url = "{0!s}?{1!s}".format(
+                        url, urllib.urlencode(url_params)
+                    )
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
@@ -326,7 +330,9 @@ class Badges(object):
 
         # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
-            "https://img.shields.io/badge/{0!s}-{1!s}-{2!s}.svg".format(badge_subject, badge_status, badge_colour)
+            "https://img.shields.io/badge/{0!s}-{1!s}-{2!s}.svg".format(
+                badge_subject, badge_status, badge_colour
+            )
         )
 
 
