@@ -143,8 +143,7 @@ class Dashboard(object):
                 url = DASHBOARD_URL
             else:
                 repo_slug = get_repo_slug(repo_owner, repo_name)
-                url = "%s/%s/index.html" % \
-                    (DASHBOARD_URL, cgi.escape(repo_slug))
+                url = "{0!s}/{1!s}/index.html".format(DASHBOARD_URL, cgi.escape(repo_slug))
 
                 # add url parameters
                 url_params = {}
@@ -162,7 +161,7 @@ class Dashboard(object):
                     url_params['filter_branch'] = filter_branch
 
                 if url_params:
-                    url = "%s?%s" % (url, urllib.urlencode(url_params))
+                    url = "{0!s}?{1!s}".format(url, urllib.urlencode(url_params))
 
             # rewrite url
             raise cherrypy.HTTPRedirect(url)
@@ -289,30 +288,30 @@ class Badges(object):
                 value = get_latest_buildtime(repo)
                 badge_status = format_duration(value)
             elif badge_type == "jobs":
-                badge_subject = "%s_(%s)" % (badge_type, interval)
+                badge_subject = "{0!s}_({1!s})".format(badge_type, interval)
                 value = get_total_build_jobs(repo, interval)
                 format_string = "{:d}"
                 badge_status = format_string.format(value)
             elif badge_type == "builds":
-                badge_subject = "%s_(%s)" % (badge_type, interval)
+                badge_subject = "{0!s}_({1!s})".format(badge_type, interval)
                 value = get_total_builds(repo, interval)
                 format_string = "{:d}"
                 badge_status = format_string.format(value)
             elif badge_type == "passed":
-                badge_subject = "%s_(%s)" % (badge_type, interval)
+                badge_subject = "{0!s}_({1!s})".format(badge_type, interval)
                 value = get_pct_passed_build_jobs(repo, interval)
                 badge_colour = get_result_color(value, 100, 75)
                 format_string = "{:d}%"
                 badge_status = format_string.format(value)
             elif badge_type == "last_fail":
-                badge_subject = "%s" % (badge_type)
+                badge_subject = "{0!s}".format((badge_type))
                 value = keenio.get_days_since_fail(repo)
                 badge_colour = get_result_color(value, 3, 0)
                 format_string = "{:d} days"
                 badge_status = format_string.format(value)
             else:
                 # calculate average
-                badge_subject = "%s_(%s)" % (badge_subject, interval)
+                badge_subject = "{0!s}_({1!s})".format(badge_subject, interval)
                 value = get_avg_buildtime(repo, interval)
                 badge_status = format_duration(value)
 
@@ -327,8 +326,7 @@ class Badges(object):
 
         # Redirect to shields.io API to generate badge
         raise cherrypy.HTTPRedirect(
-            "https://img.shields.io/badge/%s-%s-%s.svg" %
-            (badge_subject, badge_status, badge_colour)
+            "https://img.shields.io/badge/{0!s}-{1!s}-{2!s}.svg".format(badge_subject, badge_status, badge_colour)
         )
 
 
