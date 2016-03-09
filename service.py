@@ -181,7 +181,7 @@ class Dashboard(object):
         """
         # define extra settings
         extra = {
-            'serviceUrl': ""  # use this service instance for badge generation
+            'serviceUrl': "/"  # use this service instance for badge generation
         }
 
         repo = get_repo_slug(repo_owner, repo_name)
