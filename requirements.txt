@@ -1,5 +1,5 @@
 git+https://github.com/buildtimetrend/python-lib.git#egg=buildtimetrend>=0.4.dev10
-cherrypy>=3.6.0
+cherrypy>=5.0.1
 celery==3.1.18
 kombu
 billiard
