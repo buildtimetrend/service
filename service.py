@@ -194,7 +194,7 @@ class Dashboard(object):
             repo = None
         else:
             self.logger.info(
-                "Generated dashboard config for project '{}'".format(repo)
+                "Generated dashboard config for project '%s'", repo
             )
 
         # add project list
@@ -371,8 +371,8 @@ class Root(object):
     def error_page_404(self, status, message, traceback, version):
         """Error Page (404)."""
         self.logger.error(
-            "Cherrypy {version} : Error loading page ({status}) : {message}\n"
-            "Traceback : {traceback}".format(**locals())
+            "Cherrypy %s : Error loading page (%s) : %s\nTraceback : %s",
+            version, status, message, traceback
         )
         return "This page doesn't exist, please check usage on " \
                "the {} website.".format(SERVICE_WEBSITE_LINK)
@@ -448,9 +448,7 @@ class TravisParser(object):
 
         if last_build is None:
             self.logger.warning(
-                "Request to process build #{build} of repo {repo}".format(
-                    build=first_build, repo=repo
-                )
+                "Request to process build #%s of repo %s", first_build, repo
             )
 
             # schedule task with 10 second delay to give Travis CI time
