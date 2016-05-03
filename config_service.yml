@@ -1,3 +1,6 @@
 # Buildtime Trend general settings
 buildtimetrend:
     loglevel: "WARNING"
+    data_detail: "full"
+    repo_data_detail:
+      "angular/angular": "basic"
