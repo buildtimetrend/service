@@ -3,7 +3,7 @@ buildtimetrend:
     allowed_repo:
       - "buildtimetrend"
       - "ruleant"
-    loglevel: "INFO"
+    loglevel: "DEBUG"
     data_detail: "full"
     repo_data_detail:
       "buildtimetrend/service": "basic"
