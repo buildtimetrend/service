@@ -543,7 +543,7 @@ class TravisParser(object):
         """
         if "Authorization" not in cherrypy.request.headers:
             self.logger.debug("Authorization header is not set")
-            return False
+            return True
 
         if "Travis-Repo-Slug" not in cherrypy.request.headers:
             self.logger.debug("Travis-Repo-Slug header is not set")
