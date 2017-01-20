@@ -24,13 +24,11 @@ This project contains the files that offer Buildtime Trend as a service. The [Bu
 
 ### Use the service available on Heroku
 
-- production : https://buildtimetrend.herokuapp.com/
+- production : https://buildtimetrend.herokuapp.com/ (currently discontinued)
 
-    Currently in beta.
-
-    Available for free for Open Source projects (public on GitHub), thanks to [Keen.io](https://keen.io) for hosting the timing data.
-
-    Private projects will be supported soon.
+    Currently discontinued.
+    
+    Learn how to [setup your own service](https://github.com/buildtimetrend/python-lib/wiki/Running-service-on-Heroku) on Heroku.
 
 - development : https://buildtimetrend-dev.herokuapp.com/
 
