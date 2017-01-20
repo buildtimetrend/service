@@ -190,6 +190,7 @@ class Dashboard(object):
             self.logger.info(
               "Generated dashboard config for project '{}'".format(repo)
             )
+            extra['message'] = "<strong>This free service is discontinued!</strong> Learn how  to <a href='https://github.com/buildtimetrend/python-lib/wiki/Running-service-on-Heroku'>setup your own service</a> on Heroku. (20Jan2017)"
 
         # add project list
         extra.update(get_config_project_list())
