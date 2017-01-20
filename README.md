@@ -24,7 +24,7 @@ This project contains the files that offer Buildtime Trend as a service. The [Bu
 
 ### Use the service available on Heroku
 
-- production : https://buildtimetrend.herokuapp.com/ (currently discontinued)
+- production : https://buildtimetrend.herokuapp.com/
 
     Currently discontinued.
     
