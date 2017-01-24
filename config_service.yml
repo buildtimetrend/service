@@ -1,5 +1,8 @@
 # Buildtime Trend general settings
 buildtimetrend:
+    allowed_repo:
+      - "buildtimetrend"
+      - "ruleant"
     loglevel: "WARNING"
     data_detail: "full"
     repo_data_detail:
